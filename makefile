@@ -1,7 +1,9 @@
 
 CC		=	g++
 SRCS	=	main.cpp	\
+			array.cpp	\
 			list.cpp	\
+			doubly_list.cpp	\
 			tree.cpp	\
 			graph.cpp	\
 			sort.cpp
