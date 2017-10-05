@@ -1,0 +1,4 @@
+make clean
+make
+./exe
+rm -rf *.o
