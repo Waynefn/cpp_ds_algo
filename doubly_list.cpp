@@ -8,46 +8,104 @@ using namespace std;
 void doubly_list_trvl(DoublyListNode *head)
 {
 	NULL_CHK(head);
+	NULL_CHK(head->next);
 
-	for(DoublyListNode *tmp = head->next; tmp != head; tmp = tmp->next)
-		cout<<tmp->val<<" ";
-	cout<<endl;
-
-	for(DoublyListNode *tmp = head->prev; tmp != head; tmp = tmp->prev)
-		cout<<tmp->val<<" ";
+	for(DoublyListNode *i = head->next; i != NULL && i != head; i = i->next)
+		cout<<i->val<<" ";
 	cout<<endl;
 }
 
-DoublyListNode *doubly_list_insert(DoublyListNode *head, int val)
+/*
+	头插法
+	提供数组a[],然后创建带有头节点的双向循环链表
+*/
+DoublyListNode *doubly_list_insertHead(int a[], int n)
 {
-	DoublyListNode *tmp = new DoublyListNode(val);
+	PRINT_FUNCTION_NAME;
 
-	if(head->next == head)
+	DoublyListNode *head = new DoublyListNode(0);
+	DoublyListNode *dummy = head;
+	for(int i = 0; i < n; i++)
 	{
-		head->next = tmp;
-		head->prev = tmp;
-		tmp->next = head;
-		tmp->prev = head;
-	}
-	else
-	{
-		tmp->next = head->next;
-		tmp->prev = head;
-		head->next->prev = tmp;
-		head->next = tmp;
+		DoublyListNode *tmp = new DoublyListNode(a[i]);
+		if(dummy->next == dummy)
+		{
+			dummy->next = tmp;
+			dummy->prev = tmp;
+			tmp->next = dummy;
+			tmp->prev = dummy;
+		}
+		else
+		{
+			tmp->next = dummy->next;
+			tmp->prev = dummy;
+			dummy->next->prev = tmp;
+			dummy->next = tmp;
+		}
 	}
 
+	doubly_list_trvl(head);
 	return head;
 }
 
 /*
+	尾插法
 	提供数组a[],然后创建带有头节点的双向循环链表
 */
-DoublyListNode *doubly_list_1(int a[], int n)
+DoublyListNode *doubly_list_insertTail(int a[], int n)
 {
+	PRINT_FUNCTION_NAME;
+
 	DoublyListNode *head = new DoublyListNode(0);
+	DoublyListNode *dummy = head;
+
 	for(int i = 0; i < n; i++)
-		head = doubly_list_insert(head, a[i]);
+	{
+		DoublyListNode *tmp = new DoublyListNode(a[i]);
+		if(dummy->next == dummy)
+		{
+			dummy->next = tmp;
+			dummy->prev = tmp;
+			tmp->next = dummy;
+			tmp->prev = dummy;
+		}
+		else
+		{
+			tmp->prev = dummy->prev;
+			tmp->next = dummy;
+			dummy->prev->next = tmp;
+			dummy->prev = tmp;
+		}
+	}
+
+	doubly_list_trvl(head);
+	return head;
+}
+
+DoublyListNode *doubly_list_deleteX(DoublyListNode *head, int x)
+{
+	PRINT_FUNCTION_NAME;
+
+	NULL_CHK(head);
+	NULL_CHK(head->next);
+
+	for(DoublyListNode *i = head->next; i != NULL && i != head;)
+	{
+		if(i->val == x)
+		{
+			cout<<i->val<<endl;
+			cout<<i->next->val<<endl;
+			cout<<i->next->next->val<<endl;
+			i->next->next->prev = i;
+			i->next = i->next->next;
+			delete i->next;
+			i = i->next;
+		}
+		else
+		{
+			i = i->next;
+		}
+	}
 
 	doubly_list_trvl(head);
 	return head;

@@ -10,7 +10,7 @@ typedef struct _ListNode
 	}
 }ListNode;
 
-ListNode *list_1_insertHead(int a[], int n);
-ListNode *list_1_insertTail(int a[], int n);
-ListNode *list_2(ListNode *head, int x);
-ListNode *list_3(ListNode *list1, ListNode *list2);
+ListNode *list_insertHead(int a[], int n);
+ListNode *list_insertTail(int a[], int n);
+ListNode *list_deleteX(ListNode *head, int x);
+ListNode *list_mergeList(ListNode *list1, ListNode *list2);

@@ -11,4 +11,6 @@ typedef struct _DoublyListNode
 	}
 }DoublyListNode;
 
-DoublyListNode *doubly_list_1(int a[], int n);
+DoublyListNode *doubly_list_insertHead(int a[], int n);
+DoublyListNode *doubly_list_insertTail(int a[], int n);
+DoublyListNode *doubly_list_deleteX(DoublyListNode *head, int x);

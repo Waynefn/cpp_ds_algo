@@ -9,6 +9,8 @@ using namespace std;
 */
 void array_1(int a[], int m, int b[], int n, int res[], int res_size)
 {
+	PRINT_FUNCTION_NAME;
+
 	NULL_CHK(a);
 	NULL_CHK(b);
 	NULL_CHK(res);
@@ -51,6 +53,8 @@ void array_1(int a[], int m, int b[], int n, int res[], int res_size)
 
 void array_2(int a[], int n)
 {
+	PRINT_FUNCTION_NAME;
+
 	NULL_CHK(a);
 
 	int s = 0, e = n-1;
@@ -70,6 +74,8 @@ void array_2(int a[], int n)
 
 void array_3(int a[], int n, int x)
 {
+	PRINT_FUNCTION_NAME;
+
 	NULL_CHK(a);
 
 	int k = 0;
@@ -92,6 +98,8 @@ void array_3(int a[], int n, int x)
 */
 void array_4(int a[], int n)
 {
+	PRINT_FUNCTION_NAME;
+	
 	NULL_CHK(a);
 
 	int i = 0, j = 1;

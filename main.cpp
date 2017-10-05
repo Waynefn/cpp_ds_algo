@@ -29,16 +29,16 @@ void day_20171008()
 */
 	/***********************************************/
 	int l1[5] = {1,3,5,7,9};
-	ListNode *list1 = list_1_insertTail(l1, Len(l1));
-	list1 = list_2(list1, 3);
+	ListNode *list1 = list_insertTail(l1, Len(l1));
+	list1 = list_deleteX(list1, 3);
 
 	int l2[5] = {2,4,6,8,10};
-	ListNode *list2 = list_1_insertTail(l2, Len(l2));
-	list2 = list_3(list1, list2);
+	ListNode *list2 = list_insertTail(l2, Len(l2));
+	list2 = list_mergeList(list1, list2);
 
 	int l3[5] = {6,7,8,9,10};
-	DoublyListNode *list3 = doubly_list_1(l3, Len(l3));
-
+	DoublyListNode *list3 = doubly_list_insertTail(l3, Len(l3));
+	list3 = doubly_list_deleteX(list3, 9);
 }
 
 int main()

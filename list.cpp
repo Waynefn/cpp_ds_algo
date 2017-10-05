@@ -15,29 +15,14 @@ void list_trvl(ListNode *head)
 	cout<<endl;
 }
 
-ListNode *list_insert(ListNode *head, int val)
-{
-	ListNode *tmp = new ListNode(val);
-
-	if(head->next == NULL)
-	{
-		head->next = tmp;
-	}
-	else
-	{
-		tmp->next = head->next;
-		head->next = tmp;
-	}
-
-	return head;
-}
-
 /*	
 	头插法
 	提供数组a[],然后创建带有头节点的单链表
 */
-ListNode *list_1_insertHead(int a[], int n)
+ListNode *list_insertHead(int a[], int n)
 {
+	PRINT_FUNCTION_NAME;
+
 	ListNode *head = new ListNode(0);
 	ListNode *dummy = head;
 	for(int i = 0; i < n; i++)
@@ -61,8 +46,10 @@ ListNode *list_1_insertHead(int a[], int n)
 	提供数组a[],然后创建带有头节点的单链表
 */
 
-ListNode *list_1_insertTail(int a[], int n)
+ListNode *list_insertTail(int a[], int n)
 {
+	PRINT_FUNCTION_NAME;
+
 	ListNode *head = new ListNode(0);
 	ListNode *dummy = head;
 	for(int i = 0; i < n; i++)
@@ -79,13 +66,14 @@ ListNode *list_1_insertTail(int a[], int n)
 /*
 	提供链表list,然后删除链表中指定的元素
 */
-ListNode *list_2(ListNode *head, int x)
+ListNode *list_deleteX(ListNode *head, int x)
 {
+	PRINT_FUNCTION_NAME;
+
 	NULL_CHK(head);
 
 	for(ListNode *i = head; i != NULL && i->next != NULL;)
 	{
-		
 		if(i->next->val != x)
 			i = i->next;
 		else
@@ -103,8 +91,10 @@ ListNode *list_2(ListNode *head, int x)
 /*
 	提供两个有序链表，将他们合并为一个
 */
-ListNode *list_3(ListNode *list1, ListNode *list2)
+ListNode *list_mergeList(ListNode *list1, ListNode *list2)
 {
+	PRINT_FUNCTION_NAME;
+
 	NULL_CHK(list1);
 	NULL_CHK(list1->next);
 	NULL_CHK(list2);
