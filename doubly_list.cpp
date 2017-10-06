@@ -10,7 +10,11 @@ void doubly_list_trvl(DoublyListNode *head)
 	NULL_CHK(head);
 	NULL_CHK(head->next);
 
+	cout<<"|next:";
 	for(DoublyListNode *i = head->next; i != NULL && i != head; i = i->next)
+		cout<<i->val<<" ";
+	cout<<"|prev:";
+	for(DoublyListNode *i = head->prev; i != NULL && i != head; i = i->prev)
 		cout<<i->val<<" ";
 	cout<<endl;
 }
@@ -28,20 +32,11 @@ DoublyListNode *doubly_list_insertHead(int a[], int n)
 	for(int i = 0; i < n; i++)
 	{
 		DoublyListNode *tmp = new DoublyListNode(a[i]);
-		if(dummy->next == dummy)
-		{
-			dummy->next = tmp;
-			dummy->prev = tmp;
-			tmp->next = dummy;
-			tmp->prev = dummy;
-		}
-		else
-		{
-			tmp->next = dummy->next;
-			tmp->prev = dummy;
-			dummy->next->prev = tmp;
-			dummy->next = tmp;
-		}
+		
+		tmp->next = dummy->next;
+		tmp->prev = dummy;
+		dummy->next->prev = tmp;
+		dummy->next = tmp;
 	}
 
 	doubly_list_trvl(head);
@@ -62,20 +57,11 @@ DoublyListNode *doubly_list_insertTail(int a[], int n)
 	for(int i = 0; i < n; i++)
 	{
 		DoublyListNode *tmp = new DoublyListNode(a[i]);
-		if(dummy->next == dummy)
-		{
-			dummy->next = tmp;
-			dummy->prev = tmp;
-			tmp->next = dummy;
-			tmp->prev = dummy;
-		}
-		else
-		{
-			tmp->prev = dummy->prev;
-			tmp->next = dummy;
-			dummy->prev->next = tmp;
-			dummy->prev = tmp;
-		}
+
+		tmp->prev = dummy->prev;
+		tmp->next = dummy;
+		dummy->prev->next = tmp;
+		dummy->prev = tmp;
 	}
 
 	doubly_list_trvl(head);
@@ -89,24 +75,17 @@ DoublyListNode *doubly_list_deleteX(DoublyListNode *head, int x)
 	NULL_CHK(head);
 	NULL_CHK(head->next);
 
-	for(DoublyListNode *i = head->next; i != NULL && i != head;)
+	for(DoublyListNode *i = head->next; i != NULL && i != head; i = i->next)
 	{
 		if(i->val == x)
 		{
-			cout<<i->val<<endl;
-			cout<<i->next->val<<endl;
-			cout<<i->next->next->val<<endl;
-			i->next->next->prev = i;
-			i->next = i->next->next;
-			delete i->next;
-			i = i->next;
-		}
-		else
-		{
-			i = i->next;
+			i->next->prev = i->prev;
+			i->prev->next = i->next;
+			delete i;
 		}
 	}
 
 	doubly_list_trvl(head);
+
 	return head;
 }

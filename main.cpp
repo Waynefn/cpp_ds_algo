@@ -7,6 +7,7 @@
 #include "tree.h"
 #include "graph.h"
 #include "sort.h"
+#include "exam.h"
 
 using namespace std;
 
@@ -27,18 +28,24 @@ void day_20171008()
 	int a4[10] = {1,1,2,2,2,3,4,5,5,6};
 	array_4(a4, Len(a4));
 */
-	/***********************************************/
-	int l1[5] = {1,3,5,7,9};
-	ListNode *list1 = list_insertTail(l1, Len(l1));
+
+	/**********************************************
+	int l1[10] = {3,3,5,7,9,4,5,6,2,3};
+	ListNode *list1 = list_insertHead(l1, Len(l1));
 	list1 = list_deleteX(list1, 3);
+	list_reverse(list1);
 
 	int l2[5] = {2,4,6,8,10};
 	ListNode *list2 = list_insertTail(l2, Len(l2));
 	list2 = list_mergeList(list1, list2);
 
-	int l3[5] = {6,7,8,9,10};
-	DoublyListNode *list3 = doubly_list_insertTail(l3, Len(l3));
+	int l3[10] = {6,7,8,9,10,9,9,9,9,9};
+	DoublyListNode *list3 = doubly_list_insertHead(l3, Len(l3));
 	list3 = doubly_list_deleteX(list3, 9);
+*/
+
+//	divisor(24);
+	show_perfect(1000);
 }
 
 int main()

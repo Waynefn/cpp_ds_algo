@@ -28,13 +28,9 @@ ListNode *list_insertHead(int a[], int n)
 	for(int i = 0; i < n; i++)
 	{
 		ListNode *tmp = new ListNode(a[i]);
-		if(dummy->next == NULL)
-			dummy->next = tmp;
-		else
-		{
-			tmp->next = dummy->next;
-			dummy->next = tmp;
-		}
+
+		tmp->next = dummy->next;
+		dummy->next = tmp;	
 	}
 
 	list_trvl(head);
@@ -74,6 +70,7 @@ ListNode *list_deleteX(ListNode *head, int x)
 
 	for(ListNode *i = head; i != NULL && i->next != NULL;)
 	{
+		// 必须在next不等于x时，才能移动i指针，为什么？
 		if(i->next->val != x)
 			i = i->next;
 		else
@@ -127,4 +124,27 @@ ListNode *list_mergeList(ListNode *list1, ListNode *list2)
 	return head;
 }
 
+/*
+	提供一个带头节点的链表，将链表反转
+*/
+ListNode *list_reverse(ListNode *head)
+{
+	PRINT_FUNCTION_NAME;
 
+	NULL_CHK(head);
+	NULL_CHK(head->next);
+
+	ListNode *i = head->next, *j = i->next, *k = NULL;
+	while(j)
+	{
+		k = j->next;
+		j->next = i;
+		i = j;
+		j = k;
+	}
+
+	head->next->next = NULL;
+	head->next = i;
+	list_trvl(head);
+	return head;
+}

@@ -6,7 +6,8 @@ SRCS	=	main.cpp	\
 			doubly_list.cpp	\
 			tree.cpp	\
 			graph.cpp	\
-			sort.cpp
+			sort.cpp	\
+			exam.cpp
 
 OBJS	=	$(SRCS:.cpp=.o)
 EXES	=	exe
