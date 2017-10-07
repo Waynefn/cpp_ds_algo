@@ -70,10 +70,9 @@ ListNode *list_deleteX(ListNode *head, int x)
 
 	for(ListNode *i = head; i != NULL && i->next != NULL;)
 	{
-		// 必须在next不等于x时，才能移动i指针，为什么？
 		if(i->next->val != x)
 			i = i->next;
-		else
+		else	// 此时不能移动i指针，为什么？
 		{
 			ListNode *tmp = i->next;
 			i->next = i->next->next;

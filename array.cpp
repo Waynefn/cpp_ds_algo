@@ -7,7 +7,7 @@ using namespace std;
 /*
 	提供两个有序数组a[]和b[]，将他们整合到一个新的有序数组
 */
-void array_1(int a[], int m, int b[], int n, int res[], int res_size)
+void array_merge2Array(int a[], int m, int b[], int n, int res[], int res_size)
 {
 	PRINT_FUNCTION_NAME;
 
@@ -51,7 +51,7 @@ void array_1(int a[], int m, int b[], int n, int res[], int res_size)
 	提供任意数组a[]，将所有元素逆置
 */
 
-void array_2(int a[], int n)
+void array_reverse(int a[], int n)
 {
 	PRINT_FUNCTION_NAME;
 
@@ -60,7 +60,6 @@ void array_2(int a[], int n)
 	int s = 0, e = n-1;
 	while(s < e)
 	{
-		cout<<a[s]<<"--"<<a[e]<<endl;
 		SWAP(a[s], a[e]);
 		s++; e--;
 	}
@@ -69,10 +68,10 @@ void array_2(int a[], int n)
 }
 
 /*
-	提供有序数组a[], 删除数组中所有为x的元素，时间复杂度O(n),空间复杂度O(1)
+	提供有序数组a[], 删除数组中所有为x的元素
 */
 
-void array_3(int a[], int n, int x)
+void array_deleteX(int a[], int n, int x)
 {
 	PRINT_FUNCTION_NAME;
 
@@ -87,6 +86,7 @@ void array_3(int a[], int n, int x)
 			a[i-k] = a[i];
 	}
 
+	print_array(a, n);
 	for(int i = n-k; i < n; i++)
 		a[i] = -1;
 
@@ -96,7 +96,7 @@ void array_3(int a[], int n, int x)
 /*
 	提供有序数组a[],如果元素重复则删掉重复的部分，使所有元素唯一
 */
-void array_4(int a[], int n)
+void array_deleteRepeat(int a[], int n)
 {
 	PRINT_FUNCTION_NAME;
 	
@@ -105,13 +105,11 @@ void array_4(int a[], int n)
 	int i = 0, j = 1;
 	for(; j < n; j++)
 	{
-		if(a[i] == a[j])
-			;
-		else
+		if(a[i] != a[j])
 			a[++i] = a[j];
 	}
 
-	for(int k = i; k < n; k++)
+	for(int k = i+1; k < n; k++)
 		a[k] = -1;
 
 	print_array(a, n);

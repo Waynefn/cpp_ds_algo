@@ -4,6 +4,8 @@ SRCS	=	main.cpp	\
 			array.cpp	\
 			list.cpp	\
 			doubly_list.cpp	\
+			stack.cpp 	\
+			queue.cpp	\
 			tree.cpp	\
 			graph.cpp	\
 			sort.cpp	\
