@@ -6,7 +6,8 @@ typedef struct _ListNode
 	_ListNode(int val)
 	{
 		this->val = val;
-		this->next = NULL;
+		this->next = NULL;	// this->next = this 则是循环链表
+		this->prev = NULL;	// this->prev = this 则是循环链表
 	}
 }ListNode;
 

@@ -5,49 +5,82 @@
 
 using namespace std;
 
-StackNode *stack_create()
+/**********************************************
+	用list来实现stack
+	top指向栈顶，bottom指向栈底
+	push时：list头插的方式，将新元素置于top的后面
+	pop时：top指向的元素弹出，然后top=top->next
+	empty时：top已经指向了NULL，无元素可以弹出
+**********************************************/
+bool stack_isEmpty_byList(Stack_byList *s)
 {
-	StackNode *node = new StackNode(0);
-	NULL_CHK(node);
-
-	return node;
+	if(s->top == NULL)
+	{
+		// 此时原本bottom指向的栈底元素已经被top指针pop并delete，会变成野指针
+		s->bottom = NULL;
+		return true;
+	}
+	else
+		return false;
 }
 
-bool stack_isEmpty(StackNode *s)
-{
-	return s->next == NULL;
-}
-
-void stack_push(StackNode *s, int val)
+void stack_push_byList(Stack_byList *s, int val)
 {
 	NULL_CHK(s);
 
 	StackNode *tmp = new StackNode(val);
 	NULL_CHK(tmp);
 
-	tmp->next = s->next;
-	s->next = tmp;
+	if(s->top == NULL)
+	{
+		s->top = tmp;
+		s->bottom = tmp;
+	}
+	else
+	{
+		tmp->next = s->top;
+		s->top = tmp;
+	}
 }
 
-int stack_pop(StackNode *s)
+int stack_pop_byList(Stack_byList *s)
 {
 	NULL_CHK(s);
 
-	StackNode *first = s->next;
-	int res = first->val;
+	if(stack_isEmpty_byList(s))
+	{
+		cout<<"stack_byList is empty"<<endl;
+		return -1;
+	}
 
-	s->next = first->next;
-	delete first;
+	StackNode *tmp = s->top;
+	int res = tmp->val;
 
-	cout<<"Pop res = "<<res<<endl;
+	s->top = tmp->next;
 
+	cout<<"stack_byList pop = "<<res<<endl;
+	delete tmp;
 	return res;
 }
 
-void stack_empty(StackNode *s)
+void stack_empty_byList(Stack_byList *s)
 {
 	NULL_CHK(s);
 
-	while(!stack_isEmpty(s))
-		stack_pop(s);
+	while(!stack_isEmpty_byList(s))
+		stack_pop_byList(s);
+}
+
+void test_stack_byList()
+{
+	Stack_byList *s = new Stack_byList;
+	stack_push_byList(s, 1);
+	stack_push_byList(s, 2);
+	stack_push_byList(s, 3);
+	stack_push_byList(s, 4);
+	stack_pop_byList(s);
+	stack_pop_byList(s);
+	stack_pop_byList(s);
+	stack_pop_byList(s);
+	stack_pop_byList(s);
 }

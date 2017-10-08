@@ -9,8 +9,15 @@ typedef struct _StackNode
 	}
 }StackNode;
 
-StackNode *stack_create();
-bool stack_isEmpty(StackNode *s);
-void stack_push(StackNode *s, int val);
-int stack_pop(StackNode *s);
-void stack_empty(StackNode *s);
+typedef struct _Stack_byList
+{
+	StackNode *top;
+	StackNode *bottom;
+	_Stack_byList()
+	{
+		this->top = NULL;
+		this->bottom = NULL;
+	}
+}Stack_byList;
+
+void test_stack_byList();

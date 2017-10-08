@@ -4,23 +4,22 @@ void divisor(int n);
 int is_perfect(int n);
 void show_perfect(int N);	
 
-
 typedef struct _element
 {
 	int val;
 	_element *next;
 }element;
 
-typedef struct _queueHead
+typedef struct _Queue_byList
 {
-	element *first;
-	element *last;
-	_queueHead()
+	element *first;		// pop point
+	element *last;		// push point
+	_Queue_byList()
 	{
 		this->first = NULL;
 		this->last = NULL;
 	}
-}queueHead;
+}Queue_byList;
 
 void show_radixSort();
 

@@ -96,28 +96,41 @@ ListNode *list_mergeList(ListNode *list1, ListNode *list2)
 	NULL_CHK(list2);
 	NULL_CHK(list2->next);
 
+	list_trvl(list1);
+	list_trvl(list2);
+http://www.cs.tsukuba.ac.jp/admission/19-8infj.pdf
 	ListNode *tmp1 = list1->next, *tmp2 = list2->next;
 	ListNode *head = new ListNode(0);
-	ListNode *i = head;
+	ListNode *dummy = head;
 
-	while(tmp1 && tmp2)
+	while(tmp1 != NULL && tmp2 != NULL)
 	{
 		if(tmp1->val < tmp2->val)
 		{
-			i->next = tmp1;
+			dummy->next = tmp1;
 			tmp1 = tmp1->next;
 		}
 		else
 		{
-			i->next = tmp2;
+			dummy->next = tmp2;
 			tmp2 = tmp2->next;
 		}
-		i = i->next;
+		dummy = dummy->next;
 	}
-	if(tmp1)
-		i->next = tmp1;
-	else
-		i->next = tmp2;
+
+	while(tmp1 != NULL)
+	{
+		dummy->next = tmp1;
+		tmp1 = tmp2->next;
+	}
+	while(tmp2 != NULL)
+	{
+		dummy->next = tmp2;
+		tmp2 = tmp2->next;
+	}
+
+//	delete list1;
+//	delete list2;
 
 	list_trvl(head);
 	return head;
