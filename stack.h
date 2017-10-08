@@ -21,3 +21,4 @@ typedef struct _Stack_byList
 }Stack_byList;
 
 void test_stack_byList();
+void test_stack_minStack();

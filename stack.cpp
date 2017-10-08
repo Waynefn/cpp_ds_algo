@@ -1,4 +1,5 @@
 #include <iostream>
+#include <stack>
 
 #include "main.h"
 #include "stack.h"
@@ -83,4 +84,78 @@ void test_stack_byList()
 	stack_pop_byList(s);
 	stack_pop_byList(s);
 	stack_pop_byList(s);
+}
+
+/**********************************************
+	stack实现方法min()可以O(1)时间内返回stack中的最小值
+	s1:正常的操作
+	s2：与s1保持元素一样多，每次pop时和s1一样。但push时只push当前最小值
+	min()：s2.pop()即可
+**********************************************/
+typedef struct _minStack
+{
+	stack<int> s1;
+	stack<int> s2;
+	int min;
+	_minStack()
+	{
+		this->min = 99999;
+	}
+}minStack;
+
+void minStack_push(minStack &ms, int x)
+{
+	if(ms.s2.empty())
+		ms.min = 99999;
+	else	// 之前的min可能已经被pop，所以每次push时都要再次从s2获取
+		ms.min = ms.s2.top();	
+	ms.min = ms.min < x ? ms.min : x;
+
+	ms.s1.push(x);
+	ms.s2.push(ms.min);
+}
+
+int minStack_pop(minStack &ms)
+{
+	if(ms.s1.empty())
+	{
+		cout<<"minStack is empty"<<endl;
+		return -1;
+	}
+
+	int res = ms.s2.top();
+
+	ms.s1.pop(); ms.s2.pop();
+	if(ms.s1.empty())
+		ms.min = 99999;
+
+	return res;
+}
+
+int minStack_min(minStack &ms)
+{
+	if(ms.s1.empty())
+	{
+		cout<<"minStack is empty, min = 99999"<<endl;
+		return -1;
+	}
+	int res = ms.s2.top();
+	cout<<"minStack min = "<<res<<endl;
+	return res;
+}
+
+void test_stack_minStack()
+{
+	minStack ms;
+
+	minStack_push(ms, 5); minStack_min(ms);
+	minStack_push(ms, 4); minStack_min(ms);
+	minStack_push(ms, 8); minStack_min(ms);
+	minStack_push(ms, 1); minStack_min(ms);
+	minStack_push(ms, 2); minStack_min(ms);
+	minStack_pop(ms); minStack_min(ms);
+	minStack_pop(ms); minStack_min(ms);
+	minStack_pop(ms); minStack_min(ms);
+	minStack_pop(ms); minStack_min(ms);
+	minStack_pop(ms); minStack_min(ms);
 }

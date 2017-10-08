@@ -49,10 +49,11 @@ void day_20171008()
 
 void day_20171015()
 {
-	show_radixSort();
+//	show_radixSort();
 
-	test_queue_byStack();
-	test_stack_byList();
+//	test_queue_byStack();
+//	test_stack_byList();
+	test_stack_minStack();
 }
 
 int main()
