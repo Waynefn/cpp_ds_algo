@@ -30,21 +30,13 @@ void day_20171008()
 	int a4[10] = {1,1,2,2,2,3,4,5,5,6};
 	array_deleteRepeat(a4, Len(a4));
 */
+	/***********************************************/
+	
+	test_list_create_merge();
+	test_list_reverse();
+	test_list_delete();
 
-	/**********************************************
-	int l1[10] = {9,8,7,7,6,5,4,3,3,3};
-	ListNode *list1 = list_insertHead(l1, Len(l1));
-	list1 = list_deleteX(list1, 3);
-
-	int l2[5] = {10,8,4,3,2};
-	ListNode *list2 = list_insertHead(l2, Len(l2));
-	list2 = list_mergeList(list1, list2);
-
-	int l3[10] = {6,7,8,9,10,9,9,9,9,9};
-	DoublyListNode *list3 = doubly_list_insertHead(l3, Len(l3));
-	list3 = doubly_list_deleteX(list3, 9);
-	list_reverse(list1);
-*/
+	test_doubly_list();
 }
 
 void day_20171015()
@@ -53,7 +45,8 @@ void day_20171015()
 
 //	test_queue_byStack();
 //	test_stack_byList();
-	test_stack_minStack();
+//	test_stack_minStack();
+
 }
 
 int main()

@@ -25,8 +25,6 @@ void doubly_list_trvl(DoublyListNode *head)
 */
 DoublyListNode *doubly_list_insertHead(int a[], int n)
 {
-	PRINT_FUNCTION_NAME;
-
 	DoublyListNode *head = new DoublyListNode(0);
 	DoublyListNode *dummy = head;
 	for(int i = 0; i < n; i++)
@@ -39,7 +37,6 @@ DoublyListNode *doubly_list_insertHead(int a[], int n)
 		dummy->next = tmp;
 	}
 
-	doubly_list_trvl(head);
 	return head;
 }
 
@@ -49,8 +46,6 @@ DoublyListNode *doubly_list_insertHead(int a[], int n)
 */
 DoublyListNode *doubly_list_insertTail(int a[], int n)
 {
-	PRINT_FUNCTION_NAME;
-
 	DoublyListNode *head = new DoublyListNode(0);
 	DoublyListNode *dummy = head;
 
@@ -64,14 +59,11 @@ DoublyListNode *doubly_list_insertTail(int a[], int n)
 		dummy->prev = tmp;
 	}
 
-	doubly_list_trvl(head);
 	return head;
 }
 
 DoublyListNode *doubly_list_deleteX(DoublyListNode *head, int x)
 {
-	PRINT_FUNCTION_NAME;
-
 	NULL_CHK(head);
 	NULL_CHK(head->next);
 
@@ -85,7 +77,17 @@ DoublyListNode *doubly_list_deleteX(DoublyListNode *head, int x)
 		}
 	}
 
-	doubly_list_trvl(head);
-
 	return head;
+}
+
+void test_doubly_list()
+{
+	PRINT_FUNCTION_NAME;
+
+	int l1[10] = {6,7,8,9,10,9,9,9,9,9};
+	DoublyListNode *list1 = doubly_list_insertHead(l1, Len(l1));
+	doubly_list_trvl(list1);
+
+	list1 = doubly_list_deleteX(list1, 9);
+	doubly_list_trvl(list1);
 }

@@ -1,5 +1,7 @@
 #include <iostream>
 #include <stack>
+#include <queue>
+#include <string>
 
 #include "main.h"
 #include "stack.h"
