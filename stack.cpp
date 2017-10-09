@@ -76,6 +76,8 @@ void stack_empty_byList(Stack_byList *s)
 
 void test_stack_byList()
 {
+	PRINT_FUNCTION_NAME;
+
 	Stack_byList *s = new Stack_byList;
 	stack_push_byList(s, 1);
 	stack_push_byList(s, 2);
@@ -148,6 +150,8 @@ int minStack_min(minStack &ms)
 
 void test_stack_minStack()
 {
+	PRINT_FUNCTION_NAME;
+	
 	minStack ms;
 
 	minStack_push(ms, 5); minStack_min(ms);

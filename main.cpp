@@ -49,11 +49,16 @@ void day_20171015()
 
 }
 
+void day_20171022()
+{
+	test_tree_basic();
+}
+
 int main()
 {
 	day_20171008();
 	day_20171015();
-
+	day_20171022();
 	return 0;
 }
 

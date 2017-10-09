@@ -51,6 +51,8 @@ int queue_pop_byStack(Queue_byStack &q)
 
 void test_queue_byStack()
 {
+	PRINT_FUNCTION_NAME;
+	
 	Queue_byStack q;
 
 	queue_push_byStack(q, 1);
