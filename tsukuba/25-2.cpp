@@ -1,4 +1,5 @@
 /*
+http://www.cs.tsukuba.ac.jp/admission/25-2inf.pdf
 	问题1->Dijkstra
 	问题2->离散数学的题
 */

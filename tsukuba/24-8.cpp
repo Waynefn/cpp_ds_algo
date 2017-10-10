@@ -1,4 +1,5 @@
 /*
+http://www.cs.tsukuba.ac.jp/admission/24-8inf.pdf
 	问题1->stack检测符号串是否平衡
 	问题2->离散数学的题
 */
