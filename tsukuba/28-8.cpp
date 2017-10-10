@@ -19,13 +19,13 @@ using namespace std;
 		每次split:newq*2, enq为q的元素个数
 		每次merge:newq*1, enq为q1+q2的元素个数
 		->newq*9, enq*16 (test函数中初始化过程不算)
-	4.
+	4.真假判断
 		T->总是同时出现的
 		F->除了比较大小时enq,split时也enq了
 		F
 		T->??
 		F->只依赖于q1和q2的元素个数
-
+	5.完成[数组实现循环queue]的代码
 ***************************************/
 
 #define MAX (100)
