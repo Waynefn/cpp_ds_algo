@@ -101,7 +101,7 @@ void Dijkstra(int p, int w[N][N], int d[N])
 	for(i = 0; i < N; i++)
 		d[i] = M;
 	d[p] = 0;
-
+	
 	while(remain(&U))	
 	{
 		u = select_min(d, &U);
