@@ -21,7 +21,7 @@ using namespace std;
 		...
 		data[N-1]比较1次
 		所以->
-	3.归并排序填代码->垃圾代码
+	3.归并排序填代码->
 		归并时两段数组互相比较大小并归并,然而下标的移动方向:
 			前半段left[]是: start~mid
 			后半段right[]是:end~mid+1,每次比较时总是从a[end]开始往前移动,最终a[start~end]保证有序
@@ -74,7 +74,7 @@ void sortsub(int a[], int l, int r)
 		for(i = l; i <= m; i++)	
 			b[i] = a[i];
 		for(j = m+1; j <= r; j++)
-			b[r-j+m+1] = a[j]; 		// coding,垃圾代码
+			b[r-j+m+1] = a[j]; 		// coding
 
 		i = l; j = r;
 		for(k = l; k <= r; k++)
