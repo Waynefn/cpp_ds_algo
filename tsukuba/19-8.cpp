@@ -41,14 +41,7 @@ void show_radixSort();
 
 bool queue_isEmpty(queuehead *qh)
 {
-	if(qh->first == NULL)
-	{
-		// 此时原本last指向的队尾元素已经被first指针pop并delete，会变成野指针
-		qh->last = NULL;
-		return true;
-	}
-	else
-		return false;
+	return qh->first == NULL;
 }
 
 void queue_push(queuehead *qh, int val)
@@ -73,15 +66,16 @@ void queue_push(queuehead *qh, int val)
 int queue_pop(queuehead *qh)	// coding
 {
 	if(queue_isEmpty(qh))
-	{
 		return -1;
-	}
 
 	element *tmp = qh->first;
 	int res = tmp->val;
 
 	qh->first = tmp->next;
 	delete tmp;
+
+	if(qh->first == NULL)
+		qh->last = NULL;	// 此时原本last指向的队尾元素已经被first指针pop并delete，会变成野指针
 
 	return res;
 }
@@ -123,7 +117,7 @@ void test_question_1()
 	for(int i = 0; i < Len(a); i++)
 		queue_push(&input, a[i]);
 
-	radix_sort(&input, &output, 0);
+	radix_sort(&input, &output, 1);
 }
 
 int main()
