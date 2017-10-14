@@ -8,8 +8,7 @@ SRCS	=	main.cpp	\
 			queue.cpp	\
 			tree.cpp	\
 			graph.cpp	\
-			sort.cpp	\
-			exam.cpp
+			sort.cpp
 
 OBJS	=	$(SRCS:.cpp=.o)
 EXES	=	exe

@@ -9,7 +9,6 @@
 #include "tree.h"
 #include "graph.h"
 #include "sort.h"
-#include "exam.h"
 
 using namespace std;
 
@@ -35,7 +34,6 @@ void day_20171008()
 	test_list_create_merge();
 	test_list_reverse();
 	test_list_delete();
-
 	test_doubly_list();
 }
 
@@ -44,7 +42,7 @@ void day_20171015()
 //	show_radixSort();
 
 //	test_queue_byStack();
-//	test_stack_byList();
+	test_stack_byList();
 //	test_stack_minStack();
 
 }
@@ -56,9 +54,9 @@ void day_20171022()
 
 int main()
 {
-	day_20171008();
+//	day_20171008();
 	day_20171015();
-	day_20171022();
+//	day_20171022();
 	return 0;
 }
 

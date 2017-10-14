@@ -17,14 +17,7 @@ using namespace std;
 **********************************************/
 bool stack_isEmpty_byList(Stack_byList *s)
 {
-	if(s->top == NULL)
-	{
-		// 此时原本bottom指向的栈底元素已经被top指针pop并delete，会变成野指针
-		s->bottom = NULL;
-		return true;
-	}
-	else
-		return false;
+	return s->top == NULL;
 }
 
 void stack_push_byList(Stack_byList *s, int val)
@@ -60,9 +53,12 @@ int stack_pop_byList(Stack_byList *s)
 	int res = tmp->val;
 
 	s->top = tmp->next;
+	delete tmp;
+
+	if(s->top == NULL)
+		s->bottom = NULL;
 
 	cout<<"stack_byList pop = "<<res<<endl;
-	delete tmp;
 	return res;
 }
 
