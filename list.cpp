@@ -1,10 +1,22 @@
 #include <iostream>
 #include <stack>
 
-#include "main.h"
-#include "list.h"
+#include "utils.h"
 
 using namespace std;
+
+typedef struct _ListNode
+{
+	int val;
+	_ListNode *next;
+	_ListNode *prev;
+	_ListNode(int val)
+	{
+		this->val = val;
+		this->next = NULL;	// this->next = this 则是循环链表
+		this->prev = NULL;	// this->prev = this 则是循环链表
+	}
+}ListNode;
 
 void list_trvl(ListNode *head)
 {
@@ -58,6 +70,8 @@ ListNode *list_insertTail(int a[], int n)
 **********************************************/
 ListNode *list_mergeList(ListNode *list1, ListNode *list2)
 {
+	PRINT_SUB_FUNCTION_NAME;
+
 	NULL_CHK(list1);
 	NULL_CHK(list1->next);
 	NULL_CHK(list2);
@@ -99,7 +113,7 @@ ListNode *list_mergeList(ListNode *list1, ListNode *list2)
 	return head;
 }
 
-void test_list_create_merge()
+void test_list_merge()
 {
 	PRINT_FUNCTION_NAME;
 
@@ -117,6 +131,8 @@ void test_list_create_merge()
 **********************************************/
 ListNode *list_reverse(ListNode *head)
 {
+	PRINT_SUB_FUNCTION_NAME;
+
 	NULL_CHK(head);
 	NULL_CHK(head->next);
 
@@ -140,6 +156,8 @@ ListNode *list_reverse(ListNode *head)
 **********************************************/
 ListNode *list_reverse_byStack(ListNode *head)
 {
+	PRINT_SUB_FUNCTION_NAME;
+
 	stack<ListNode *> s;
 	ListNode *i = head->next;
 	while(i)
@@ -180,6 +198,8 @@ void test_list_reverse()
 **********************************************/
 ListNode *list_deleteX(ListNode *head, int x)
 {
+	PRINT_SUB_FUNCTION_NAME;
+
 	NULL_CHK(head);
 
 	for(ListNode *i = head; i != NULL && i->next != NULL;)
@@ -202,6 +222,8 @@ ListNode *list_deleteX(ListNode *head, int x)
 **********************************************/
 ListNode *delete_moreOne(ListNode *head)
 {
+	PRINT_SUB_FUNCTION_NAME;
+
 	NULL_CHK(head);
 	NULL_CHK(head->next);
 
@@ -228,6 +250,8 @@ ListNode *delete_moreOne(ListNode *head)
 **********************************************/
 ListNode *delete_duplicates(ListNode *head)
 {
+	PRINT_SUB_FUNCTION_NAME;
+	
 	NULL_CHK(head);
 	NULL_CHK(head->next)
 
@@ -265,10 +289,116 @@ void test_list_delete()
 	ListNode *list3 = list_insertHead(l3, Len(l3));
 
 	ListNode *del_1 = list_deleteX(list1, 3);
-	ListNode *del_2 = delete_moreOne(list2);
-	ListNode *del_3 = delete_duplicates(list3);
-
 	list_trvl(del_1);
+	ListNode *del_2 = delete_moreOne(list2);
 	list_trvl(del_2);
+	ListNode *del_3 = delete_duplicates(list3);
 	list_trvl(del_3);
+}
+
+/**********************************************
+	双向循环链表
+**********************************************/
+typedef struct _DoublyListNode
+{
+	int val;
+	_DoublyListNode *next;
+	_DoublyListNode *prev;
+	_DoublyListNode(int val)
+	{
+		this->val = val;
+		this->next = this;
+		this->prev = this;
+	}
+}DoublyListNode;
+
+void doubly_list_trvl(DoublyListNode *head)
+{
+	NULL_CHK(head);
+	NULL_CHK(head->next);
+
+	cout<<"|next:";
+	for(DoublyListNode *i = head->next; i != NULL && i != head; i = i->next)
+		cout<<i->val<<" ";
+	cout<<"\n|prev:";
+	for(DoublyListNode *i = head->prev; i != NULL && i != head; i = i->prev)
+		cout<<i->val<<" ";
+	cout<<endl;
+}
+
+DoublyListNode *doubly_list_insertHead(int a[], int n)
+{
+	DoublyListNode *head = new DoublyListNode(0);
+	DoublyListNode *dummy = head;
+	for(int i = 0; i < n; i++)
+	{
+		DoublyListNode *tmp = new DoublyListNode(a[i]);
+		
+		tmp->next = dummy->next;
+		tmp->prev = dummy;
+		dummy->next->prev = tmp;
+		dummy->next = tmp;
+	}
+
+	return head;
+}
+
+DoublyListNode *doubly_list_insertTail(int a[], int n)
+{
+	DoublyListNode *head = new DoublyListNode(0);
+	DoublyListNode *dummy = head;
+
+	for(int i = 0; i < n; i++)
+	{
+		DoublyListNode *tmp = new DoublyListNode(a[i]);
+
+		tmp->prev = dummy->prev;
+		tmp->next = dummy;
+		dummy->prev->next = tmp;
+		dummy->prev = tmp;
+	}
+
+	return head;
+}
+
+DoublyListNode *doubly_list_delete(DoublyListNode *head, int x)
+{
+	PRINT_SUB_FUNCTION_NAME;
+
+	NULL_CHK(head);
+	NULL_CHK(head->next);
+
+	for(DoublyListNode *i = head->next; i != NULL && i != head; i = i->next)
+	{
+		if(i->val == x)
+		{
+			i->next->prev = i->prev;
+			i->prev->next = i->next;
+			delete i;
+		}
+	}
+
+	return head;
+}
+
+void test_doubly_list()
+{
+	PRINT_FUNCTION_NAME;
+
+	int l1[10] = {6,7,8,9,10,9,9,9,9,9};
+	DoublyListNode *list1 = doubly_list_insertHead(l1, Len(l1));
+	doubly_list_trvl(list1);
+
+	list1 = doubly_list_delete(list1, 9);
+	doubly_list_trvl(list1);
+}
+
+int main()
+{
+	test_list_merge();
+	test_list_reverse();
+	test_list_delete();
+
+	test_doubly_list();
+	return 0;
 }

@@ -20,8 +20,9 @@ typedef struct _element
 {
 	int data;
 	_element *next;
-	_element()
+	_element(int val)
 	{
+		this->data = val;
 		this->next = NULL;
 	}
 }element;

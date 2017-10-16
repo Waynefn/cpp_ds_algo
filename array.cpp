@@ -1,15 +1,22 @@
 #include <iostream>
 
-#include "main.h"
+#include "utils.h"
 
 using namespace std;
 
-/*
+void print_array(int a[], int n)
+{
+	for(int i = 0; i < n; i++)
+		cout<<a[i]<<" ";
+	cout<<endl;
+}
+
+/***************************************
 	提供两个有序数组a[]和b[]，将他们整合到一个新的有序数组
-*/
+***************************************/
 void array_merge2Array(int a[], int m, int b[], int n, int res[], int res_size)
 {
-	PRINT_FUNCTION_NAME;
+	PRINT_SUB_FUNCTION_NAME;
 
 	NULL_CHK(a);
 	NULL_CHK(b);
@@ -47,13 +54,12 @@ void array_merge2Array(int a[], int m, int b[], int n, int res[], int res_size)
 	print_array(res, k);
 }
 
-/*
+/***************************************
 	提供任意数组a[]，将所有元素逆置
-*/
-
+***************************************/
 void array_reverse(int a[], int n)
 {
-	PRINT_FUNCTION_NAME;
+	PRINT_SUB_FUNCTION_NAME;
 
 	NULL_CHK(a);
 
@@ -67,13 +73,12 @@ void array_reverse(int a[], int n)
 	print_array(a, n);
 }
 
-/*
+/***************************************
 	提供有序数组a[], 删除数组中所有为x的元素
-*/
-
+***************************************/
 void array_deleteX(int a[], int n, int x)
 {
-	PRINT_FUNCTION_NAME;
+	PRINT_SUB_FUNCTION_NAME;
 
 	NULL_CHK(a);
 
@@ -93,13 +98,13 @@ void array_deleteX(int a[], int n, int x)
 	print_array(a, n);
 }
 
-/*
+/***************************************
 	提供有序数组a[],如果元素重复则删掉重复的部分，使所有元素唯一
-*/
+***************************************/
 void array_deleteRepeat(int a[], int n)
 {
-	PRINT_FUNCTION_NAME;
-	
+	PRINT_SUB_FUNCTION_NAME;
+
 	NULL_CHK(a);
 
 	int i = 0, j = 1;
@@ -113,4 +118,48 @@ void array_deleteRepeat(int a[], int n)
 		a[k] = -1;
 
 	print_array(a, n);
+}
+
+void test_array_merge()
+{
+	PRINT_FUNCTION_NAME;
+
+	int a[4] = {1,3,5,7};
+	int b[5] = {2,4,6,8,10};
+	int c[20] = {};
+	array_merge2Array(a, Len(a), b, Len(b), c, Len(c));
+}
+
+void test_array_reverse()
+{
+	PRINT_FUNCTION_NAME;
+
+	int a[10] = {0,1,2,3,4,5,6,7,8,9};
+	array_reverse(a, Len(a));
+}
+
+void test_array_delete()
+{
+	PRINT_FUNCTION_NAME;
+
+	int a[10] = {1,2,2,3,4,5,5,6,7,7};
+	array_deleteX(a, Len(a), 2);
+}
+
+void test_array_delete_repeat()
+{
+	PRINT_FUNCTION_NAME;
+	
+	int a[10] = {1,1,2,2,2,3,4,5,5,6};
+	array_deleteRepeat(a, Len(a));
+}
+
+int main()
+{
+	test_array_merge();
+	test_array_reverse();
+	test_array_delete();
+	test_array_delete_repeat();
+
+	return 0;
 }

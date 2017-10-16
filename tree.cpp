@@ -1,11 +1,27 @@
 #include <iostream>
+#include <vector>
 #include <queue>
 #include <stack>
+#include <string>
 
-#include "main.h"
-#include "tree.h"
+#include "utils.h"
 
 using namespace std;
+
+typedef struct _TreeNode
+{
+	int val;
+	int cnt;
+	_TreeNode *left;
+	_TreeNode *right;
+	_TreeNode(int val)
+	{
+		this->val = val;
+		this->cnt = 1;
+		this->left = NULL;
+		this->right = NULL;
+	}
+}TreeNode;
 
 void tree_trvl_prev(TreeNode *t)
 {
@@ -36,6 +52,8 @@ void tree_trvl_post(TreeNode *t)
 
 void tree_trvl_prev_nonRecursive(TreeNode *t)
 {
+	PRINT_SUB_FUNCTION_NAME;
+
 	stack<TreeNode *> s;
 	s.push(t);
 
@@ -66,6 +84,8 @@ void tree_trvl_prev_nonRecursive(TreeNode *t)
 
 void tree_trvl_prev_nonRecursive_modify(TreeNode *t)
 {
+	PRINT_SUB_FUNCTION_NAME;
+
 	stack<TreeNode *> s;
 
 	while(!s.empty() || t)
@@ -84,6 +104,8 @@ void tree_trvl_prev_nonRecursive_modify(TreeNode *t)
 
 void tree_trvl_in_nonRecursive(TreeNode *t)
 {
+	PRINT_SUB_FUNCTION_NAME;
+
 	stack<TreeNode *> s;
 
 	while(!s.empty() || t)
@@ -102,6 +124,8 @@ void tree_trvl_in_nonRecursive(TreeNode *t)
 
 void tree_trvl_post_nonRecursive(TreeNode *t)
 {
+	PRINT_SUB_FUNCTION_NAME;
+
 	TreeNode *last = NULL;
 	stack<TreeNode *> s;
 
@@ -126,6 +150,106 @@ void tree_trvl_post_nonRecursive(TreeNode *t)
 	cout<<endl;
 }
 
+void tree_trvl_level(TreeNode *t)
+{
+	PRINT_SUB_FUNCTION_NAME;
+
+	if(t == NULL)
+		return;
+
+	queue<TreeNode *> q;
+	q.push(t);
+
+	int level = 0;
+	while(!q.empty())
+	{
+		level++;
+		cout<<"lv"<<level<<" :";
+		int lvSize = q.size();
+		while(lvSize)
+		{
+			lvSize--;
+			TreeNode *tmp = q.front(); q.pop();
+			cout<<tmp->val<<"-";
+			if(tmp->left)	q.push(tmp->left);
+			if(tmp->right)	q.push(tmp->right);
+		}
+		cout<<endl;
+	}
+}
+
+void tree_trvl_level_reverse(TreeNode *t)
+{
+	PRINT_SUB_FUNCTION_NAME;
+
+	if(NULL == t)
+		return;
+
+	queue<TreeNode *> q;
+	stack<vector<int> > s;
+	q.push(t);
+
+	while(!q.empty())
+	{
+		int lvSize = q.size();
+		vector<int> v;
+		while(lvSize)
+		{
+			lvSize--;
+			TreeNode *tmp = q.front(); q.pop();
+			v.push_back(tmp->val);
+			if(tmp->left)	q.push(tmp->left);
+			if(tmp->right)	q.push(tmp->right);
+		}
+		s.push(v);
+	}
+
+	int level = s.size();
+	while(!s.empty())
+	{
+		cout<<"lv"<<level<<" :";
+		level--;
+
+		vector<int> v = s.top(); s.pop();
+		for(int i = 0; i < v.size(); i++)
+			cout<<v[i]<<"-";
+		cout<<endl;
+	}
+}
+
+void tree_trvl_zigzag(TreeNode *t)
+{
+	PRINT_SUB_FUNCTION_NAME;
+
+	if(NULL == t)
+		return;
+
+	int level = 0;
+	stack<TreeNode *> s1;
+	stack<TreeNode *> s2;
+
+	s1.push(t);
+	while(!s1.empty() || !s2.empty())
+	{
+		TreeNode *tmp;
+
+		while(!s1.empty())
+		{
+			tmp = s1.top(); s1.pop();
+			cout<<tmp->val<<"-";
+			if(tmp->left)	s2.push(tmp->left);
+			if(tmp->right)	s2.push(tmp->right);
+		}cout<<endl;
+		while(!s2.empty())
+		{
+			tmp = s2.top(); s2.pop();
+			cout<<tmp->val<<"-";
+			if(tmp->right)	s1.push(tmp->right);
+			if(tmp->left)	s1.push(tmp->left);
+		}cout<<endl;
+	}
+}
+
 TreeNode *tree_insert(TreeNode *t, int val)
 {
 	if(t == NULL)
@@ -140,18 +264,112 @@ TreeNode *tree_insert(TreeNode *t, int val)
 	return t;
 }
 
-void test_tree_basic()
+TreeNode *tree_delete(TreeNode *t, int x)
+{
+	if(NULL == t)
+		return NULL;
+
+	if(x < t->val)
+		t->left = tree_delete(t->left, x);
+	else if(x > t->val)
+		t->right = tree_delete(t->right, x);
+	else
+	{
+		TreeNode *tmp;
+		if(NULL == t->right)
+		{
+			tmp = t;
+			t = t->left;
+			delete tmp;
+		}
+		else
+		{
+			tmp = t->right;
+			while(tmp->left)
+				tmp = tmp->left;	// 找到右子树中最小的节点
+			t->val = tmp->val;		// 右子树最小值赋值给当前被删除节点
+			t->right = tree_delete(t->right, tmp->val);	// 递归去右子树删除这个最小值节点
+		}
+	}
+
+	return t;
+}
+
+bool tree_find(TreeNode *t, int x)
+{
+	bool ret = false;
+	if(NULL == t)
+	{
+		cout<<"find "<<x<<" FAIL"<<endl;
+		return ret;
+	}
+
+	if(x == t->val)
+	{
+		ret = true;
+		cout<<"find "<<x<<" OK"<<endl;
+	}
+	else if(x < t->val)
+		ret = tree_find(t->left, x);
+	else
+		ret = tree_find(t->right, x);
+
+	return ret;
+}
+
+int tree_node_count(TreeNode *t)
+{
+	if(NULL == t)
+		return 0;
+
+	return 1 + tree_node_count(t->left) + tree_node_count(t->right);
+}
+
+int tree_heigh(TreeNode *t)
+{
+	if(NULL == t)
+		return 0;
+
+	return 1 + max(tree_heigh(t->left),tree_heigh(t->right));
+}
+
+
+
+void test_tree_trvl(TreeNode *t)
 {
 	PRINT_FUNCTION_NAME;
 
+	tree_trvl_prev_nonRecursive_modify(t); 
+	tree_trvl_in_nonRecursive(t);
+	tree_trvl_post(t); cout<<endl;
+
+	tree_trvl_level(t);
+	tree_trvl_level_reverse(t);
+	tree_trvl_zigzag(t);
+}
+
+void test_tree_basic(TreeNode *t)
+{
+	PRINT_FUNCTION_NAME;
+
+	tree_find(t, 3);
+	tree_find(t, 9);
+	tree_find(t, 33);
+
+	cout<<"tree node num = "<<tree_node_count(t)<<endl;
+	cout<<"tree height = "<<tree_heigh(t)<<endl;
+}
+
+int main()
+{
 	int a[] = {6,4,8,2,7,9,1,3,10,0};
 	TreeNode *root = NULL;
 
 	for(int i = 0; i < Len(a); i++)
 		root = tree_insert(root, a[i]);
 
-	tree_trvl_prev_nonRecursive_modify(root); 
-	tree_trvl_in_nonRecursive(root); cout<<endl;
-	tree_trvl_post(root); cout<<endl;
+	test_tree_trvl(root);
+	test_tree_basic(root);
 
+	return 0;
 }

@@ -1,10 +1,90 @@
 #include <iostream>
 #include <stack>
 
-#include "main.h"
-#include "queue.h"
+#include "utils.h"
 
 using namespace std;
+
+/**********************************************
+	用list实现queue,完成push,pop,empty等方法
+**********************************************/
+typedef struct _Node
+{
+	int val;
+	_Node *next;
+	_Node(int val)
+	{
+		this->val = val;
+		this->next = NULL;
+	}
+}Node;
+
+typedef struct _Queue_byList
+{
+	Node *first;
+	Node *tail;
+	_Queue_byList()
+	{
+		this->first = NULL;
+		this->tail = NULL;
+	}
+}Queue_byList;
+
+bool queue_isEmpty_byList(Queue_byList *q)
+{
+	return q->first == NULL;
+}
+
+void queue_push_byList(Queue_byList *q, int val)
+{
+	Node *node = new Node(val);
+
+	if(NULL == q->first)
+	{
+		q->first = node;
+		q->tail = node;
+	}
+	else
+	{
+		q->tail->next = node;
+		q->tail = node;
+	}
+}
+
+int queue_pop_byList(Queue_byList *q)
+{
+	if(queue_isEmpty_byList(q))
+	{
+		cout<<"queue_byList is empty"<<endl;
+		return -1;
+	}
+
+	Node *tmp = q->first;
+	int ret = tmp->val;
+
+	q->first = q->first->next;
+	if(NULL == q->first)
+		q->tail = NULL;
+
+	delete tmp;
+
+	cout<<"queue_byList pop :"<<ret<<endl;
+	return ret;
+}
+
+void test_queue_byList()
+{
+	PRINT_FUNCTION_NAME;
+
+	Queue_byList *q = new Queue_byList;
+	queue_push_byList(q, 3);
+	queue_push_byList(q, 5);
+	queue_push_byList(q, 7);
+	queue_pop_byList(q);
+	queue_pop_byList(q);
+	queue_pop_byList(q);
+	queue_pop_byList(q);
+}
 
 /**********************************************
 	用两个stack模拟一个queue
@@ -13,7 +93,13 @@ using namespace std;
 	2.pop时，如果s2为空，则s1全部灌入s2，并且s2.pop
 	3.pop时，如果s2不为空，则直接s2.pop
 **********************************************/
-bool queue_empty_byStack(Queue_byStack &q)
+typedef struct
+{
+	stack<int> s1;
+	stack<int> s2;
+}Queue_byStack;
+
+bool queue_isEmpty_byStack(Queue_byStack &q)
 {
 	return q.s1.empty() && q.s2.empty();
 }
@@ -66,6 +152,14 @@ void test_queue_byStack()
 	queue_push_byStack(q, 5);
 	queue_push_byStack(q, 6);
 
-	while(!queue_empty_byStack(q))
+	while(!queue_isEmpty_byStack(q))
 		queue_pop_byStack(q);
+}
+
+int main()
+{
+	test_queue_byList();
+	test_queue_byStack();
+
+	return 0;
 }

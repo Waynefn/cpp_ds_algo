@@ -65,7 +65,6 @@ int dequeue(queue *q)
 
 	node = q->head;
 	data = node->val;
-
 	q->head = node->next;
 	delete node;
 
