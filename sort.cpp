@@ -155,11 +155,151 @@ void test_shell()
 	PRINT_ARRAY(a1, Len(a1));
 }
 
+/**********************************************	
+快速排序
+**********************************************/
+void sub_quick(int a[], int s, int e)
+{
+	if(s >= e)
+		return;
+
+	int i = s, j = e, x = a[s];
+	while(i < j)
+	{
+		while(i < j && a[j] > x)	j--;
+		if(i < j)	a[i++] = a[j];
+		while(i < j && a[i] < x)	i++;
+		if(i < j)	a[j--] = a[i];	
+	}
+	a[i] = x;
+
+	sub_quick(a, s, i-1);
+	sub_quick(a, i+1, e);
+}
+
+void quick(int a[], int n)
+{
+	sub_quick(a, 0, n-1);
+}
+
+void test_quick()
+{
+	PRINT_FUNCTION_NAME;
+
+	int a1[] = {49,38,65,97,26,13,27,49,55,4};
+	quick(a1, Len(a1));
+	PRINT_ARRAY(a1, Len(a1));
+}
+
+/**********************************************	
+归并排序
+**********************************************/
+void merge_array(int a[], int s, int m, int e, int p[])
+{
+	int i = s, j = m+1, k = 0;
+
+	while(i <= m && j <= e)
+	{
+		if(a[i] < a[j]) p[k++] = a[i++];
+		else			p[k++] = a[j++];
+	}
+	while(i <= m)		p[k++] = a[i++];
+	while(j <= e)		p[k++] = a[j++];
+
+	for(i = 0; i < k; i++)
+		a[s+i] = p[i];
+}
+
+void divide(int a[], int s, int e, int p[])
+{
+	if(s < e)
+	{
+		int m = (s + e) / 2;
+		divide(a, s, m, p);
+		divide(a, m+1, e, p);
+		merge_array(a, s, m, e, p);
+	}
+}
+
+void merge(int a[], int n)
+{
+	int *p = new int[n];
+	divide(a, 0, n-1, p);
+}
+
+void test_merge()
+{
+	PRINT_FUNCTION_NAME;
+
+	int a1[] = {49,38,65,97,26,13,27,49,55,4};
+	merge(a1, Len(a1));
+	PRINT_ARRAY(a1, Len(a1));
+}
+
+/**********************************************	
+堆排序
+**********************************************/
+void heap_up(int hp[], int add)
+{
+	int i = ++hp[0];
+
+	for(; i > 1 && hp[i/2] > add; i /= 2)
+		hp[i] = hp[i/2];
+	hp[i] = add;
+}
+
+int heap_down(int hp[])
+{
+	int ret = hp[1], last = hp[hp[0]--];
+	int child, i;
+
+	for(i = 1; i*2 <= hp[0]; i = child)
+	{
+		child = 2*i;
+		if(child+1 <= hp[0] && hp[child+1] < hp[child])
+			child++;
+		if(last < hp[child])
+			break;
+		else
+		{
+			hp[i] = hp[child];
+			i = child;
+		}
+	}
+	hp[i] = last;
+
+	return ret;
+}
+
+void heap(int a[], int n)
+{
+	int *hp = new int[n+1];
+	hp[0] = 0;
+
+	for(int i = 0; i < n; i++)
+		heap_up(hp, a[i]);
+	PRINT_ARRAY(hp, n+1);
+	for(int i = 0; i < n; i++)
+		a[i] = heap_down(hp);
+}
+
+void test_heap()
+{
+	PRINT_FUNCTION_NAME;
+
+	int a1[] = {49,38,65,97,26,13,27,49,55,4};
+	heap(a1, Len(a1));
+	PRINT_ARRAY(a1, Len(a1));
+}
+
 int main()
 {
 	test_bubble();
 	test_insert();
 	test_shell();
+	test_quick();
+	test_merge();
+	test_heap();
 
 	return 0;
 }
