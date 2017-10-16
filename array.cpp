@@ -4,13 +4,6 @@
 
 using namespace std;
 
-void print_array(int a[], int n)
-{
-	for(int i = 0; i < n; i++)
-		cout<<a[i]<<" ";
-	cout<<endl;
-}
-
 /***************************************
 	提供两个有序数组a[]和b[]，将他们整合到一个新的有序数组
 ***************************************/
@@ -51,7 +44,7 @@ void array_merge2Array(int a[], int m, int b[], int n, int res[], int res_size)
 		k++; j++;
 	}
 
-	print_array(res, k);
+	PRINT_ARRAY(res, k);
 }
 
 /***************************************
@@ -70,13 +63,13 @@ void array_reverse(int a[], int n)
 		s++; e--;
 	}
 
-	print_array(a, n);
+	PRINT_ARRAY(a, n);
 }
 
 /***************************************
 	提供有序数组a[], 删除数组中所有为x的元素
 ***************************************/
-void array_deleteX(int a[], int n, int x)
+void array_delete(int a[], int n, int x)
 {
 	PRINT_SUB_FUNCTION_NAME;
 
@@ -91,11 +84,11 @@ void array_deleteX(int a[], int n, int x)
 			a[i-k] = a[i];
 	}
 
-	print_array(a, n);
+	PRINT_ARRAY(a, n);
 	for(int i = n-k; i < n; i++)
 		a[i] = -1;
 
-	print_array(a, n);
+	PRINT_ARRAY(a, n);
 }
 
 /***************************************
@@ -117,7 +110,7 @@ void array_deleteRepeat(int a[], int n)
 	for(int k = i+1; k < n; k++)
 		a[k] = -1;
 
-	print_array(a, n);
+	PRINT_ARRAY(a, n);
 }
 
 void test_array_merge()
@@ -143,7 +136,7 @@ void test_array_delete()
 	PRINT_FUNCTION_NAME;
 
 	int a[10] = {1,2,2,3,4,5,5,6,7,7};
-	array_deleteX(a, Len(a), 2);
+	array_delete(a, Len(a), 2);
 }
 
 void test_array_delete_repeat()
