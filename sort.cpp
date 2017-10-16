@@ -57,8 +57,8 @@ void test_bubble()
 {
 	PRINT_FUNCTION_NAME;
 
-	int a1[] = {2,1,3,4,5,6,9};
-	int a2[] = {2,1,3,4,5,6,9};
+	int a1[] = {49,38,65,97,26,13,27,49,55,4};
+	int a2[] = {49,38,65,97,26,13,27,49,55,4};
 	bubble_lv1(a1, Len(a1));
 	PRINT_ARRAY(a1, Len(a1));
 	
@@ -93,8 +93,65 @@ void test_insert()
 {
 	PRINT_FUNCTION_NAME;
 
-	int a1[] = {8,7,6,5,4,3,2,1,99};
+	int a1[] = {49,38,65,97,26,13,27,49,55,4};
 	insert(a1, Len(a1));
+	PRINT_ARRAY(a1, Len(a1));
+}
+
+/**********************************************	
+选择排序
+	1.每一轮从[start]到[end]遍历,找到最小值的下标,保存到min
+	2.a[min]与a[start]交换,保证每一轮总是能够找到当前区间的最小值,并把它移动到最前面
+	3.start+1,直至start==end,结束
+**********************************************/
+void select(int a[], int n)
+{
+	for(int i = 0; i < n; i++)
+	{
+		int min = i;
+		for(int j = i; j < n; j++)
+			if(a[min] < a[j])
+				min = j;
+		SWAP(a[i], a[min]);
+	}
+}
+
+void test_select()
+{
+	PRINT_FUNCTION_NAME;
+
+	int a1[] = {49,38,65,97,26,13,27,49,55,4};
+	select(a1, Len(a1));
+	PRINT_ARRAY(a1, Len(a1));
+}
+
+/**********************************************	
+希尔排序
+	类似于插入排序,在发现a[j-1]>a[j]时,就不断往前移动直至找到合适的位置
+	但希尔排序是[分阶段地做插入排序]
+	e.g:
+		1.数组分为4段,[1]与[3],[2]与[4]做插入排序
+		2.[1][2][3][4]合起来再做完整的插入排序
+**********************************************/
+void shell(int a[], int n)
+{
+	for(int gap = n/2; gap > 0; gap /= 2)
+		for(int i = gap; i < n; i++)
+			if(a[i-gap] > a[i])
+			{
+				int tmp = a[i], j;
+				for(j = i; j >= gap && a[j-gap] > tmp; j -= gap)
+					a[j] = a[j-gap];
+				a[j] = tmp;
+			}
+}
+
+void test_shell()
+{
+	PRINT_FUNCTION_NAME;
+
+	int a1[] = {49,38,65,97,26,13,27,49,55,4};
+	shell(a1, Len(a1));
 	PRINT_ARRAY(a1, Len(a1));
 }
 
@@ -102,5 +159,7 @@ int main()
 {
 	test_bubble();
 	test_insert();
+	test_shell();
+
 	return 0;
 }
