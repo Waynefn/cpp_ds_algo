@@ -84,7 +84,6 @@ int queue_pop(queuehead *qh)	// coding
 	链表队列应用于基数排序
 	http://www.cs.tsukuba.ac.jp/admission/19-8infj.pdf
 **********************************************/
-
 #define M (10)	// 十进制
 void radix_sort(queuehead *input, queuehead *output, int n)
 {
@@ -103,21 +102,24 @@ void radix_sort(queuehead *input, queuehead *output, int n)
 	for(i = 0; i < M; i++)
 		while((data = queue_pop(&buf[i])) >= 0)
 			queue_push(output, data);
-
-	while((data = queue_pop(output)) >= 0)
-		cout<<data<<" ";
-	cout<<endl;
 }
 
 void test_question_1()
 {
-	int a[] = {52, 97, 74, 0, 37, 14, 57, 95};
+//	int a[] = {52, 97, 74, 0, 37, 14, 57, 95};
+	int a[] = {81,22,73,93,43,14,55,65,28,39};
 	queuehead input, output;
+	int data;
 
 	for(int i = 0; i < Len(a); i++)
 		queue_push(&input, a[i]);
 
-	radix_sort(&input, &output, 1);
+	radix_sort(&input, &output, 0);
+	radix_sort(&output, &input, 1);
+
+	while((data = queue_pop(&input)) >= 0)
+		cout<<data<<" ";
+	cout<<endl;
 }
 
 int main()
