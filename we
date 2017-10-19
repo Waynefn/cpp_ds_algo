@@ -1,3 +1,4 @@
 rm -rf exe
 g++ -o exe $1
+rm -rf *.o
 ./exe

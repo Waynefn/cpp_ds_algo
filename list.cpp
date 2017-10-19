@@ -1,5 +1,6 @@
 #include <iostream>
 #include <stack>
+#include <string.h>
 
 #include "utils.h"
 
@@ -393,6 +394,97 @@ void test_doubly_list()
 	doubly_list_trvl(list1);
 }
 
+/**********************************************
+	Linux内核双向循环链表
+**********************************************/
+#define offsetof(TYPE, MEMBER) ((size_t) &((TYPE *)0)->MEMBER)
+#define container_of(ptr, type, member) ({          \
+    const typeof( ((type *)0)->member ) *__mptr = (ptr);    \
+    (type *)( (char *)__mptr - offsetof(type,member) );})
+#define container_of_simple(ptr, type, member) ({             \
+        (type *) ((char *) ptr - offsetof(type, member));})  
+
+typedef struct _kernel_list
+{
+	_kernel_list *next, *prev;
+	_kernel_list()
+	{
+		this->next = this;
+		this->prev = this;
+	}
+}kernel_list;
+
+typedef struct 
+{
+	int id;
+	char name[20];
+	kernel_list list;
+}student;
+
+#define LIST_HEAD_INIT(name) {&(name), &(name)}
+
+#define LIST_HEAD(name) {kernel_list name = LIST_HEAD_INIT(name)}
+
+void _list_add(kernel_list *node, kernel_list *prev, kernel_list *next)
+{
+	node->next = next;
+	node->prev = prev;
+	next->prev = node;
+	prev->next = node;
+}
+
+void kernel_list_add(kernel_list *node, kernel_list *head)
+{
+	_list_add(node, head, head->next);
+}
+
+void kernel_list_add_tail(kernel_list *node, kernel_list *head)
+{
+	_list_add(node, head->prev, head);
+}
+
+void _list_del(kernel_list *prev,kernel_list *next)
+{
+	next->prev = prev;
+	prev->next = next;
+}
+
+void kernel_list_del(kernel_list *entry)
+{
+	_list_del(entry->prev, entry->next);
+}
+
+void kernel_list_replace(kernel_list *_old, kernel_list *_new)
+{
+	_new->next = _old->next;
+	_new->prev = _old->prev;
+	_new->prev->next = _new;
+	_new->next->prev = _new;
+}
+
+void test_kernel_list()
+{
+	student stu;
+	student *p;
+
+	stu.gender = '1';
+	stu.id = 9527;
+	stu.age = 24;
+	strcpy(stu.name, "asdasd");
+
+	p = container_of2(&stu.id, student, id);
+	student *p2 = container_of(&stu.id, student, id);
+
+	if(p == p2)
+		cout<<"True"<<endl;
+	else
+		cout<<"False"<<endl;
+
+	cout<<p->gender<<endl;
+	cout<<p->age<<endl;
+	cout<<p->name<<endl;
+}
+
 int main()
 {
 	test_list_merge();
@@ -400,5 +492,8 @@ int main()
 	test_list_delete();
 
 	test_doubly_list();
+
+	test_kernel_list();
+
 	return 0;
 }
