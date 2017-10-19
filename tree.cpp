@@ -8,6 +8,16 @@
 
 using namespace std;
 
+/*
+	1.二叉搜索树
+	2.字典树
+	3.线段树
+	4.AVL树
+*/
+
+/**********************************************
+	二叉搜索树
+**********************************************/
 typedef struct _TreeNode
 {
 	int val;
@@ -333,11 +343,22 @@ int tree_heigh(TreeNode *t)
 	return 1 + max(tree_heigh(t->left),tree_heigh(t->right));
 }
 
-
-
-void test_tree_trvl(TreeNode *t)
+void test_tree()
 {
 	PRINT_FUNCTION_NAME;
+
+	int a[] = {6,4,8,2,7,9,1,3,10,0};
+	TreeNode *t = NULL;
+
+	for(int i = 0; i < Len(a); i++)
+		t = tree_insert(t, a[i]);
+
+	tree_find(t, 3);
+	tree_find(t, 9);
+	tree_find(t, 33);
+
+	cout<<"tree node num = "<<tree_node_count(t)<<endl;
+	cout<<"tree height = "<<tree_heigh(t)<<endl;
 
 	tree_trvl_prev_nonRecursive_modify(t); 
 	tree_trvl_in_nonRecursive(t);
@@ -348,28 +369,74 @@ void test_tree_trvl(TreeNode *t)
 	tree_trvl_zigzag(t);
 }
 
-void test_tree_basic(TreeNode *t)
+/**********************************************
+	字典树(Trie)
+**********************************************/
+typedef struct _TrieNode
 {
-	PRINT_FUNCTION_NAME;
+	bool exist;	// 用于以后删除单词时,不破坏树结构
+	_TrieNode *child[26];
+	_TrieNode()
+	{
+		this->exist = false;
+		for(int i = 0; i < 26; i++)
+			this->child[i] = NULL;
+	}
+}TrieNode;
 
-	tree_find(t, 3);
-	tree_find(t, 9);
-	tree_find(t, 33);
+void trie_insert(TrieNode *t, string word)
+{
+	TrieNode *dummy = t;
 
-	cout<<"tree node num = "<<tree_node_count(t)<<endl;
-	cout<<"tree height = "<<tree_heigh(t)<<endl;
+	for(int i = 0; i < word.length(); i++)
+	{
+		int c = word[i] - 'a';
+		if(NULL == dummy->child[c])
+			dummy->child[c] = new TrieNode;
+		dummy = dummy->child[c];
+	}
+	dummy->exist = true;
 }
+
+bool trie_search(TrieNode *t, string word)
+{
+	TrieNode *dummy = t;
+
+	for(int i = 0; i < word.length(); i++)
+	{
+		int c = word[i] - 'a';
+		if(NULL == dummy->child[c])
+		{
+			cout<<"NOT find "<<word<<" in trie"<<endl;
+			return false;
+		}
+		dummy = dummy->child[c];
+	}
+
+	cout<<"find "<<word<<" in trie"<<endl;
+	return true;
+}
+
+void test_trie_tree()
+{
+	TrieNode *t = new TrieNode;
+
+	trie_insert(t, "abc");
+	trie_insert(t, "abcd");
+	trie_insert(t, "abd");
+
+	trie_search(t, "abc");
+	trie_search(t, "abca");
+}
+
+/**********************************************
+	线段树(Segment)
+**********************************************/
 
 int main()
 {
-	int a[] = {6,4,8,2,7,9,1,3,10,0};
-	TreeNode *root = NULL;
-
-	for(int i = 0; i < Len(a); i++)
-		root = tree_insert(root, a[i]);
-
-	test_tree_trvl(root);
-	test_tree_basic(root);
+	test_tree();
+	test_trie_tree();
 
 	return 0;
 }

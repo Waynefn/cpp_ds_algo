@@ -1,21 +1,26 @@
 #include <iostream>
 #include <stack>
 #include <string.h>
+#include <stdio.h>
 
 #include "utils.h"
 
 using namespace std;
 
+/*
+	1.单向链表
+	2.双向循环链表
+	3.linux内核链表
+*/
+
 typedef struct _ListNode
 {
 	int val;
 	_ListNode *next;
-	_ListNode *prev;
 	_ListNode(int val)
 	{
 		this->val = val;
 		this->next = NULL;	// this->next = this 则是循环链表
-		this->prev = NULL;	// this->prev = this 则是循环链表
 	}
 }ListNode;
 
@@ -416,7 +421,7 @@ typedef struct _kernel_list
 
 typedef struct 
 {
-	int id;
+	int age;
 	char name[20];
 	kernel_list list;
 }student;
@@ -424,6 +429,25 @@ typedef struct
 #define LIST_HEAD_INIT(name) {&(name), &(name)}
 
 #define LIST_HEAD(name) {kernel_list name = LIST_HEAD_INIT(name)}
+
+#define list_for_each(i, head) \
+	for(i = (head)->next; i != (head); i = i->next)
+
+#define list_for_each_safe(i, j, head)	\
+	for(i = (head)->next, j = i->next; i != (head); i = j, j = i->next)
+
+#define list_entry(ptr, type, member) container_of(ptr, type, member)
+
+inline void INIT_LIST_HEAD(kernel_list *list)
+{
+	list->next = list;
+	list->prev = list;
+}
+
+bool kernel_list_empty(kernel_list *head)
+{
+	return head->next == head;
+}
 
 void _list_add(kernel_list *node, kernel_list *prev, kernel_list *next)
 {
@@ -464,25 +488,23 @@ void kernel_list_replace(kernel_list *_old, kernel_list *_new)
 
 void test_kernel_list()
 {
-	student stu;
-	student *p;
+	student head;
 
-	stu.gender = '1';
-	stu.id = 9527;
-	stu.age = 24;
-	strcpy(stu.name, "asdasd");
+	for(int i = 0; i < 5; i++)
+	{
+		student *s = new student;
+		s->age = i*10;
+		sprintf(s->name, "%d", i+1);
+		kernel_list_add_tail(&(s->list), &head.list);
+	}
 
-	p = container_of2(&stu.id, student, id);
-	student *p2 = container_of(&stu.id, student, id);
+	kernel_list *tmp;
+	list_for_each(tmp, &head.list)
+	{
+		student *s = list_entry(tmp, student, list);
+		cout<<"name:"<<s->name<<", age:"<<s->age<<endl;
+	}
 
-	if(p == p2)
-		cout<<"True"<<endl;
-	else
-		cout<<"False"<<endl;
-
-	cout<<p->gender<<endl;
-	cout<<p->age<<endl;
-	cout<<p->name<<endl;
 }
 
 int main()
