@@ -7,6 +7,7 @@ http://www.cs.tsukuba.ac.jp/admission/29-8.pdf
 
 #include <iostream>
 #include <stdlib.h>
+#include <limits.h>
 
 using namespace std;
 
@@ -14,7 +15,6 @@ using namespace std;
 	情报2(1)->优先队列的堆排序
 ***************************************/
 #define SIZE (100)
-#define INT_MAX (9999)
 #define Len(x)	sizeof(x)/sizeof(x[0])	
 
 typedef struct
@@ -109,6 +109,7 @@ void calc_dists(const int origin, int dist_vec[])
 	int *curr = array1, *next = array2, *tmp;
 	int i, j, index = 0, dist = 1, len_curr = 1, len_next = 0;
 
+	// 完成邻接表
 	for(i = 0; i < N_VERT; i++)
 	{
 		adj_index[i] = index;
@@ -118,6 +119,7 @@ void calc_dists(const int origin, int dist_vec[])
 	}
 	adj_index[N_VERT] = index;
 
+	// 初始化所有顶点距离为-1
 	for(i = 0; i < N_VERT; i++)
 		dist_vec[i] = UNREACH;
 

@@ -9,13 +9,14 @@ using namespace std;
 
 /*
 	1.拓扑排序
-
+	2.无权最短路径
+	3.dijkstra
 */
 
 #define M (INT_MAX)
 
 /**********************************************
-	拓扑排序
+	1.拓扑排序
 **********************************************/
 #define V_TOP (7)
 
@@ -93,7 +94,7 @@ void test_topsort()
 }
 
 /**********************************************
-	无权最短路径
+	2.无权最短路径
 **********************************************/
 #define V_UNWEIGHTED (7)
 
@@ -158,7 +159,7 @@ void test_unweighted()
 }
 
 /**********************************************
-	有权最短路径
+	3.dijkstra 有权最短路径
 **********************************************/
 #define V_WEIGHTED (7)
 
@@ -218,7 +219,7 @@ void dijkstra_print_process(queue<int> &path)
 	}cout<<endl;
 }
 
-void dijkstra_print_path(int start, int goal, int dis[], int prev[])
+void dijkstra_print_way(int start, int goal, int dis[], int prev[])
 {
 	// 输出start到goal的路径
 	int find = goal;
@@ -268,7 +269,7 @@ void dijkstra(int start, int goal)
 	}
 
 	dijkstra_print_process(path);
-	dijkstra_print_path(start, goal, dis, prev);	
+	dijkstra_print_way(start, goal, dis, prev);	
 }	
 
 void test_dijkstra()
@@ -276,6 +277,12 @@ void test_dijkstra()
 	PRINT_FUNCTION_NAME;
 	dijkstra(0, 5);
 }
+
+/**********************************************
+	4.prim 最小生成树
+**********************************************/
+
+
 
 int main()
 {
