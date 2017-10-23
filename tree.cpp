@@ -20,16 +20,13 @@ using namespace std;
 **********************************************/
 typedef struct _TreeNode
 {
-	int val;
-	int cnt;
-	_TreeNode *left;
-	_TreeNode *right;
+	int val, cnt;
+	_TreeNode *left, *right;
 	_TreeNode(int val)
 	{
 		this->val = val;
 		this->cnt = 1;
-		this->left = NULL;
-		this->right = NULL;
+		this->left = this->right = NULL;
 	}
 }TreeNode;
 
@@ -274,6 +271,32 @@ TreeNode *tree_insert(TreeNode *t, int val)
 	return t;
 }
 
+TreeNode *tree_insert_nonRecursive(TreeNode *t, int val)
+{
+	TreeNode *node = new TreeNode(val);
+	if(NULL == t)
+		return node;
+
+	TreeNode *i = t, *j = NULL;
+	while(i)
+	{
+		j = i;
+		if(val < i->val)	
+			i = i->left;
+		else			
+			i = i->right;
+	}
+
+	if(val < j->val)		
+		j->left = node;
+	else if(val > j->val)	
+		j->right = node;
+	else 
+		j->cnt++;
+
+	return t;
+}
+
 TreeNode *tree_delete(TreeNode *t, int x)
 {
 	if(NULL == t)
@@ -372,35 +395,35 @@ void test_tree()
 /**********************************************
 	字典树(Trie)
 **********************************************/
-typedef struct _TrieNode
+typedef struct _TrieTreeNode
 {
 	bool exist;	// 用于以后删除单词时,不破坏树结构
-	_TrieNode *child[26];
-	_TrieNode()
+	_TrieTreeNode *child[26];
+	_TrieTreeNode()
 	{
 		this->exist = false;
 		for(int i = 0; i < 26; i++)
 			this->child[i] = NULL;
 	}
-}TrieNode;
+}TrieTreeNode;
 
-void trie_insert(TrieNode *t, string word)
+void trie_tree_insert(TrieTreeNode *t, string word)
 {
-	TrieNode *dummy = t;
+	TrieTreeNode *dummy = t;
 
 	for(int i = 0; i < word.length(); i++)
 	{
 		int c = word[i] - 'a';
 		if(NULL == dummy->child[c])
-			dummy->child[c] = new TrieNode;
+			dummy->child[c] = new TrieTreeNode;
 		dummy = dummy->child[c];
 	}
 	dummy->exist = true;
 }
 
-bool trie_search(TrieNode *t, string word)
+bool trie_tree_search(TrieTreeNode *t, string word)
 {
-	TrieNode *dummy = t;
+	TrieTreeNode *dummy = t;
 
 	for(int i = 0; i < word.length(); i++)
 	{
@@ -419,24 +442,153 @@ bool trie_search(TrieNode *t, string word)
 
 void test_trie_tree()
 {
-	TrieNode *t = new TrieNode;
+	TrieTreeNode *t = new TrieTreeNode;
 
-	trie_insert(t, "abc");
-	trie_insert(t, "abcd");
-	trie_insert(t, "abd");
+	trie_tree_insert(t, "abc");
+	trie_tree_insert(t, "abcd");
+	trie_tree_insert(t, "abd");
 
-	trie_search(t, "abc");
-	trie_search(t, "abca");
+	trie_tree_search(t, "abc");
+	trie_tree_search(t, "abca");
 }
 
 /**********************************************
 	线段树(Segment)
 **********************************************/
+typedef struct _SegmentNode
+{
+	int start, end, max, min, sum;
+	_SegmentNode *left, *right;
+	_SegmentNode(int s, int end, int val)
+	{
+		this->start = s;
+		this->end = end;
+		this->max = this->min = this->sum = val;
+		this->left = this->right = NULL;
+	}
+}SegmentNode;
+
+void segment_tree_trvl(SegmentNode *t, int curr_level = 1)
+{
+	if(NULL == t)
+		return;
+
+	for(int i = 0; i < curr_level; i++)
+		cout<<"#";
+	cout<<"["<<t->start<<"~"<<t->end<<"]:max = "<<t->max<<", min = "<<t->min<<", sum = "<<t->sum<<endl;
+	segment_tree_trvl(t->left, curr_level+1);
+	segment_tree_trvl(t->right, curr_level+1);
+}
+
+SegmentNode *segment_tree_build(int a[], int s, int e)
+{
+	if(s > e)
+		return NULL;
+
+	SegmentNode *node = new SegmentNode(s, e, a[s]);
+	if(s == e)
+		return node;
+
+	int m = (s + e) / 2;
+	node->left = segment_tree_build(a, s, m);
+	node->right = segment_tree_build(a, m+1, e);
+
+	node->max = node->left->max > node->right->max ? node->left->max : node->right->max;
+	node->min = node->left->min < node->right->min ? node->left->min : node->right->min;
+	node->sum = node->left->sum + node->right->sum;
+
+	return node;
+}
+
+void segment_tree_modify(SegmentNode *t, int index, int val)
+{
+	if(NULL == t || index < t->start || index > t->end)
+		return;
+	if(index == t->start && index == t->end)
+	{
+		t->max = t->min = val;
+		return;
+	}
+
+	int m = (t->start + t->end) / 2;
+	if(index <= m)
+		segment_tree_modify(t->left, index, val);
+	else
+		segment_tree_modify(t->right, index, val);
+	
+	t->max = t->left->max > t->right->max ? t->left->max : t->right->max;
+	t->min = t->left->min < t->right->min ? t->left->min : t->right->min;
+	t->sum = t->left->sum + t->right->sum;
+}
+
+// 返回a[from]到a[to]的数据的和
+int segment_tree_query_sum(SegmentNode *t, int from, int to)
+{
+	if(from > to)
+		return 0;
+	if(from == t->start && to == t->end)
+		return t->sum;
+
+	int m = (t->start + t->end) / 2;
+	if(m > to)
+		return segment_tree_query_sum(t->left, from, to);
+	else if(m < from)
+		return segment_tree_query_sum(t->right, from, to);
+	else
+	{
+		int left = segment_tree_query_sum(t->left, from, m);
+		int right = segment_tree_query_sum(t->right, m+1, to);
+		return left + right;
+	}
+}
+
+void test_segment_tree_build()
+{
+	PRINT_SUB_FUNCTION_NAME;
+
+	int a[] = {1,2,7,8,5};
+	SegmentNode *t = segment_tree_build(a, 0, Len(a)-1);
+	segment_tree_trvl(t);
+}
+
+void test_segment_tree_modify()
+{
+	PRINT_SUB_FUNCTION_NAME;
+
+	int a[] = {1,2,7,8,5};
+	SegmentNode *t = segment_tree_build(a, 0, Len(a)-1);
+
+	cout<<"----------modify----------"<<endl;
+	segment_tree_modify(t, 2, 9);
+	segment_tree_trvl(t);
+}
+
+void test_segment_tree_query_sum()
+{
+	PRINT_SUB_FUNCTION_NAME;
+
+	int a[] = {1,2,7,8,5};
+	SegmentNode *t = segment_tree_build(a, 0, Len(a)-1);
+
+	cout<<"----------query sum----------"<<endl;
+	segment_tree_trvl(t);
+	cout<<"query sum = "<<segment_tree_query_sum(t, 0, 2)<<endl;
+}
+
+void test_segment_tree()
+{
+	PRINT_FUNCTION_NAME;
+
+	test_segment_tree_build();
+	test_segment_tree_modify();
+	test_segment_tree_query_sum();
+}
 
 int main()
 {
 	test_tree();
 	test_trie_tree();
+	test_segment_tree();
 
 	return 0;
 }
