@@ -447,6 +447,7 @@ void tarjan(TreeNode *t, bool visited[], int dfs[], int n)
 	}
 	visited[t->val] = true;		// 类似后续遍历,最后将自己置true
 
+	// 不指定查询的边(用union-find时还有bug),输出全部的LCA结果
 	for(int i = 0; i < MAX; i++)
 		if(visited[i])// && t->val != i)
 			cout<<"LCA("<<t->val<<","<<i<<") = "<<uf_find(dfs, i)<<endl;	
