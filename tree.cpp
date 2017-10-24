@@ -393,6 +393,92 @@ void test_tree()
 }
 
 /**********************************************
+	tanjan算法求LCA by union-find
+**********************************************/
+#define MAX (10)
+
+void uf_init(int S[], int n)
+{
+	for(int i = 0; i < n; i++)
+		S[i] = -1;
+}
+
+void uf_union(int S[], int e1, int e2)
+{
+	if(S[e1] == S[e2])	// e1与e2所属集合的深度一样,此时e1深度+1,e2集合指向e1
+	{
+		S[e2] = e1;
+		S[e1]--;
+	}
+	else	// 深度相对小集合指向深度相对大的集合,保证最大深度缓慢增长
+	{
+		if(S[e1] < S[e2])	S[e2] = e1;
+		else				S[e1] = e2;
+	}
+}
+
+int uf_find(int S[], int x)
+{
+	if(S[x] <= 0)
+		return x;
+	else
+		return uf_find(S, S[x]);
+}
+
+void tarjan(TreeNode *t, int query[], bool visited[], int merge[], int n)
+{
+	if(NULL == t)
+		return;
+	if(t->left)
+	{
+		tarjan(t->left, query, visited, merge, n);
+		uf_union(merge, t->val, t->left->val);	// 合并子树到自身集合
+		visited[t->left->val] = true;
+	}
+	if(t->right)
+	{
+		tarjan(t->right, query, visited, merge, n);
+		uf_union(merge, t->val, t->right->val);
+		visited[t->right->val] = true;
+	}
+
+/*	
+	for(int i = 0; i < n; i++)
+	{
+		if(uf_find(query, t->val) == uf_find(query, query[i]))
+			if(visited[i])
+				cout<<"LCA("<<t->val<<","<<i<<") = "<<uf_find(merge, query[i])<<endl;
+	}
+*/
+}
+
+void test_tarjan()
+{
+	int a[] = {6,4,8};//,7,9,1,3,0};
+	TreeNode *t = NULL;
+
+	for(int i = 0; i < Len(a); i++)
+		t = tree_insert(t, a[i]);
+	tree_trvl_level(t);
+
+	bool visited[MAX] = {false};
+	int query[MAX], merge[MAX];
+	uf_init(query, MAX);
+	uf_init(merge, MAX);
+
+	uf_union(query, 4,8);	// 4<-8
+
+	if(uf_find(query, 4) == uf_find(query, 8))
+		cout<<"fuck OK"<<endl;
+
+	PRINT_ARRAY(query, Len(query));
+
+	tarjan(t, query, visited, merge, Len(a));	
+	PRINT_ARRAY(merge, MAX);
+	PRINT_ARRAY(visited, MAX);
+}
+
+/**********************************************
 	字典树(Trie)
 **********************************************/
 typedef struct _TrieTreeNode
@@ -586,9 +672,12 @@ void test_segment_tree()
 
 int main()
 {
-	test_tree();
-	test_trie_tree();
-	test_segment_tree();
+//	test_tree();
+	test_tarjan();
+
+//	test_trie_tree();
+
+//	test_segment_tree();
 
 	return 0;
 }
