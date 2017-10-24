@@ -394,67 +394,69 @@ void test_tree()
 
 /**********************************************
 	tanjan算法求LCA by union-find
+	注意:union和find不能优化,否则会导致回溯过程中,parent指向child的情况发生
 **********************************************/
 #define MAX (10)
+
+void print_tarjan_info(bool visited[], int dfs[], int n)
+{
+	cout<<"vis = ";
+	PRINT_ARRAY(visited, n);
+	
+	cout<<"dfs = ";
+	PRINT_ARRAY(dfs, n);
+	
+	cout<<"idx = ";
+	for(int i = 0; i < n; i++)
+		cout<<i<<"|";
+	cout<<endl;
+}
 
 void uf_init(int S[], int n)
 {
 	for(int i = 0; i < n; i++)
-		S[i] = -1;
+		S[i] = i;
 }
 
 void uf_union(int S[], int e1, int e2)
 {
-	if(S[e1] == S[e2])	// e1与e2所属集合的深度一样,此时e1深度+1,e2集合指向e1
-	{
-		S[e2] = e1;
-		S[e1]--;
-	}
-	else	// 深度相对小集合指向深度相对大的集合,保证最大深度缓慢增长
-	{
-		if(S[e1] < S[e2])	S[e2] = e1;
-		else				S[e1] = e2;
-	}
+	S[e2] = e1;
 }
 
 int uf_find(int S[], int x)
 {
-	if(S[x] <= 0)
+	if(S[x] == x)
 		return x;
 	else
 		return uf_find(S, S[x]);
 }
 
-void tarjan(TreeNode *t, int query[], bool visited[], int merge[], int n)
+void tarjan(TreeNode *t, bool visited[], int dfs[], int n)
 {
 	if(NULL == t)
 		return;
 	if(t->left)
 	{
-		tarjan(t->left, query, visited, merge, n);
-		uf_union(merge, t->val, t->left->val);	// 合并子树到自身集合
-		visited[t->left->val] = true;
+		tarjan(t->left, visited, dfs, n);		// dfs遍历树
+		uf_union(dfs, t->val, t->left->val);	// 合并子树到自身集合
 	}
 	if(t->right)
 	{
-		tarjan(t->right, query, visited, merge, n);
-		uf_union(merge, t->val, t->right->val);
-		visited[t->right->val] = true;
+		tarjan(t->right, visited, dfs, n);
+		uf_union(dfs, t->val, t->right->val);
 	}
+	visited[t->val] = true;		// 类似后续遍历,最后将自己置true
 
-/*	
-	for(int i = 0; i < n; i++)
-	{
-		if(uf_find(query, t->val) == uf_find(query, query[i]))
-			if(visited[i])
-				cout<<"LCA("<<t->val<<","<<i<<") = "<<uf_find(merge, query[i])<<endl;
-	}
-*/
+	for(int i = 0; i < MAX; i++)
+		if(visited[i])// && t->val != i)
+			cout<<"LCA("<<t->val<<","<<i<<") = "<<uf_find(dfs, i)<<endl;	
 }
 
 void test_tarjan()
 {
-	int a[] = {6,4,8};//,7,9,1,3,0};
+	PRINT_FUNCTION_NAME;
+
+	int a[] = {6,4,8,2,5};//,7,9,1,3,0};
 	TreeNode *t = NULL;
 
 	for(int i = 0; i < Len(a); i++)
@@ -462,20 +464,13 @@ void test_tarjan()
 	tree_trvl_level(t);
 
 	bool visited[MAX] = {false};
-	int query[MAX], merge[MAX];
-	uf_init(query, MAX);
-	uf_init(merge, MAX);
+	int dfs[MAX];
 
-	uf_union(query, 4,8);	// 4<-8
+	uf_init(dfs, MAX);
 
-	if(uf_find(query, 4) == uf_find(query, 8))
-		cout<<"fuck OK"<<endl;
+	tarjan(t, visited, dfs, MAX);	
 
-	PRINT_ARRAY(query, Len(query));
-
-	tarjan(t, query, visited, merge, Len(a));	
-	PRINT_ARRAY(merge, MAX);
-	PRINT_ARRAY(visited, MAX);
+	print_tarjan_info(visited, dfs, MAX);
 }
 
 /**********************************************
@@ -528,6 +523,8 @@ bool trie_tree_search(TrieTreeNode *t, string word)
 
 void test_trie_tree()
 {
+	PRINT_FUNCTION_NAME;
+
 	TrieTreeNode *t = new TrieTreeNode;
 
 	trie_tree_insert(t, "abc");
@@ -672,12 +669,12 @@ void test_segment_tree()
 
 int main()
 {
-//	test_tree();
+	test_tree();
 	test_tarjan();
 
-//	test_trie_tree();
+	test_trie_tree();
 
-//	test_segment_tree();
+	test_segment_tree();
 
 	return 0;
 }
