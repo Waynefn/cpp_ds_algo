@@ -395,16 +395,17 @@ void test_tree()
 /**********************************************
 	tanjan算法求LCA by union-find
 	注意:union和find不能优化,否则会导致回溯过程中,parent指向child的情况发生
+	ps:为了显示ancestors方便，MAX取值不要过大（节点的数字尽量采用个位数）
 **********************************************/
-#define MAX (10)
+#define MAX (11)
 
-void print_tarjan_info(bool visited[], int dfs[], int n)
+void print_tarjan_info(bool visited[], int ancestors[], int n)
 {
 	cout<<"vis = ";
 	PRINT_ARRAY(visited, n);
 	
-	cout<<"dfs = ";
-	PRINT_ARRAY(dfs, n);
+	cout<<"anc = ";
+	PRINT_ARRAY(ancestors, n);
 	
 	cout<<"idx = ";
 	for(int i = 0; i < n; i++)
@@ -415,12 +416,12 @@ void print_tarjan_info(bool visited[], int dfs[], int n)
 void uf_init(int S[], int n)
 {
 	for(int i = 0; i < n; i++)
-		S[i] = i;
+		S[i] = i;	// 初始化时，每个节点的祖先即是自己
 }
 
 void uf_union(int S[], int e1, int e2)
 {
-	S[e2] = e1;
+	S[e2] = e1;		// 不可以优化合并操作，否则parent节点会被合并，指向child
 }
 
 int uf_find(int S[], int x)
@@ -431,33 +432,46 @@ int uf_find(int S[], int x)
 		return uf_find(S, S[x]);
 }
 
-void tarjan(TreeNode *t, bool visited[], int dfs[], int n)
+void tarjan(TreeNode *t, bool visited[], int ancestors[], int n, int x, int y)
 {
 	if(NULL == t)
 		return;
+	if(x == y)
+	{
+		cout<<"LCA("<<x<<","<<y<<") = "<<x<<endl;
+		return;
+	}
+
 	if(t->left)
 	{
-		tarjan(t->left, visited, dfs, n);		// dfs遍历树
-		uf_union(dfs, t->val, t->left->val);	// 合并子树到自身集合
+		tarjan(t->left, visited, ancestors, n, x, y);	// dfs遍历树
+		uf_union(ancestors, t->val, t->left->val);		// 合并子树到自身集合
 	}
 	if(t->right)
 	{
-		tarjan(t->right, visited, dfs, n);
-		uf_union(dfs, t->val, t->right->val);
+		tarjan(t->right, visited, ancestors, n, x, y);
+		uf_union(ancestors, t->val, t->right->val);
 	}
-	visited[t->val] = true;		// 类似后续遍历,最后将自己置true
 
-	// 不指定查询的边(用union-find时还有bug),输出全部的LCA结果
+	if(x == t->val && visited[y])	// 遍历到x时，发现y已经被访问过，此时y所属集合即为结果
+		cout<<"LCA("<<x<<","<<y<<") = "<<uf_find(ancestors, y)<<endl;	
+	if(y == t->val && visited[x])	// 遍历到y时，发现y已经被访问过，此时y所属集合即为结果
+		cout<<"LCA("<<x<<","<<y<<") = "<<uf_find(ancestors, x)<<endl;
+
+	visited[t->val] = true;			// 类似后续遍历,最后将自己置true
+
+/*	// 以下代码输出树t的所有配对节点的LCA结果
 	for(int i = 0; i < MAX; i++)
 		if(visited[i])// && t->val != i)
-			cout<<"LCA("<<t->val<<","<<i<<") = "<<uf_find(dfs, i)<<endl;	
+			cout<<"LCA("<<t->val<<","<<i<<") = "<<uf_find(lca, i)<<endl;	
+*/
 }
 
 void test_tarjan()
 {
 	PRINT_FUNCTION_NAME;
 
-	int a[] = {6,4,8,2,5};//,7,9,1,3,0};
+	int a[] = {6,4,8,2,7,9,1,3,10,0};
 	TreeNode *t = NULL;
 
 	for(int i = 0; i < Len(a); i++)
@@ -465,13 +479,13 @@ void test_tarjan()
 	tree_trvl_level(t);
 
 	bool visited[MAX] = {false};
-	int dfs[MAX];
+	int ancestors[MAX];
 
-	uf_init(dfs, MAX);
+	uf_init(ancestors, MAX);
 
-	tarjan(t, visited, dfs, MAX);	
+	tarjan(t, visited, ancestors, MAX, 1, 0);	
 
-	print_tarjan_info(visited, dfs, MAX);
+	print_tarjan_info(visited, ancestors, MAX);
 }
 
 /**********************************************
@@ -670,12 +684,12 @@ void test_segment_tree()
 
 int main()
 {
-	test_tree();
+//	test_tree();
 	test_tarjan();
 
-	test_trie_tree();
+//	test_trie_tree();
 
-	test_segment_tree();
+//	test_segment_tree();
 
 	return 0;
 }
