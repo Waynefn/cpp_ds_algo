@@ -20,12 +20,11 @@ using namespace std;
 **********************************************/
 typedef struct _TreeNode
 {
-	int val, cnt;
+	int val;
 	_TreeNode *left, *right;
 	_TreeNode(int val)
 	{
 		this->val = val;
-		this->cnt = 1;
 		this->left = this->right = NULL;
 	}
 }TreeNode;
@@ -266,7 +265,7 @@ TreeNode *tree_insert(TreeNode *t, int val)
 	else if(val > t->val)
 		t->right = tree_insert(t->right, val);
 	else
-		t->cnt++;
+		;
 
 	return t;
 }
@@ -292,7 +291,7 @@ TreeNode *tree_insert_nonRecursive(TreeNode *t, int val)
 	else if(val > j->val)	
 		j->right = node;
 	else 
-		j->cnt++;
+		;
 
 	return t;
 }
