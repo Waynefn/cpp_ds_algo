@@ -37,9 +37,9 @@ void uf_union_v1(int S[], int e1, int e2)
 
 int uf_find_v1(int S[], int x)
 {
-	if(S[x] <= 0)	// x元素指向初始位置，集合的名字就是它自身
+	if(S[x] <= 0)					// x元素指向初始位置，集合的名字就是它自身
 		return x;
-	else			// x指向了s[x]，递归地去找这个s[x]的集合名
+	else							// x指向了s[x]，递归地去找这个s[x]的集合名
 		return uf_find_v1(S, S[x]);
 }
 
