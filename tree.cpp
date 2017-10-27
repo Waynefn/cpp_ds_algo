@@ -29,9 +29,125 @@ typedef struct _TreeNode
 	}
 }TreeNode;
 
+bool tree_search(TreeNode *t, int x)
+{
+	TreeNode *tmp = t;
+
+	while(tmp)
+	{
+		if(x < tmp->val)
+			tmp = tmp->left;
+		else if(x > tmp->val)
+			tmp = tmp->right;
+		else
+		{
+			cout<<"find "<<x<<" OK"<<endl;
+			return true;
+		}
+	}
+
+	cout<<"find "<<x<<" FAIL"<<endl;
+	return false;
+}
+
+int tree_node_count(TreeNode *t)
+{
+	if(NULL == t)
+		return 0;
+
+	return 1 + tree_node_count(t->left) + tree_node_count(t->right);
+}
+
+int tree_val_sum(TreeNode *t)
+{
+	if(NULL == t)
+		return 0;
+	return t->val + tree_val_sum(t->left) + tree_val_sum(t->right);
+}
+
+int tree_height(TreeNode *t)
+{
+	if(NULL == t)
+		return 0;
+
+	return 1 + max(tree_height(t->left),tree_height(t->right));
+}
+
+TreeNode *tree_insert(TreeNode *t, int val)
+{
+	if(NULL == t)
+		t = new TreeNode(val);
+	else if(val < t->val)
+		t->left = tree_insert(t->left, val);
+	else if(val > t->val)
+		t->right = tree_insert(t->right, val);
+	else
+		;
+
+	return t;
+}
+
+TreeNode *tree_insert_nonRecursive(TreeNode *t, int val)
+{
+	TreeNode *node = new TreeNode(val);
+	if(NULL == t)
+		return node;
+
+	TreeNode *i = t, *j = NULL;
+	while(i)
+	{
+		j = i;
+		if(val < i->val)	
+			i = i->left;
+		else			
+			i = i->right;
+	}
+
+	if(val < j->val)		
+		j->left = node;
+	else if(val > j->val)	
+		j->right = node;
+	else 
+		;
+
+	return t;
+}
+
+TreeNode *tree_delete(TreeNode *t, int x)
+{
+	if(NULL == t)
+		return NULL;
+
+	if(x < t->val)
+		t->left = tree_delete(t->left, x);
+	else if(x > t->val)
+		t->right = tree_delete(t->right, x);
+	else
+	{
+		TreeNode *tmp;
+		if(t->left && t->right)
+		{
+			tmp = t->right;
+			while(tmp->left)
+				tmp = tmp->left;		// 找到右子树中最小的节点
+			t->val = tmp->val;
+			t->right = tree_delete(t->right, tmp->val);
+		}
+		else
+		{
+			tmp = t;
+			if(t->left)	t = t->left;
+			else		t = t->right;
+			delete tmp;
+		}
+	}
+
+	return t;
+}
+
 void tree_trvl_prev(TreeNode *t)
 {
-	if(t == NULL)
+	if(NULL == t)
 		return;
 	cout<<t->val<<" ";
 	tree_trvl_prev(t->left);
@@ -40,7 +156,7 @@ void tree_trvl_prev(TreeNode *t)
 
 void tree_trvl_in(TreeNode *t)
 {
-	if(t == NULL)
+	if(NULL == t)
 		return;
 	tree_trvl_in(t->left);
 	cout<<t->val<<" ";
@@ -49,7 +165,7 @@ void tree_trvl_in(TreeNode *t)
 
 void tree_trvl_post(TreeNode *t)
 {
-	if(t == NULL)
+	if(NULL == t)
 		return;
 	tree_trvl_post(t->left);
 	tree_trvl_post(t->right);
@@ -160,7 +276,7 @@ void tree_trvl_level(TreeNode *t)
 {
 	PRINT_SUB_FUNCTION_NAME;
 
-	if(t == NULL)
+	if(NULL == t)
 		return;
 
 	queue<TreeNode *> q;
@@ -256,115 +372,6 @@ void tree_trvl_zigzag(TreeNode *t)
 	}
 }
 
-TreeNode *tree_insert(TreeNode *t, int val)
-{
-	if(t == NULL)
-		t = new TreeNode(val);
-	else if(val < t->val)
-		t->left = tree_insert(t->left, val);
-	else if(val > t->val)
-		t->right = tree_insert(t->right, val);
-	else
-		;
-
-	return t;
-}
-
-TreeNode *tree_insert_nonRecursive(TreeNode *t, int val)
-{
-	TreeNode *node = new TreeNode(val);
-	if(NULL == t)
-		return node;
-
-	TreeNode *i = t, *j = NULL;
-	while(i)
-	{
-		j = i;
-		if(val < i->val)	
-			i = i->left;
-		else			
-			i = i->right;
-	}
-
-	if(val < j->val)		
-		j->left = node;
-	else if(val > j->val)	
-		j->right = node;
-	else 
-		;
-
-	return t;
-}
-
-TreeNode *tree_delete(TreeNode *t, int x)
-{
-	if(NULL == t)
-		return NULL;
-
-	if(x < t->val)
-		t->left = tree_delete(t->left, x);
-	else if(x > t->val)
-		t->right = tree_delete(t->right, x);
-	else
-	{
-		TreeNode *tmp;
-		if(NULL == t->right)
-		{
-			tmp = t;
-			t = t->left;
-			delete tmp;
-		}
-		else
-		{
-			tmp = t->right;
-			while(tmp->left)
-				tmp = tmp->left;	// 找到右子树中最小的节点
-			t->val = tmp->val;		// 右子树最小值赋值给当前被删除节点
-			t->right = tree_delete(t->right, tmp->val);	// 递归去右子树删除这个最小值节点
-		}
-	}
-
-	return t;
-}
-
-bool tree_find(TreeNode *t, int x)
-{
-	bool ret = false;
-	if(NULL == t)
-	{
-		cout<<"find "<<x<<" FAIL"<<endl;
-		return ret;
-	}
-
-	if(x == t->val)
-	{
-		ret = true;
-		cout<<"find "<<x<<" OK"<<endl;
-	}
-	else if(x < t->val)
-		ret = tree_find(t->left, x);
-	else
-		ret = tree_find(t->right, x);
-
-	return ret;
-}
-
-int tree_node_count(TreeNode *t)
-{
-	if(NULL == t)
-		return 0;
-
-	return 1 + tree_node_count(t->left) + tree_node_count(t->right);
-}
-
-int tree_heigh(TreeNode *t)
-{
-	if(NULL == t)
-		return 0;
-
-	return 1 + max(tree_heigh(t->left),tree_heigh(t->right));
-}
-
 void test_tree()
 {
 	PRINT_FUNCTION_NAME;
@@ -375,16 +382,18 @@ void test_tree()
 	for(int i = 0; i < Len(a); i++)
 		t = tree_insert(t, a[i]);
 
-	tree_find(t, 3);
-	tree_find(t, 9);
-	tree_find(t, 33);
+	tree_search(t, 3);
+	tree_search(t, 9);
+	tree_search(t, 33);
 
 	cout<<"tree node num = "<<tree_node_count(t)<<endl;
-	cout<<"tree height = "<<tree_heigh(t)<<endl;
+	cout<<"tree height = "<<tree_height(t)<<endl;
 
 	tree_trvl_prev_nonRecursive_modify(t); 
 	tree_trvl_in_nonRecursive(t);
 	tree_trvl_post(t); cout<<endl;
+
+	tree_delete(t, 0);
 
 	tree_trvl_level(t);
 	tree_trvl_level_reverse(t);
@@ -431,7 +440,7 @@ int uf_find(int S[], int x)
 		return uf_find(S, S[x]);
 }
 
-void tarjan(TreeNode *t, bool visited[], int ancestors[], int n, int x, int y)
+void tarjan_lca(TreeNode *t, bool visited[], int ancestors[], int n, int x, int y)
 {
 	if(NULL == t)
 		return;
@@ -443,12 +452,12 @@ void tarjan(TreeNode *t, bool visited[], int ancestors[], int n, int x, int y)
 
 	if(t->left)
 	{
-		tarjan(t->left, visited, ancestors, n, x, y);	// dfs遍历树
+		tarjan_lca(t->left, visited, ancestors, n, x, y);	// dfs遍历树
 		uf_union(ancestors, t->val, t->left->val);		// 合并子树到自身集合
 	}
 	if(t->right)
 	{
-		tarjan(t->right, visited, ancestors, n, x, y);
+		tarjan_lca(t->right, visited, ancestors, n, x, y);
 		uf_union(ancestors, t->val, t->right->val);
 	}
 
@@ -466,7 +475,7 @@ void tarjan(TreeNode *t, bool visited[], int ancestors[], int n, int x, int y)
 */
 }
 
-void test_tarjan()
+void test_tarjan_lca()
 {
 	PRINT_FUNCTION_NAME;
 
@@ -482,7 +491,7 @@ void test_tarjan()
 
 	uf_init(ancestors, MAX);
 
-	tarjan(t, visited, ancestors, MAX, 1, 0);	
+	tarjan_lca(t, visited, ancestors, MAX, 1, 0);	
 
 	print_tarjan_info(visited, ancestors, MAX);
 }
@@ -613,8 +622,8 @@ void segment_tree_modify(SegmentNode *t, int index, int val)
 	else
 		segment_tree_modify(t->right, index, val);
 	
-	t->max = t->left->max > t->right->max ? t->left->max : t->right->max;
-	t->min = t->left->min < t->right->min ? t->left->min : t->right->min;
+	t->max = max(t->left->max, t->right->max);
+	t->min = min(t->left->min, t->right->min);
 	t->sum = t->left->sum + t->right->sum;
 }
 
@@ -681,14 +690,112 @@ void test_segment_tree()
 	test_segment_tree_query_sum();
 }
 
+/**********************************************
+	自平衡树(AVL)
+**********************************************/
+typedef struct _AvlTreeNode
+{
+	int val, height;
+	_AvlTreeNode *left, *right;
+	_AvlTreeNode(int val)
+	{
+		this->val = val;
+		this->height = 0;
+		this->left = this->right = NULL;
+	}
+}AvlTreeNode;
+
+int tree_height(TreeNode *t)
+{
+	if(NULL == t)
+		return 0;
+
+	return 1 + max(tree_height(t->left),tree_height(t->right));
+}
+
+int avl_tree_heightt(AvlTreeNode *t)
+{
+	if(NULL == t)
+		return 0;
+	return t->height;
+}
+
+void avl_tree_update_height(AvlTreeNode *t)
+{
+	t->height = 1 + max(t->left->height, t->right->height);
+}
+
+AvlTreeNode *avl_tree_left_left(AvlTreeNode *k2)
+{
+	AvlTreeNode *k1 = k2->left;
+
+	k2->left = k1->right;
+	k1->right = k2;
+
+	avl_tree_update_height(k1);
+	avl_tree_update_height(k2);	
+
+	return k1;
+}
+
+AvlTreeNode *avl_tree_right_right(AvlTreeNode *k1)
+{
+	AvlTreeNode *k2 = k1->right;
+
+	k1->right = k2->left;
+	k2->left = k1;
+
+	avl_tree_update_height(k1);
+	avl_tree_update_height(k2);
+
+	return k1;
+}
+
+AvlTreeNode *avl_tree_left_right(AvlTreeNode *k3)
+{
+	k3->left = avl_tree_right_right(k3->left);
+	return avl_tree_left_left(k3);
+}
+
+AvlTreeNode *avl_tree_right_left(AvlTreeNode *k1)
+{
+	k1->right = avl_tree_left_left(k1->right);
+	return avl_tree_right_right(k1);
+}
+
+AvlTreeNode *alv_tree_insert(AvlTreeNode *t, int val)
+{
+	if(NULL == t)
+	{
+
+	}
+	else if(val < t->left)
+	{
+
+	}
+	else
+	{
+
+	}
+
+	return 
+}
+
+void test_avl_tree()
+{
+
+}
+
 int main()
 {
-//	test_tree();
-	test_tarjan();
+	test_tree();
+//	test_tarjan_lca();
 
 //	test_trie_tree();
 
 //	test_segment_tree();
+
+//	test_avl_tree();
 
 	return 0;
 }
