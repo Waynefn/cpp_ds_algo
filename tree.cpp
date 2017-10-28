@@ -3,6 +3,7 @@
 #include <queue>
 #include <stack>
 #include <string>
+#include <stdlib.h>
 
 #include "utils.h"
 
@@ -129,7 +130,7 @@ TreeNode *tree_delete(TreeNode *t, int x)
 		{
 			tmp = t->right;
 			while(tmp->left)
-				tmp = tmp->left;		// 找到右子树中最小的节点
+				tmp = tmp->left;		// 找到后驱:右子树中最小的节点
 			t->val = tmp->val;
 			t->right = tree_delete(t->right, tmp->val);
 		}
@@ -705,15 +706,7 @@ typedef struct _AvlTreeNode
 	}
 }AvlTreeNode;
 
-int tree_height(TreeNode *t)
-{
-	if(NULL == t)
-		return 0;
-
-	return 1 + max(tree_height(t->left),tree_height(t->right));
-}
-
-int avl_tree_heightt(AvlTreeNode *t)
+int avl_tree_height(AvlTreeNode *t)
 {
 	if(NULL == t)
 		return 0;
@@ -722,9 +715,47 @@ int avl_tree_heightt(AvlTreeNode *t)
 
 void avl_tree_update_height(AvlTreeNode *t)
 {
-	t->height = 1 + max(t->left->height, t->right->height);
+	t->height = 1 + max(avl_tree_height(t->left), avl_tree_height(t->right));
 }
 
+void avl_tree_trvl_level(AvlTreeNode *t)
+{
+	PRINT_SUB_FUNCTION_NAME;
+
+	if(NULL == t)
+		return;
+
+	queue<AvlTreeNode *> q;
+	q.push(t);
+
+	int level = 0;
+	while(!q.empty())
+	{
+		level++;
+		cout<<"lv"<<level<<" :";
+		int lvSize = q.size();
+		while(lvSize)
+		{
+			lvSize--;
+			AvlTreeNode *tmp = q.front(); q.pop();
+			cout<<tmp->val<<"-";
+			if(tmp->left)	q.push(tmp->left);
+			if(tmp->right)	q.push(tmp->right);
+		}
+		cout<<endl;
+	}
+}
+
+/*	insert(A),造成k2不平衡
+	A < k2 && A < k1 => 此时k2树左倾 
+	=> LL(k2)
+	
+		k2				  k1
+	   /  	   LL	   	 /  \
+	  k1      ---> 		A    k2
+	 /  					  
+	A     				    	
+*/
 AvlTreeNode *avl_tree_left_left(AvlTreeNode *k2)
 {
 	AvlTreeNode *k1 = k2->left;
@@ -738,6 +769,15 @@ AvlTreeNode *avl_tree_left_left(AvlTreeNode *k2)
 	return k1;
 }
 
+/*	insert(A),造成k1不平衡
+	A > k1 && A > k1 => 此时k1树右倾 
+	=> RR(k1)
+		k1					k2
+		  \		  RR	   /  \
+		  k2	 --->     k1   A
+		    \			   
+		 	 A 				
+*/
 AvlTreeNode *avl_tree_right_right(AvlTreeNode *k1)
 {
 	AvlTreeNode *k2 = k1->right;
@@ -748,54 +788,167 @@ AvlTreeNode *avl_tree_right_right(AvlTreeNode *k1)
 	avl_tree_update_height(k1);
 	avl_tree_update_height(k2);
 
-	return k1;
+	return k2;
 }
 
+/*	insert(k2),造成k3不平衡
+	k2 < k3 && k2 > k1 => 此时k3树左右倾 
+	=> RR(k1),使k3完全左倾
+	=> LL(k3)
+		k3				  k3			k2
+	   /  	   RR	   	 /  	 LL	   /  \
+	  k1      ---> 		k2 		--->  k1  k3
+	    \			   /	  
+	     k2 		  k1	    	   
+*/
 AvlTreeNode *avl_tree_left_right(AvlTreeNode *k3)
 {
 	k3->left = avl_tree_right_right(k3->left);
 	return avl_tree_left_left(k3);
 }
 
+/*	insert(k2),造成k1不平衡
+	k2 > k1 && k2 < k3 => 此时k1树右左倾 
+	=> LL(k3),使k1完全右倾
+	=> RR(k1)
+	k1				  k1				k2
+	  \   	   LL	   \  	 	 RR	   /  \
+	  k3      ---> 		k2 		--->  k1  k3
+	  /   			   	 \ 
+	 K2 		  		  k3	    	   
+*/
 AvlTreeNode *avl_tree_right_left(AvlTreeNode *k1)
 {
 	k1->right = avl_tree_left_left(k1->right);
 	return avl_tree_right_right(k1);
 }
 
-AvlTreeNode *alv_tree_insert(AvlTreeNode *t, int val)
+AvlTreeNode *avl_tree_insert(AvlTreeNode *t, int val)
 {
 	if(NULL == t)
 	{
-
+		t = new AvlTreeNode(val);
 	}
-	else if(val < t->left)
+	else if(val < t->val)
 	{
+		t->left = avl_tree_insert(t->left, val);
+		if(2 == abs(avl_tree_height(t->left) - avl_tree_height(t->right)))
+		{
+			
+			if(val < t->left->val)
+				t = avl_tree_left_left(t);
+			else
+				t = avl_tree_left_right(t);
+		}
+	}
+	else if(val > t->val)
+	{
+		t->right = avl_tree_insert(t->right, val);
+		if(2 == abs(avl_tree_height(t->left) - avl_tree_height(t->right)))
+		{
+			
+			if(val > t->right->val)
+				t = avl_tree_right_right(t);
+			else
+				t = avl_tree_right_left(t);
+		}
+	}
+	else
+		;
 
+	avl_tree_update_height(t);
+	return t;
+}
+
+AvlTreeNode *avl_tree_delete(AvlTreeNode *t, int x)
+{
+	if(NULL == t)
+		return NULL;
+
+	if(x < t->val)	// x在t的左子树部分,删除后可能导致t的右子树不平衡
+	{
+		t->left = avl_tree_delete(t->left, x);
+		if(2 == abs(avl_tree_height(t->left) - avl_tree_height(t->right)))	// RR or RL
+		{
+			AvlTreeNode *R = t->right;
+			if(avl_tree_height(R->right) > avl_tree_height(R->left))		// RR
+				t = avl_tree_right_right(t);
+			else
+				t = avl_tree_right_left(t);									// RL
+		}
+	}
+	else if(x > t->val)	// x在t的右子树部分,删除后可能导致t的左子树不平衡
+	{
+		t->right = avl_tree_delete(t->right, x);
+		if(2 == abs(avl_tree_height(t->left) - avl_tree_height(t->right)))	// LL or LR
+		{
+			AvlTreeNode *L = t->left;
+			if(avl_tree_height(L->left) > avl_tree_height(L->right))		// LL
+				t = avl_tree_left_left(t);
+			else															// LR
+				t = avl_tree_left_right(t);
+		}
 	}
 	else
 	{
-
+		AvlTreeNode *tmp;
+		if(t->left && t->right)	// 根据左右子树的高度,再选择用前驱or后驱元素替代
+		{
+			if(avl_tree_height(t->left) > avl_tree_height(t->right))
+			{
+				// x节点的左子树>右子树,选择前驱元素替代
+				tmp = t->left;
+				while(tmp->right)
+					tmp = tmp->right;
+				t->val = tmp->val;
+				t->left = avl_tree_delete(t->left, tmp->val);
+			}
+			else
+			{
+				// x节点的左子树<右子树,选择后驱元素替代
+				tmp = t->right;
+				while(tmp->left)
+					tmp = tmp->left;
+				t->val = tmp->val;
+				t->right = avl_tree_delete(t->right, tmp->val);
+			}
+		}
+		else
+		{
+			tmp = t;
+			if(t->left)	t = t->left;
+			else		t = t->right;
+			delete tmp;
+		}
 	}
 
-	return 
+	return t;
 }
 
 void test_avl_tree()
 {
+	PRINT_FUNCTION_NAME;
 
+	int a[] = {6,4,8,2,7,9,1,3,10,0};
+	AvlTreeNode *t = NULL;
+
+	for(int i = 0; i < Len(a); i++)
+		t = avl_tree_insert(t, a[i]);
+	avl_tree_trvl_level(t);
+	avl_tree_delete(t, 6);
+	avl_tree_trvl_level(t);
 }
 
 int main()
 {
 	test_tree();
-//	test_tarjan_lca();
+	test_tarjan_lca();
 
-//	test_trie_tree();
+	test_trie_tree();
 
-//	test_segment_tree();
+	test_segment_tree();
 
-//	test_avl_tree();
+	test_avl_tree();
 
 	return 0;
 }
