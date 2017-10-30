@@ -180,34 +180,6 @@ int g_dijkstra[V_WEIGHTED][V_WEIGHTED] =
 	{M,M,M,M,M,1,0},
 };
 
-void dijkstra_init(int start, bool visited[], int prev[], int dis[])
-{
-	// 初始化所有顶点未被探索,start到其他顶点的距离
-	for(int to = 0; to < V_WEIGHTED; to++)
-	{
-		visited[to] = false;
-		prev[to] = 0;
-		dis[to] = g_dijkstra[start][to];
-	}
-}
-
-int dijkstra_find_min(int dis[], bool visited[])
-{
-	// 从dis[]中找到当前最短路径的顶点(第一轮必定找到start顶点), 标记为已知
-	int curr, min = M;
-	for(int i = 0; i < V_WEIGHTED; i++)
-	{
-		if(!visited[i] && dis[i] < min)
-		{
-			curr = i;
-			min = dis[i];
-		}
-	}
-	visited[curr] = true;
-
-	return curr;
-}
-
 void dijkstra_print_process(queue<int> &path)
 {
 	// 输出算法探索顶点的过程
@@ -238,24 +210,52 @@ void dijkstra_print_way(int start, int goal, int dis[], int prev[])
 	}cout<<endl;
 }
 
+void dijkstra_init(int start, bool visited[], int prev[], int dis[])
+{
+	// 初始化所有顶点未被探索,start到其他顶点的距离
+	for(int to = 0; to < V_WEIGHTED; to++)
+	{
+		visited[to] = false;
+		prev[to] = 0;
+		dis[to] = g_dijkstra[start][to];
+	}
+}
+
+int dijkstra_find_min(int dis[], bool visited[])
+{
+	// 从dis[]中找到当前最短路径的顶点(第一轮必定找到start顶点), 标记为已知
+	int curr, min = M;
+	for(int i = 0; i < V_WEIGHTED; i++)
+	{
+		if(!visited[i] && dis[i] < min)
+		{
+			curr = i;
+			min = dis[i];
+		}
+	}
+	visited[curr] = true;
+
+	return curr;
+}
+
 void dijkstra(int start, int goal)
 {
 	bool visited[V_WEIGHTED];	// visited[x]:表示x顶点是否已经被找到最短路径
-	int prev[V_WEIGHTED];		// 保存start到goal的最终路径结果
 	int dis[V_WEIGHTED];		// dis[x]:表示从start到x的最短距离
-	int visited_cnt = 0;		// 记录当前已经寻找到最短路径的顶点数
+
+	int prev[V_WEIGHTED];		// 保存start到goal的最终路径结果	
 	queue<int> path;			// 记录算法探索的顶点顺序
 
 	dijkstra_init(start, visited, prev, dis);
 
-	while(visited_cnt < V_WEIGHTED)		// 还有未探索顶点就继续
+	while(!visited[goal])		// 还有未探索顶点就继续
 	{
 		int curr = dijkstra_find_min(dis, visited); // 找到本轮最短距离的顶点curr
 
-		visited_cnt++;		// 已确定的[最短距离]顶点+1
-		path.push(curr);	// 入队保存算法过程
+		visited[curr] = true;	// curr顶点已访问
+		path.push(curr);		// 入队保存算法过程
 
-		for(int i = 0; i < V_WEIGHTED; i++)
+		for(int i = 0; i < V_WEIGHTED; i++)	// 优化：遍历【未被置为true】的顶点
 		{
 			if(!visited[i] && g_dijkstra[curr][i] < M) 				// 顶点i尚未被确定最短距离 && curr可以达到i
 			{
@@ -275,7 +275,7 @@ void dijkstra(int start, int goal)
 void test_dijkstra()
 {
 	PRINT_FUNCTION_NAME;
-	dijkstra(0, 5);
+	dijkstra(0, 6);
 }
 
 /**********************************************
