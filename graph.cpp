@@ -8,15 +8,91 @@
 using namespace std;
 
 /*
-	1.拓扑排序
-	2.无权最短路径
-	3.dijkstra
+	1.BFS & DFS
+	2.拓扑排序
+	3.无权最短路径
+	4.dijkstra 		图参照onenote笔记
+	5.最小生成树 minimal spanning tree
+		prim
+		kruskal
 */
 
 #define M (INT_MAX)
 
 /**********************************************
-	1.拓扑排序
+	1.BFS & DFS
+**********************************************/
+#define V (7)
+
+typedef struct
+{
+	bool known[V];
+	int cnt;
+}V_SET;
+
+int g[V][V] = 
+{
+	{M,1,M,M,M,M,M},
+	{M,M,1,M,1,1,M},
+	{M,M,M,M,1,M,M},
+	{M,M,1,M,M,M,M},
+	{M,1,M,1,M,M,M},
+	{M,M,M,M,M,M,1},
+	{M,M,M,M,M,M,M},
+};
+
+void bfs(int start)
+{
+	bool visited[V] = {false};
+	queue<int> q;
+
+	q.push(start);
+	visited[start] = true;
+	
+	cout<<"BFS搜索结果：";
+	while(!q.empty())
+	{
+		int lvSize = q.size();
+		while(lvSize)
+		{
+			lvSize--;
+			int curr = q.front(); q.pop();
+			cout<<curr<<" ";
+			for(int to = 0; to < V; to++)
+			{
+				if(!visited[to] && g[curr][to] < M)
+				{
+					q.push(to);
+					visited[to] = true;
+				}
+			}
+		}
+		cout<<" | ";
+	}
+	cout<<endl;
+}
+
+void dfs(int start)
+{
+	static bool visited[V] = {false};
+
+	visited[start] = true;
+	cout<<start<<" ";
+	for(int to = 0; to < V; to++)
+	{
+		if(!visited[to] && g[start][to] < M)
+			dfs(to);
+	}
+}
+
+void test_bfs_dfs()
+{
+	bfs(0);
+	cout<<"DFS搜索结果：";dfs(0);cout<<endl;
+}
+
+/**********************************************
+	2.拓扑排序
 **********************************************/
 #define V_TOP (7)
 
@@ -94,7 +170,7 @@ void test_topsort()
 }
 
 /**********************************************
-	2.无权最短路径
+	3.无权最短路径
 **********************************************/
 #define V_UNWEIGHTED (7)
 
@@ -159,15 +235,9 @@ void test_unweighted()
 }
 
 /**********************************************
-	3.dijkstra 有权最短路径
+	4.dijkstra 有权最短路径 
 **********************************************/
 #define V_WEIGHTED (7)
-
-typedef struct
-{
-	bool known[V_WEIGHTED];
-	int cnt;
-}V_WEIGHTED_SET;
 
 int g_dijkstra[V_WEIGHTED][V_WEIGHTED] = 
 {
@@ -233,7 +303,6 @@ int dijkstra_find_min(int dis[], bool visited[])
 			min = dis[i];
 		}
 	}
-	visited[curr] = true;
 
 	return curr;
 }
@@ -279,13 +348,24 @@ void test_dijkstra()
 }
 
 /**********************************************
-	4.prim 最小生成树
+	5.最小生成树 minimal spanning tree
+		prim
+		kruskal
 **********************************************/
-
-
+int g_mst[V][V] = 
+{
+	{M,12,M,M,M,16,14},
+	{12,M,10,M,M,7,M},
+	{M,10,M,3,5,6,M},
+	{M,M,3,M,4,M,M},
+	{M,M,5,4,M,2,8},
+	{16,7,6,M,2,M,9},
+	{14,M,M,M,8,9,M},
+};
 
 int main()
 {
+	test_bfs_dfs();
 	test_topsort();
 	test_unweighted();
 	test_dijkstra();
