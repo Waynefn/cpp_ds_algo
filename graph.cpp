@@ -85,6 +85,11 @@ void dfs(int start)
 	}
 }
 
+void dfs_2(int start)
+{
+	
+}
+
 void test_bfs_dfs()
 {
 	bfs(0);
@@ -363,12 +368,79 @@ int g_mst[V][V] =
 	{14,M,M,M,8,9,M},
 };
 
+int prim_find_min(bool visited[], int dist[])
+{
+	int min_dist = M, to;
+	for(int i = 0; i < V; i++)
+	{
+		if(!visited[i] && dist[i] < min_dist)
+		{
+			to = i;
+			min_dist = dist[i];
+		}
+	}
+
+	return to;
+}
+
+void prim(int start)
+{
+	bool visited[V] = {false};
+	int dist[V];
+	int prev[V];
+	int ret_mst_cost = 0;
+	
+	dist[0] = 0;
+	visited[0] = true;
+
+	for(int i = 0; i < V; i++)
+	{
+		dist[i] = g_mst[0][i];
+		prev[i] = 0;
+	}
+
+	int mst_target_edge = V-1;
+	while(mst_target_edge)
+	{
+		int to = prim_find_min(visited, dist);
+		int from = prev[to];
+		cout<<"add edge ["<<from<<"]["<<to<<"] = "<<g_mst[from][to]<<endl;
+
+		visited[to] = true;
+
+		for(int i = 0; i < V; i++)
+		{
+			if(!visited[i] && g_mst[i][to] < dist[i])
+			{
+				dist[i] = g_mst[i][to];
+				prev[i] = to;
+			}
+		}
+
+		mst_target_edge--;
+		ret_mst_cost += g_mst[from][to];
+	}
+
+	cout<<ret_mst_cost<<endl;
+}
+
+void test_mst_prim()
+{
+	prim(0);
+}
+
+void test_mst()
+{
+	test_mst_prim();
+}
+
 int main()
 {
-	test_bfs_dfs();
-	test_topsort();
-	test_unweighted();
-	test_dijkstra();
+	// test_bfs_dfs();
+	// test_topsort();
+	// test_unweighted();
+	// test_dijkstra();
 
+	test_mst();
 	return 0;
 }
