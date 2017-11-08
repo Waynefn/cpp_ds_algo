@@ -390,24 +390,25 @@ void prim(int start)
 	int prev[V];
 	int ret_mst_cost = 0;
 	
-	dist[0] = 0;
-	visited[0] = true;
-
 	for(int i = 0; i < V; i++)
 	{
-		dist[i] = g_mst[0][i];
-		prev[i] = 0;
+		dist[i] = g_mst[start][i];	// 初始化start到所有顶点的距离
+		prev[i] = start;			// 所有顶点的前驱是start
 	}
 
-	int mst_target_edge = V-1;
+	dist[start] = 0;				// 起点距离为0
+	visited[start] = true;			// 从起点开始探索
+
+	int mst_target_edge = V-1;		// 加入的边达到V-1时，算法结束
 	while(mst_target_edge)
 	{
-		int to = prim_find_min(visited, dist);
-		int from = prev[to];
+		int to = prim_find_min(visited, dist);	// 找到目前能探索到的最短边的顶点
+		int from = prev[to];					// 找到边的另一端顶点
 		cout<<"add edge ["<<from<<"]["<<to<<"] = "<<g_mst[from][to]<<endl;
 
 		visited[to] = true;
 
+		// 刚刚探索到了顶点to，原先start探索不到的顶点，现在有可能与顶点to相连，所以更新其他所有顶点的dist和prev
 		for(int i = 0; i < V; i++)
 		{
 			if(!visited[i] && g_mst[i][to] < dist[i])
@@ -424,14 +425,9 @@ void prim(int start)
 	cout<<ret_mst_cost<<endl;
 }
 
-void test_mst_prim()
-{
-	prim(0);
-}
-
 void test_mst()
 {
-	test_mst_prim();
+	prim(0);
 }
 
 int main()
