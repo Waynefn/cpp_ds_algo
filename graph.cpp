@@ -12,7 +12,8 @@ using namespace std;
 	2.拓扑排序
 	3.无权最短路径
 	4.dijkstra 		图参照onenote笔记
-	5.最小生成树 minimal spanning tree
+	5.floyd
+	6.最小生成树 minimal spanning tree
 		prim
 		kruskal
 */
@@ -244,7 +245,7 @@ void test_unweighted()
 **********************************************/
 #define V_WEIGHTED (7)
 
-int g_dijkstra[V_WEIGHTED][V_WEIGHTED] = 
+int g_weighted[V_WEIGHTED][V_WEIGHTED] = 
 {
 	{0,2,M,1,M,M,M},
 	{M,0,M,3,10,M,M},
@@ -285,17 +286,6 @@ void dijkstra_print_way(int start, int goal, int dis[], int prev[])
 	}cout<<endl;
 }
 
-void dijkstra_init(int start, bool visited[], int prev[], int dis[])
-{
-	// 初始化所有顶点未被探索,start到其他顶点的距离
-	for(int to = 0; to < V_WEIGHTED; to++)
-	{
-		visited[to] = false;
-		prev[to] = 0;
-		dis[to] = g_dijkstra[start][to];
-	}
-}
-
 int dijkstra_find_min(int dis[], bool visited[])
 {
 	// 从dis[]中找到当前最短路径的顶点(第一轮必定找到start顶点), 标记为已知
@@ -314,13 +304,20 @@ int dijkstra_find_min(int dis[], bool visited[])
 
 void dijkstra(int start, int goal)
 {
+	PRINT_SUB_FUNCTION_NAME;
+
 	bool visited[V_WEIGHTED];	// visited[x]:表示x顶点是否已经被找到最短路径
 	int dis[V_WEIGHTED];		// dis[x]:表示从start到x的最短距离
 
 	int prev[V_WEIGHTED];		// 保存start到goal的最终路径结果	
 	queue<int> path;			// 记录算法探索的顶点顺序
 
-	dijkstra_init(start, visited, prev, dis);
+	for(int to = 0; to < V_WEIGHTED; to++)
+	{
+		visited[to] = false;
+		prev[to] = 0;
+		dis[to] = g_weighted[start][to];
+	}
 
 	while(!visited[goal])		// 还有未探索顶点就继续
 	{
@@ -331,11 +328,11 @@ void dijkstra(int start, int goal)
 
 		for(int i = 0; i < V_WEIGHTED; i++)	// 优化：遍历【未被置为true】的顶点
 		{
-			if(!visited[i] && g_dijkstra[curr][i] < M) 				// 顶点i尚未被确定最短距离 && curr可以达到i
+			if(!visited[i] && g_weighted[curr][i] < M) 				// 顶点i尚未被确定最短距离 && curr可以达到i
 			{
-				if(g_dijkstra[curr][i] + dis[curr] < dis[i])		
+				if(g_weighted[curr][i] + dis[curr] < dis[i])		
 				{
-					dis[i] = g_dijkstra[curr][i] + dis[curr];		// 从[curr]到[i]比dis[i]的距离短,更新dis[i]
+					dis[i] = g_weighted[curr][i] + dis[curr];		// 从[curr]到[i]比dis[i]的距离短,更新dis[i]
 					prev[i] = curr;									// 记录此次找到的i路径的前驱是curr
 				}
 			}
@@ -343,17 +340,46 @@ void dijkstra(int start, int goal)
 	}
 
 	dijkstra_print_process(path);
-	dijkstra_print_way(start, goal, dis, prev);	
+	dijkstra_print_way(start, goal, dis, prev);
 }	
 
-void test_dijkstra()
+void floyd()
+{
+	PRINT_SUB_FUNCTION_NAME;
+
+	int dist[V_WEIGHTED][V_WEIGHTED], i, j, k;
+ 
+    for(i = 0; i < V_WEIGHTED; i++)
+        for(j = 0; j < V_WEIGHTED; j++)
+            dist[i][j] = g_weighted[i][j];
+
+    for(k = 0; k < V_WEIGHTED; k++)
+        for(i = 0; i < V_WEIGHTED; i++)
+            for(j = 0; j < V_WEIGHTED; j++)
+                if(dist[i][k] < M && dist[k][j] < M 	// 注意：【dist<M】才表示有通路。不判断的话会造成数值溢出	
+                && dist[i][k] + dist[k][j] < dist[i][j])
+                   	dist[i][j] = dist[i][k] + dist[k][j];
+
+    for(int i = 0; i < V_WEIGHTED; i++)
+    {
+        for(int j = 0; j < V_WEIGHTED; j++)
+        {
+            if(dist[i][j] == M)	cout<<"M ";
+            else				cout<<dist[i][j]<<" ";    
+        }
+        cout<<endl;
+    }
+}
+
+void test_weighted()
 {
 	PRINT_FUNCTION_NAME;
-	dijkstra(0, 6);
+	dijkstra(0, 5);
+	floyd();
 }
 
 /**********************************************
-	5.最小生成树 minimal spanning tree
+	6.最小生成树 minimal spanning tree
 		prim
 		kruskal
 **********************************************/
@@ -422,11 +448,12 @@ void prim(int start)
 		ret_mst_cost += g_mst[from][to];
 	}
 
-	cout<<ret_mst_cost<<endl;
+	cout<<"prim mst_cost:"<<ret_mst_cost<<endl;
 }
 
 void test_mst()
 {
+	PRINT_FUNCTION_NAME;
 	prim(0);
 }
 
@@ -435,7 +462,7 @@ int main()
 	// test_bfs_dfs();
 	// test_topsort();
 	// test_unweighted();
-	// test_dijkstra();
+	test_weighted();
 
 	test_mst();
 	return 0;
