@@ -5,6 +5,10 @@
 
 using namespace std;
 
+/*
+	1.01背包
+*/
+
 #define MAX (10)
 
 int f[MAX][MAX];
@@ -60,7 +64,7 @@ void packing_01_modify(int w[], int v[], int item_num, int capacity)
 	for(int i = 1; i <= item_num; i++)
 	{
 		for(int j = capacity; j > 0; j--)
-			if(w[i] <= j)	// 当前物品i的重量w[i]小于背包容量j，可以放入
+			if(w[i]dp <= j)	// 当前物品i的重量w[i]小于背包容量j，可以放入
 				f[j] = max(f[j], f[j-w[i]]+v[i]);
 
 		for(int k = 1; k <= capacity; k++)
