@@ -1,8 +1,20 @@
 #include <iostream>
+#include <string.h>
 
 #include "utils.h"
 
 using namespace std;
+
+/*
+	1.bubble
+	2.insert
+	3.select
+	4.shell
+	5.quick
+	6.merge
+	7.heap
+	8.bucket
+*/
 
 /**********************************************	
 冒泡排序
@@ -26,7 +38,7 @@ void bubble_lv1(int a[], int n)
 			}
 		}
 
-	cout<<"bubble_lv1 cnt = "<<cnt<<endl;
+	cout<<"lv1 cnt = "<<cnt<<endl;
 }
 
 void bubble_lv2(int a[], int n)
@@ -50,15 +62,15 @@ void bubble_lv2(int a[], int n)
 			}
 		}
 	}
-	cout<<"cnt = "<<cnt<<endl;
+	cout<<"lv2 cnt = "<<cnt<<endl;
 }
 
 void test_bubble()
 {
 	PRINT_FUNCTION_NAME;
 
-	int a1[] = {49,38,65,97,26,13,27,49,55,4};
-	int a2[] = {49,38,65,97,26,13,27,49,55,4};
+	int a1[] = {49,38,65,97,26,13,27,49,55};
+	int a2[] = {49,38,65,97,26,13,27,49,55};
 	bubble_lv1(a1, Len(a1));
 	PRINT_ARRAY(a1, Len(a1));
 	
@@ -93,9 +105,9 @@ void test_insert()
 {
 	PRINT_FUNCTION_NAME;
 
-	int a1[] = {49,38,65,97,26,13,27,49,55,4};
-	insert(a1, Len(a1));
-	PRINT_ARRAY(a1, Len(a1));
+	int a[] = {49,38,65,97,26,13,27,49,55,4};
+	insert(a, Len(a));
+	PRINT_ARRAY(a, Len(a));
 }
 
 /**********************************************	
@@ -120,9 +132,9 @@ void test_select()
 {
 	PRINT_FUNCTION_NAME;
 
-	int a1[] = {49,38,65,97,26,13,27,49,55,4};
-	select(a1, Len(a1));
-	PRINT_ARRAY(a1, Len(a1));
+	int a[] = {49,38,65,97,26,13,27,49,55,4};
+	select(a, Len(a));
+	PRINT_ARRAY(a, Len(a));
 }
 
 /**********************************************	
@@ -150,9 +162,9 @@ void test_shell()
 {
 	PRINT_FUNCTION_NAME;
 
-	int a1[] = {49,38,65,97,26,13,27,49,55,4};
-	shell(a1, Len(a1));
-	PRINT_ARRAY(a1, Len(a1));
+	int a[] = {49,38,65,97,26,13,27,49,55,4};
+	shell(a, Len(a));
+	PRINT_ARRAY(a, Len(a));
 }
 
 /**********************************************	
@@ -186,9 +198,9 @@ void test_quick()
 {
 	PRINT_FUNCTION_NAME;
 
-	int a1[] = {49,38,65,97,26,13,27,49,55,4};
-	quick(a1, Len(a1));
-	PRINT_ARRAY(a1, Len(a1));
+	int a[] = {49,38,65,97,26,13,27,49,55,4};
+	quick(a, Len(a));
+	PRINT_ARRAY(a, Len(a));
 }
 
 /**********************************************	
@@ -231,9 +243,9 @@ void test_merge()
 {
 	PRINT_FUNCTION_NAME;
 
-	int a1[] = {49,38,65,97,26,13,27,49,55,4};
-	merge(a1, Len(a1));
-	PRINT_ARRAY(a1, Len(a1));
+	int a[] = {49,38,65,97,26,13,27,49,55,4};
+	merge(a, Len(a));
+	PRINT_ARRAY(a, Len(a));
 }
 
 /**********************************************	
@@ -287,9 +299,35 @@ void test_heap()
 {
 	PRINT_FUNCTION_NAME;
 
-	int a1[] = {49,38,65,97,26,13,27,49,55,4};
-	heap(a1, Len(a1));
-	PRINT_ARRAY(a1, Len(a1));
+	int a[] = {49,38,65,97,26,13,27,49,55,4};
+	heap(a, Len(a));
+	PRINT_ARRAY(a, Len(a));
+}
+
+/**********************************************	
+桶排序
+**********************************************/
+void bucket(int a[], int n, int max)
+{
+    int *buf = new int[max];
+
+    for(int i = 0; i < n; i++) 
+        buf[a[i]]++; 
+
+    for (int i = 0, j = 0; i < max; i++) 
+        while((buf[i]--))
+            a[j++] = i;
+
+    delete[] buf;
+}
+
+void test_bucket()
+{
+	PRINT_FUNCTION_NAME;
+
+	int a[] = {4,5,1,3,8,4,2,8,9};
+	bucket(a, Len(a), 9);
+	PRINT_ARRAY(a, Len(a));
 }
 
 int main()
@@ -300,6 +338,6 @@ int main()
 	test_quick();
 	test_merge();
 	test_heap();
-
+	test_bucket();
 	return 0;
 }
