@@ -75,7 +75,7 @@ int search(node *root, char *key)
 		n = n->c[i];			// coding
 	}
 	if(n != NULL)				// coding
-		return n->val;
+		return n->isEnd;		// fixed bug:仅仅节点存在不能说明word查找成功
 	else
 		return -1;
 }

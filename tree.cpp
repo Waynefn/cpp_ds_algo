@@ -534,15 +534,11 @@ bool trie_tree_search(TrieTreeNode *t, string word)
 	{
 		int c = word[i] - 'a';
 		if(NULL == dummy->child[c])
-		{
-			cout<<"NOT find "<<word<<" in trie"<<endl;
 			return false;
-		}
 		dummy = dummy->child[c];
 	}
 
-	cout<<"find "<<word<<" in trie"<<endl;
-	return true;
+	return dummy->exist;	// fixed bug:仅仅节点存在不能说明word查找成功
 }
 
 void test_trie_tree()
@@ -555,8 +551,8 @@ void test_trie_tree()
 	trie_tree_insert(t, "abcd");
 	trie_tree_insert(t, "abd");
 
-	trie_tree_search(t, "abc");
-	trie_tree_search(t, "abca");
+	cout<<"found result: "<<trie_tree_search(t, "ab")<<endl;
+	cout<<"found result: "<<trie_tree_search(t, "abc")<<endl;
 }
 
 /**********************************************
@@ -941,14 +937,14 @@ void test_avl_tree()
 
 int main()
 {
-	test_tree();
-	test_tarjan_lca();
+	// test_tree();
+	// test_tarjan_lca();
 
-	test_trie_tree();
+	 test_trie_tree();
 
-	test_segment_tree();
+	// test_segment_tree();
 
-	test_avl_tree();
+	// test_avl_tree();
 
 	return 0;
 }
