@@ -83,9 +83,9 @@ void test_question_1()
 	int a[] = {11,5,28,2,13};
 
 	for(int i = 0; i < Len(a); i++)
-		insert(t, a[i]);
+		t = insert(t, a[i]);
 
-	cout<<contains(t, 8)<<endl;
+	cout<<contains(t, 9)<<endl;
 }
 
 int main()
