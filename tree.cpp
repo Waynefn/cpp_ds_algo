@@ -538,7 +538,7 @@ bool trie_tree_search(TrieTreeNode *t, string word)
 		dummy = dummy->child[c];
 	}
 
-	return dummy->exist;	// fixed bug:仅仅节点存在不能说明word查找成功
+	return dummy->exist;	// fixed bug:此时节点dummy一定不为null，根据需要返回exist或者word对应的val
 }
 
 void test_trie_tree()
