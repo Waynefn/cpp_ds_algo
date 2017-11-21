@@ -73,17 +73,10 @@ void dp()
 		{
 			if(sack[i-1][j] != -1)
 			{
-				if(sack[i-1][j] > sack[i][j])	sack[i][j] = sack[i-1][j];	// 初始化数据为-1,都小于[0][0]的0
-				if(j + size[i] <= capacity)		sack[i][j+size[i]] = sack[i-1][j] + value[i]; //如果i商品放得下,则放入背包再说
+				if(sack[i-1][j] > sack[i][j])	sack[i][j] = sack[i-1][j];						// case_1 初始化数据为-1,都小于[0][0]的0
+				if(j + size[i] <= capacity)		sack[i][j+size[i]] = sack[i-1][j] + value[i]; 	// case_2 如果i商品放得下,则放入背包再说
 			}
 		}
-	}
-
-	for(i = 0; i <= item; i++)
-	{
-		for(j = 0; j <= capacity; j++)
-			cout<<sack[i][j]<<" ";
-		cout<<endl;
 	}
 
 	max = 0; index = 0;
@@ -91,19 +84,20 @@ void dp()
 	{
 		if(sack[item][j] > max)
 		{
-			max = sack[item][j];
-			index = j;
+			max = sack[item][j];	// 记录最大价值
+			index = j;				// 此时物品的总重量
 		}
 	}
-	// for(i = item; i >= 1; i--)
-	// {
-	// 	if(index >= size[i] &&  == )
-	// 	{
-	// 		cout<<"item "<<i<<" is in a knapsack"<<endl;
-	// 		index = index - size[i];
-	// 	}
-	// }
-} 
+
+	for(i = item; i >= 1; i--)
+	{	// 如果【前i-1件商品在j-w[i]重量的包内的最大价值】，加上【第i件商品的价值】，等于【j包内放前i件商品】的价值，则说明第i件商品确实需要被放入
+		if(index >= size[i] && sack[i][index] == sack[i-1][index-size[i]] + value[i])
+		{
+			cout<<"item "<<i<<" is in a knapsack"<<endl;
+			index = index - size[i];
+		}
+	}
+}
 
 void test_question_2()
 {
