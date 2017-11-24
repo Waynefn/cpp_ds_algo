@@ -60,7 +60,7 @@ void bfs(int start)
 			int curr = q.front(); q.pop();
 			cout<<curr<<" ";
 			for(int to = 0; to < V; to++)
-			{
+			{// 入队和置为true必须同时进行，否则会造成【顶点被多次push】
 				if(!visited[to] && g[curr][to] < M)
 				{
 					q.push(to);
@@ -84,11 +84,6 @@ void dfs(int start)
 		if(!visited[to] && g[start][to] < M)
 			dfs(to);
 	}
-}
-
-void dfs_2(int start)
-{
-	
 }
 
 void test_bfs_dfs()
