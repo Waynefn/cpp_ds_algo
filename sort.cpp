@@ -1,5 +1,7 @@
 #include <iostream>
 #include <string.h>
+#include <pthread.h>
+#include <unistd.h>
 
 #include "utils.h"
 
@@ -14,6 +16,7 @@ using namespace std;
 	6.merge
 	7.heap
 	8.bucket
+	9.sleep
 */
 
 /**********************************************	
@@ -330,14 +333,42 @@ void test_bucket()
 	PRINT_ARRAY(a, Len(a));
 }
 
+/**********************************************	
+睡觉排序
+**********************************************/
+void *worker(void *arg)
+{
+	int time = *(int *)arg;
+	usleep(time*1000);
+	cout<<time<<endl;
+}
+
+void sleep(int a[], int n)
+{
+	pthread_t td[100];
+	for(int i = 0; i < n; i++)
+		pthread_create(&td[i], NULL, worker ,(void *)&a[i]);
+	for(int i = 0; i < n; i++)
+		pthread_join(td[i], NULL);
+}
+
+void test_sleep()
+{
+	PRINT_FUNCTION_NAME;
+
+	int a[] = {4,5,65,77,23,54,2,9,2,3,7,10};
+	sleep(a, Len(a));
+}
+
 int main()
 {
-	test_bubble();
-	test_insert();
-	test_shell();
-	test_quick();
-	test_merge();
-	test_heap();
-	test_bucket();
+	// test_bubble();
+	// test_insert();
+	// test_shell();
+	// test_quick();
+	// test_merge();
+	// test_heap();
+	// test_bucket();
+	test_sleep();
 	return 0;
 }
