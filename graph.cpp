@@ -11,7 +11,8 @@ using namespace std;
 	1.BFS & DFS
 	2.拓扑排序
 	3.无权最短路径
-	4.dijkstra 		图参照onenote笔记
+	4.dijkstra
+	 		图参照onenote笔记
 	5.floyd
 	6.最小生成树 minimal spanning tree
 		prim
@@ -60,7 +61,7 @@ void bfs(int start)
 			int curr = q.front(); q.pop();
 			cout<<curr<<" ";
 			for(int to = 0; to < V; to++)
-			{// 入队和置为true必须同时进行，否则会造成【顶点被多次push】
+			{
 				if(!visited[to] && g[curr][to] < M)
 				{
 					q.push(to);
@@ -84,6 +85,11 @@ void dfs(int start)
 		if(!visited[to] && g[start][to] < M)
 			dfs(to);
 	}
+}
+
+void dfs_2(int start)
+{
+	
 }
 
 void test_bfs_dfs()
@@ -265,13 +271,18 @@ void dijkstra_print_process(queue<int> &path)
 void dijkstra_print_way(int start, int goal, int dis[], int prev[])
 {
 	// 输出start到goal的路径
+
+cout<<"11111  ："<<start<<" -- "<<goal<<endl;
+
 	int find = goal;
 	stack<int> ret;
 	while(find != start)
 	{
+	//	cout<<"find = "<<find<<endl;
 		ret.push(find);
 		find = prev[find];
 	}
+cout<<"222"<<endl;
 	cout<<"found "<<start<<" to "<<goal<<" path : "<<endl;
 	cout<<"->start "<<start<<", 距离为"<<dis[start]<<endl;
 	while(!ret.empty())
@@ -310,7 +321,7 @@ void dijkstra(int start, int goal)
 	for(int to = 0; to < V_WEIGHTED; to++)
 	{
 		visited[to] = false;
-		prev[to] = 0;
+		prev[to] = start;
 		dis[to] = g_weighted[start][to];
 	}
 
@@ -369,7 +380,7 @@ void floyd()
 void test_weighted()
 {
 	PRINT_FUNCTION_NAME;
-	dijkstra(0, 5);
+	dijkstra(1, 0);
 	floyd();
 }
 
