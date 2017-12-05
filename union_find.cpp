@@ -10,54 +10,52 @@ using namespace std;
 	union-find 并查集
 	用数组S[]来保存各个元素的集合关系
 	1.初始化:
-		S[1~n]=0,如果find(1~n)则返回1~n本身(注意不能返回0)
+		S[x]=x, x = find(x)
 	2.union(S,x,y),y合并到x集合内:
 		S[y]=x,然后find(y)会返回x,表明y属于集合x
 	3.find(S, x):查找x所属的合集的名字
-		S[x]<=0,则返回x本身(注意不能返回0)
-		S[x]!=0,则递归地查询find(S[x])直到发现S[root]<=0,返回root
+		S[x]==x,则返回x本身(注意不能返回0)
+		S[x]!=x,则递归地查询find(S[x])直到发现S[root]==x,返回root
 			e.g:1<--5<--7<--8 find(8)
 			step1:find(8),由于S[8] == 7,所以继续find(S[7])
 			step2:find(7),由于S[7] == 5,所以继续find(S[5])
 			step3:find(5),由于S[5] == 1,所以继续find(S[1])
-			step4:find(1),由于S[1] == 0,所以返回1
+			step4:find(1),由于S[1] == 1,所以返回1
 			final:最终得到find(8) = 1,8与1属于同一个集合
 **********************************************/
 void uf_init_v1(int S[])
-{// 1-8元素置0，set[0]不使用
-	for(int i = SET_NUM; i > 0; i--)
-		S[i] = 0;
-	S[0] = -1;
-}
-
-void uf_union_v1(int S[], int e1, int e2)
 {
-	S[e2] = e1;
+	for(int i = 0; i < SET_NUM; i++)
+		S[i] = i;
 }
 
 int uf_find_v1(int S[], int x)
 {
-	if(S[x] <= 0)					// x元素指向初始位置，集合的名字就是它自身
-		return x;
-	else							// x指向了s[x]，递归地去找这个s[x]的集合名
-		return uf_find_v1(S, S[x]);
+	while(x != S[x])	// refer to stanford cs97si ppt
+		x = S[x];
+	return x;
+}
+
+void uf_union_v1(int S[], int e1, int e2)
+{
+	S[uf_find_v1(S, e2)] = uf_find_v1(S, e1); // refer to stanford cs97si ppt
 }
 
 void test_union_find_v1()
 {
 	PRINT_FUNCTION_NAME;
 
-	int S[SET_NUM + 1];
+	int S[SET_NUM];
 	uf_init_v1(S);
 
-	uf_union_v1(S,5,6);
-	uf_union_v1(S,7,8);
+	uf_union_v1(S,3,4);
+	uf_union_v1(S,4,5);
 	uf_union_v1(S,5,7);
 
-	cout<<"find :"<<uf_find_v1(S,8)<<endl;
-	cout<<"find :"<<uf_find_v1(S,5)<<endl;
+	cout<<"find :"<<uf_find_v1(S,7)<<endl;
+	cout<<"find :"<<uf_find_v1(S,4)<<endl;
 
-	PRINT_ARRAY(S, SET_NUM+1);
+	PRINT_ARRAY(S, SET_NUM);
 }
 
 /**********************************************
@@ -105,21 +103,6 @@ void uf_init_v2(int S[])
 		S[i] = -1;
 }
 
-// 不再轻易地让e2指向e1集合,而是考虑到e1与e2当前的深度
-void uf_union_v2(int S[], int e1, int e2)
-{
-	if(S[e1] == S[e2])	// e1与e2所属集合的深度一样,此时e1深度+1,e2集合指向e1
-	{
-		S[e2] = e1;
-		S[e1]--;
-	}
-	else	// 深度相对小集合指向深度相对大的集合,保证最大深度缓慢增长
-	{
-		if(S[e1] < S[e2])	S[e2] = e1;
-		else				S[e1] = e2;
-	}
-}
-
 /*
 	路径压缩,为了下次更快查找x,x到root之间元素都指向root
 	e.g: root为1
@@ -130,10 +113,30 @@ void uf_union_v2(int S[], int e1, int e2)
 */ 
 int uf_find_v2(int S[], int x)
 {
-	if(S[x] <= 0)
+	if(S[x] < 0)
 		return x;
 	else
 		return S[x] = uf_find_v2(S, S[x]);
+}
+
+/*
+	不再轻易地让e2指向e1集合,而是考虑到e1与e2当前的深度
+*/
+void uf_union_v2(int S[], int e1, int e2)
+{
+	int r1 = uf_find_v2(S, e1);	// 两个集合union时，只对root点进行操作
+	int r2 = uf_find_v2(S, e2);
+
+	if(S[r1] == S[r2])		// r1与r2的深度一样,此时r1深度+1,r2指向r1
+	{
+		S[r2] = r1;
+		S[r1]--;
+	}
+	else	// 深度相对小集合指向深度相对大的集合,保证最大深度缓慢增长
+	{
+		if(S[r1] < S[r2])	S[r2] = e1;
+		else				S[r1] = e2;
+	}
 }
 
 void test_union_find_v2()
@@ -143,9 +146,9 @@ void test_union_find_v2()
 	int S[SET_NUM];
 	uf_init_v2(S);
 
+	uf_union_v2(S,3,4);
 	uf_union_v2(S,4,5);
-	uf_union_v2(S,6,7);
-	uf_union_v2(S,4,6);
+	uf_union_v2(S,5,7);
 
 	cout<<"find :"<<uf_find_v2(S,7)<<endl;
 	cout<<"find :"<<uf_find_v2(S,4)<<endl;

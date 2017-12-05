@@ -46,13 +46,16 @@ void swap(int *x, int *y)
 // coding
 void shift_up(int b[], int n)
 {
-	if(n > 0 && b[n] < b[n/2])
+	if(n > 0 && b[n] < b[(n-1)/2])
 	{
-		swap(b[n/2], b[n]);
-		shift_up(b, n/2);
+		swap(b[(n-1)/2], b[n]);
+		shift_up(b, (n-1)/2);
 	}
 }
 
+/*
+	1.每一轮down结束后，末尾元素移动到此时左右子树都维持堆特性
+*/
 void shift_down(int b[], int i, int size)
 {
 	int left = 2*i+1, right = 2*i+2;	// coding
@@ -79,18 +82,18 @@ void sort2(int a[], int n)
 	print_array(a, n);
 	for(i = 0; i < n; i++)
 	{
-		cout<<"swap前: ";print_array(a, n);
+	//	cout<<"swap前: ";print_array(a, n);
 		swap(a[0], a[n-i-1]);			// coding 每一轮把当前[0 ~ n-i-1]范围内最小值a[0]换到末尾a[n-i-1]位置
-		cout<<"swap后: ";print_array(a, n);
+	//	cout<<"swap后: ";print_array(a, n);
 		shift_down(a, 0, n-i-1);		// coding 此时末尾数据从a[0]位置down,注意第一轮找到了数组的最小值放到了a[n-1]位置不能再移动,所以第二轮只能移动到a[n-1]
-		cout<<"shift_down后: ";print_array(a, n);
+	//	cout<<"shift_down后: ";print_array(a, n);
 	}
 	print_array(a, n);
 }
 
 void test_question_1()
 {
-	int a[] = {5,4,3,2,1,0};
+	int a[] = {1,5,3,5,7,9,7,6,10,8};
 
 	sort2(a, Len(a));
 }
