@@ -54,14 +54,18 @@ void shift_up(int b[], int n)
 }
 
 /*
-	1.每一轮down结束后，末尾元素移动到此时左右子树都维持堆特性
+	参照算法导论 MAX-HEAPIFY,对i节点是否满足堆性质，进行调整。调整范围为size
+	1.从b[i],b[left],b[right]中选取最小值，保存到smallest
+	2.b[i]为最小值则已经满足堆性质，函数结束
+	3.否则，b[i]与b[smallest]交换，使i和它的左右子树满足了堆的性质
+	4.由于b[i]移动至b[smallest]，导致下一层再次不满足堆性质，所以递归地操作直至完全沉入底部
 */
 void shift_down(int b[], int i, int size)
 {
-	int left = 2*i+1, right = 2*i+2;	// coding
+	int left = 2*i+1, right = 2*i+2;			// coding
 	int smallest = i;
 
-	if(right < size && b[right] < b[smallest])				// coding
+	if(right < size && b[right] < b[smallest])	// coding
 		smallest = right;
 	if(left < size && b[left] < b[smallest])
 		smallest = left;
@@ -69,7 +73,7 @@ void shift_down(int b[], int i, int size)
 	if(smallest != i)
 	{
 		swap(b[i], b[smallest]);		// coding
-		shift_down(b, smallest, size);	
+		shift_down(b, smallest, size);	// 元素从堆顶down至【当前size】末尾之前，递归中不需要缩小size范围
 	}
 }
 
@@ -77,16 +81,12 @@ void sort2(int a[], int n)
 {
 	int i;
 	for(i = 0; i < n; i++)
-		shift_up(a, i);				// coding
+		shift_up(a, i);					// coding
 
-	print_array(a, n);
 	for(i = 0; i < n; i++)
 	{
-	//	cout<<"swap前: ";print_array(a, n);
-		swap(a[0], a[n-i-1]);			// coding 每一轮把当前[0 ~ n-i-1]范围内最小值a[0]换到末尾a[n-i-1]位置
-	//	cout<<"swap后: ";print_array(a, n);
-		shift_down(a, 0, n-i-1);		// coding 此时末尾数据从a[0]位置down,注意第一轮找到了数组的最小值放到了a[n-1]位置不能再移动,所以第二轮只能移动到a[n-1]
-	//	cout<<"shift_down后: ";print_array(a, n);
+		swap(a[0], a[n-i-1]);
+		shift_down(a, 0, n-i-1);		//	coding down()中，对于size的判断是【子树节点 < size】，故传参为n-i-1
 	}
 	print_array(a, n);
 }
