@@ -5,26 +5,127 @@
 
 using namespace std;
 
+#define MAX (20)
 /*
-	1.组成数组n有多少种方式
+	1.一维dp
+		1.1 组成数组n有多少种方式
+		1.2 tri tiling
+	2.二维dp
+		2.1 LCS(Longest common subsequence)
 	2.01背包
 
 */
 
 /**********************************************
-	1.组成数组n有多少种方式
+	1.1 组成数组n有多少种方式(by 1,3,4)
 **********************************************/
-
-
-void test_sum_n()
+void sum_n(int n)
 {
+	PRINT_SUB_FUNCTION_NAME;
 
+	int f[20] = {0};
+	f[0] = f[1] = f[2] = 1; f[3] = 2;
+
+	for(int i = 4; i <= n; i++)
+		f[i] = f[i-1] + f[i-3] + f[i-4];
+	cout<<"f["<<n<<"] = "<<f[n]<<endl;
+}
+
+/**********************************************
+	1.2 tri tiling
+**********************************************/
+void tri_tiling(int n)
+{
+	PRINT_SUB_FUNCTION_NAME;
+
+	int f[20] = {0}, g[10] = {0};
+	f[0] = 1, f[1] = 0;
+	g[0] = 0, g[1] = 1;
+
+	for(int i = 2; i <= n; i++)
+	{
+		f[i] = f[i-2] + 2*g[i-1];
+		g[i] = f[i-1] + g[i-2];
+	}
+	cout<<"f["<<n<<"] = "<<f[n]<<endl;
+}
+
+void test_1_dim()
+{
+	sum_n(6);
+	tri_tiling(8);
+}
+
+/**********************************************
+	2.1 LCS(Longest common subsequence)
+		x:a BC bd AB
+		y:B d CAB c
+		LCS = 4 -> BCAB
+**********************************************/
+void longest_common_subsequence_result(int f[MAX][MAX], char x[], int i, char y[], int j)
+{
+	while(i && j)
+	{
+		if(x[i-1] == y[j-1])		// 当前末尾字符相等，则属于LCS结果，输出它
+		{
+			cout<<x[i-1]<<"-";		// *但两个d也会被输出
+			i--,j--;
+		}
+		else
+		{
+			if(f[i-1][j] > f[i][j-1])		// 找到相对大的上一层子问题
+				i--;
+			else if(f[i-1][j] < f[i][j-1])	// 找到相对大的上一层子问题
+				j--;
+			else							// 两个子问题相等，则递归去寻找所有可能性
+			{
+				longest_common_subsequence_result(f, x, i-1, y, j);
+				longest_common_subsequence_result(f, x, i, y, j-1);
+				return;
+			}
+		}
+	}
+}
+
+void longest_common_subsequence(char x[], char y[])
+{
+	PRINT_SUB_FUNCTION_NAME;
+
+	int len_x = strlen(x);
+	int len_y = strlen(y);
+	int f[MAX][MAX];
+
+	for(int i = 0; i <= len_x; i++)
+		f[i][0] = 0;
+	for(int j = 0; j <= len_x; j++)
+		f[0][j] = 0;
+
+	// [i][0]和[0][j]是留给初始状态的，计算f时i和j要从下标1开始，但字符串首字符下标为x[0]和y[0]
+	for(int i = 1; i <= len_x; i++)
+		for(int j = 1; j <= len_y; j++)
+			if(x[i-1] == y[j-1])	f[i][j] = f[i-1][j-1] + 1;
+			else					f[i][j] = max(f[i-1][j], f[i][j-1]);
+
+	cout<<"LCS["<<x<<"]["<<y<<"] = "<<f[len_x][len_y]<<endl;
+
+	for(int i = 0; i <= len_x; i++)
+	{
+		for(int j = 0; j <= len_y; j++)
+			cout<<f[i][j]<<" ";
+		cout<<endl;
+	}
+
+	longest_common_subsequence_result(f, x, len_x, y, len_y); cout<<endl;
+}
+
+void test_2_dim()
+{
+	longest_common_subsequence("ABCBDAB", "BDCABC");
 }
 
 /**********************************************
 	2.01背包
 **********************************************/
-#define MAX (10)
 int f[MAX][MAX];
 
 void packing_01_result(int w[], int v[], int n, int c)	// n = item_num, c = capacity
@@ -78,7 +179,7 @@ void packing_01_modify(int w[], int v[], int item_num, int capacity)
 	for(int i = 1; i <= item_num; i++)
 	{
 		for(int j = capacity; j > 0; j--)
-			if(w[i]dp <= j)	// 当前物品i的重量w[i]小于背包容量j，可以放入
+			if(w[i] <= j)	// 当前物品i的重量w[i]小于背包容量j，可以放入
 				f[j] = max(f[j], f[j-w[i]]+v[i]);
 
 		for(int k = 1; k <= capacity; k++)
@@ -101,6 +202,8 @@ void test_package()
 
 int main()
 {
+	test_1_dim();
+	test_2_dim();
 	test_package();
 
 	return 0;
