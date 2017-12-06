@@ -1,4 +1,5 @@
 #include <iostream>
+#include <stack>
 #include <string.h>
 
 #include "utils.h"
@@ -12,6 +13,7 @@ using namespace std;
 		1.2 tri tiling
 	2.二维dp
 		2.1 LCS(Longest common subsequence)
+	3.区间动态规划 interval dp
 	2.01背包
 
 */
@@ -58,9 +60,10 @@ void test_1_dim()
 
 /**********************************************
 	2.1 LCS(Longest common subsequence)
-		x:a BC bd AB
-		y:B d CAB c
-		LCS = 4 -> BCAB
+		x:ABCBDAB
+		y:BDCABC
+		LCS = 4 -> BCBA,BCAB,BDAB
+	** 尚未引入flag[][]，无法正确显示所有LCS结果
 **********************************************/
 void longest_common_subsequence_result(int f[MAX][MAX], char x[], int i, char y[], int j)
 {
@@ -107,7 +110,6 @@ void longest_common_subsequence(char x[], char y[])
 			else					f[i][j] = max(f[i-1][j], f[i][j-1]);
 
 	cout<<"LCS["<<x<<"]["<<y<<"] = "<<f[len_x][len_y]<<endl;
-
 	for(int i = 0; i <= len_x; i++)
 	{
 		for(int j = 0; j <= len_y; j++)
@@ -118,9 +120,73 @@ void longest_common_subsequence(char x[], char y[])
 	longest_common_subsequence_result(f, x, len_x, y, len_y); cout<<endl;
 }
 
+/**********************************************
+	2.2 LCS(Longest common substring)
+		x:ABCFBC
+		y:ABFCAB
+		LCS = 2 -> AB
+**********************************************/
+void longest_common_substring_result(int f[MAX][MAX], char x[], char y[], int p, int q)
+{
+	stack<char> ret;
+
+	while(p && q)
+	{
+		if(x[p-1] == y[q-1])	// 从记录的最长子串的末为字符p和q开始，向左边倒推
+		{
+			ret.push(x[p-1]);
+			p--,q--;
+		}
+		else					// 一旦发现字符不再匹配，说明字串结束
+			break;
+	}
+
+	while(!ret.empty())
+	{
+		char c = ret.top(); ret.pop();
+		cout<<c<<"-";
+	}cout<<endl;
+}
+
+void longest_common_substring(char x[], char y[])
+{
+	PRINT_SUB_FUNCTION_NAME;
+
+	int len_x = strlen(x);
+	int len_y = strlen(y);
+	int f[MAX][MAX];
+	int p,q;
+
+	for(int i = 0; i <= len_x; i++)
+		f[i][0] = 0;
+	for(int j = 0; j <= len_y; j++)
+		f[0][j] = 0;
+
+	int curr_max = -1;
+	for(int i = 1; i <= len_x; i++)
+	{
+		for(int j = 1; j <= len_y; j++)
+		{
+			if(x[i-1] == y[j-1])
+				f[i][j] = f[i-1][j-1] + 1;
+			else
+				f[i][j] = 0;	// 一旦不匹配就归零，接下来重新计算
+			if(f[i][j] > curr_max)
+			{
+				curr_max = f[i][j];
+				p = i, q = j;	// 记录最长子串的末尾，输出时往前倒推即可得到结果
+			}
+		}
+	}
+	cout<<"LCS["<<x<<"]["<<y<<"] = "<<curr_max<<endl;
+
+	longest_common_substring_result(f, x, y, p, q);
+}
+
 void test_2_dim()
 {
 	longest_common_subsequence("ABCBDAB", "BDCABC");
+	longest_common_substring("ABCBDAB", "BDCABC");
 }
 
 /**********************************************
