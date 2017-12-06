@@ -110,12 +110,15 @@ void longest_common_subsequence(char x[], char y[])
 			else					f[i][j] = max(f[i-1][j], f[i][j-1]);
 
 	cout<<"LCS["<<x<<"]["<<y<<"] = "<<f[len_x][len_y]<<endl;
+
+#ifdef DEBUG_LOG
 	for(int i = 0; i <= len_x; i++)
 	{
 		for(int j = 0; j <= len_y; j++)
 			cout<<f[i][j]<<" ";
 		cout<<endl;
 	}
+#endif
 
 	longest_common_subsequence_result(f, x, len_x, y, len_y); cout<<endl;
 }
@@ -192,22 +195,20 @@ void test_2_dim()
 /**********************************************
 	2.01背包
 **********************************************/
-int f[MAX][MAX];
-
-void packing_01_result(int w[], int v[], int n, int c)	// n = item_num, c = capacity
+void packing_01_result(int f[MAX][MAX], int w[], int v[], int n, int c)	// n = item_num, c = capacity
 {
 	if(n < 0)
 		return;
 
 	if(f[n][c] == f[n-1][c])
-		packing_01_result(w,v,n-1,c);
+		packing_01_result(f, w, v, n-1, c);
 	else
 	{
 		if(w[n] <= c 
 		&& f[n][c] == v[n] + f[n-1][c-w[n]])
 		{	
 			cout<<"物品"<<n<<", 剩余空间"<<c-w[n]<<endl;
-			packing_01_result(w,v,n-1,c-w[n]);
+			packing_01_result(f, w, v, n-1, c-w[n]);
 		}
 	}
 }
@@ -216,7 +217,7 @@ void packing_01(int w[], int v[], int item_num, int capacity)
 {
 	PRINT_SUB_FUNCTION_NAME;
 
-	bzero(f, sizeof(f));
+	int f[MAX][MAX]; bzero(f, sizeof(f));
 	
 	for(int i = 1; i <= item_num; i++)
 		for(int j = 1; j <= capacity; j++)
@@ -224,16 +225,18 @@ void packing_01(int w[], int v[], int item_num, int capacity)
 				f[i][j] = max(f[i-1][j],f[i-1][j-w[i]]+v[i]);
 			else			// 当前背包放不下物品i
 				f[i][j] = f[i-1][j];
-	
+
+#ifdef DEBUG_LOG	
 	for(int i = 1; i <= item_num; i++)
 	{
 		for(int j = 1; j <= capacity; j++)
 			cout<<f[i][j]<<" ";
 		cout<<endl;
 	}
+#endif
 
 	cout<<"f["<<item_num<<"]["<<capacity<<"] = "<<f[item_num][capacity]<<", 包含:"<<endl;
-	packing_01_result(w,v,item_num,capacity);
+	packing_01_result(f, w,v,item_num,capacity);
 }
 
 void packing_01_modify(int w[], int v[], int item_num, int capacity)
@@ -248,11 +251,14 @@ void packing_01_modify(int w[], int v[], int item_num, int capacity)
 			if(w[i] <= j)	// 当前物品i的重量w[i]小于背包容量j，可以放入
 				f[j] = max(f[j], f[j-w[i]]+v[i]);
 
+#ifdef DEBUG_LOG
 		for(int k = 1; k <= capacity; k++)
 			cout<<f[k]<<" ";
 		cout<<endl;
+#endif
 	}
-	
+
+	cout<<"f["<<capacity<<"] = "<<f[capacity]<<endl;
 }
 
 void test_package()
