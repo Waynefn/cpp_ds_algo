@@ -6,11 +6,25 @@
 using namespace std;
 
 /*
-	1.01背包
+	1.组成数组n有多少种方式
+	2.01背包
+
 */
 
-#define MAX (10)
+/**********************************************
+	1.组成数组n有多少种方式
+**********************************************/
 
+
+void test_sum_n()
+{
+
+}
+
+/**********************************************
+	2.01背包
+**********************************************/
+#define MAX (10)
 int f[MAX][MAX];
 
 void packing_01_result(int w[], int v[], int n, int c)	// n = item_num, c = capacity
@@ -74,7 +88,7 @@ void packing_01_modify(int w[], int v[], int item_num, int capacity)
 	
 }
 
-void test_dp()
+void test_package()
 {
 	int item_num = 4;
 	int capacity = 8;
@@ -87,7 +101,7 @@ void test_dp()
 
 int main()
 {
-	test_dp();
+	test_package();
 
 	return 0;
 }
