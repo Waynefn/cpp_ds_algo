@@ -268,21 +268,16 @@ void dijkstra_print_process(queue<int> &path)
 	}cout<<endl;
 }
 
-void dijkstra_print_way(int start, int goal, int dis[], int prev[])
+void dijkstra_print_path(int start, int goal, int dis[], int prev[])
 {
-	// 输出start到goal的路径
-
-cout<<"11111  ："<<start<<" -- "<<goal<<endl;
-
 	int find = goal;
 	stack<int> ret;
 	while(find != start)
 	{
-	//	cout<<"find = "<<find<<endl;
 		ret.push(find);
 		find = prev[find];
 	}
-cout<<"222"<<endl;
+
 	cout<<"found "<<start<<" to "<<goal<<" path : "<<endl;
 	cout<<"->start "<<start<<", 距离为"<<dis[start]<<endl;
 	while(!ret.empty())
@@ -346,7 +341,7 @@ void dijkstra(int start, int goal)
 	}
 
 	dijkstra_print_process(path);
-	dijkstra_print_way(start, goal, dis, prev);
+	dijkstra_print_path(start, goal, dis, prev);
 }	
 
 void floyd()

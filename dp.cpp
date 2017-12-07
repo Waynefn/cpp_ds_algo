@@ -71,7 +71,7 @@ void longest_common_subsequence_result(int f[MAX][MAX], char x[], int i, char y[
 	{
 		if(x[i-1] == y[j-1])		// 当前末尾字符相等，则属于LCS结果，输出它
 		{
-			cout<<x[i-1]<<"-";		// *但两个d也会被输出
+			cout<<x[i-1]<<"-";		// *但d也会被输出
 			i--,j--;
 		}
 		else
@@ -112,12 +112,7 @@ void longest_common_subsequence(char x[], char y[])
 	cout<<"LCS["<<x<<"]["<<y<<"] = "<<f[len_x][len_y]<<endl;
 
 #ifdef DEBUG_LOG
-	for(int i = 0; i <= len_x; i++)
-	{
-		for(int j = 0; j <= len_y; j++)
-			cout<<f[i][j]<<" ";
-		cout<<endl;
-	}
+	PRINT_MATRIX(f, len_x+1, len_y+1);
 #endif
 
 	longest_common_subsequence_result(f, x, len_x, y, len_y); cout<<endl;
@@ -227,19 +222,14 @@ void packing_01(int w[], int v[], int item_num, int capacity)
 				f[i][j] = f[i-1][j];
 
 #ifdef DEBUG_LOG	
-	for(int i = 1; i <= item_num; i++)
-	{
-		for(int j = 1; j <= capacity; j++)
-			cout<<f[i][j]<<" ";
-		cout<<endl;
-	}
+	PRINT_MATRIX(f, item_num+1, capacity+1);
 #endif
 
 	cout<<"f["<<item_num<<"]["<<capacity<<"] = "<<f[item_num][capacity]<<", 包含:"<<endl;
 	packing_01_result(f, w,v,item_num,capacity);
 }
 
-void packing_01_modify(int w[], int v[], int item_num, int capacity)
+void packing_01_improve(int w[], int v[], int item_num, int capacity)
 {
 	PRINT_SUB_FUNCTION_NAME;
 
@@ -252,9 +242,7 @@ void packing_01_modify(int w[], int v[], int item_num, int capacity)
 				f[j] = max(f[j], f[j-w[i]]+v[i]);
 
 #ifdef DEBUG_LOG
-		for(int k = 1; k <= capacity; k++)
-			cout<<f[k]<<" ";
-		cout<<endl;
+		PRINT_ARRAY(f, capacity+1);
 #endif
 	}
 
@@ -269,7 +257,7 @@ void test_package()
 	int v[5] = {0,3,4,5,6};
 
 	packing_01(w, v, item_num, capacity);
-	packing_01_modify(w, v, item_num, capacity);
+	packing_01_improve(w, v, item_num, capacity);
 }
 
 int main()

@@ -205,7 +205,7 @@ void tree_trvl_prev_nonRecursive(TreeNode *t)
 	cout<<endl;
 }
 
-void tree_trvl_prev_nonRecursive_modify(TreeNode *t)
+void tree_trvl_prev_nonRecursive_improve(TreeNode *t)
 {
 	PRINT_SUB_FUNCTION_NAME;
 
@@ -390,7 +390,7 @@ void test_tree()
 	cout<<"tree node num = "<<tree_node_count(t)<<endl;
 	cout<<"tree height = "<<tree_height(t)<<endl;
 
-	tree_trvl_prev_nonRecursive_modify(t); 
+	tree_trvl_prev_nonRecursive_improve(t); 
 	tree_trvl_in_nonRecursive(t);
 	tree_trvl_post(t); cout<<endl;
 
@@ -603,7 +603,7 @@ SegmentNode *segment_tree_build(int a[], int s, int e)
 	return node;
 }
 
-void segment_tree_modify(SegmentNode *t, int index, int val)
+void segment_tree_improve(SegmentNode *t, int index, int val)
 {
 	if(NULL == t || index < t->start || index > t->end)
 		return;
@@ -615,9 +615,9 @@ void segment_tree_modify(SegmentNode *t, int index, int val)
 
 	int m = (t->start + t->end) / 2;
 	if(index <= m)
-		segment_tree_modify(t->left, index, val);
+		segment_tree_improve(t->left, index, val);
 	else
-		segment_tree_modify(t->right, index, val);
+		segment_tree_improve(t->right, index, val);
 	
 	t->max = max(t->left->max, t->right->max);
 	t->min = min(t->left->min, t->right->min);
@@ -654,15 +654,15 @@ void test_segment_tree_build()
 	segment_tree_trvl(t);
 }
 
-void test_segment_tree_modify()
+void test_segment_tree_improve()
 {
 	PRINT_SUB_FUNCTION_NAME;
 
 	int a[] = {1,2,7,8,5};
 	SegmentNode *t = segment_tree_build(a, 0, Len(a)-1);
 
-	cout<<"----------modify----------"<<endl;
-	segment_tree_modify(t, 2, 9);
+	cout<<"----------improve----------"<<endl;
+	segment_tree_improve(t, 2, 9);
 	segment_tree_trvl(t);
 }
 
@@ -683,7 +683,7 @@ void test_segment_tree()
 	PRINT_FUNCTION_NAME;
 
 	test_segment_tree_build();
-	test_segment_tree_modify();
+	test_segment_tree_improve();
 	test_segment_tree_query_sum();
 }
 
