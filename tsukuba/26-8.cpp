@@ -19,7 +19,7 @@ using namespace std;
 ***************************************/
 
 #define Len(x)	sizeof(x)/sizeof(x[0])
-#define SIZE (5)
+#define SIZE (6)
 
 void print_array(int a[], int n)
 {
@@ -41,11 +41,7 @@ void f2(int data[], int s, int e)
 	if(i >= j)
 		return;
 
-
 	p = data[s];
-
-	cout<<"s = "<<s<<"-e = "<<e<<"- p = "<<p<<endl;
-
 	while(1)
 	{
 		while(data[i] < p) i++;
@@ -53,10 +49,10 @@ void f2(int data[], int s, int e)
 		if(i >= j)
 			break;
 		swap(&data[i], &data[j]);
-		cout<<"swap !!"<<data[i]<<"--"<<data[j]<<endl;
 		i++;
 		j--;
 	}
+	print_array(data, SIZE);
 	f2(data, s, i-1);
 	f2(data, j+1, e);
 }
@@ -80,7 +76,7 @@ void test_question_1()
 	int i;
 
 //	int array[SIZE] = {0,1,3,1,4};
-	int array[SIZE] = {0,1,1,3,4};
+	int array[SIZE] = {3,4,6,1,2,5};
 
 	f1(array, SIZE);
 	print_array(array, SIZE);

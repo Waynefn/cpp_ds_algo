@@ -30,14 +30,14 @@ void bubble_lv1(int a[], int n)
 
 	int cnt = 0;
 
-	for(int i = n-1; i > 0; i--)
-		for(int j = 0; j < i; j++)
+	for(int i = n; i > 1; i--)
+		for(int j = 1; j < i; j++)
 		{
 			cnt++;
-			if(a[j] > a[j+1])
+			if(a[j-1] > a[j])
 			{
 				
-				SWAP(a[j], a[j+1]);
+				SWAP(a[j-1], a[j]);
 			}
 		}
 
@@ -49,19 +49,19 @@ void bubble_lv2(int a[], int n)
 	PRINT_SUB_FUNCTION_NAME;
 
 	int cnt = 0;
-	int end = n-1;
+	int end = n;
 	while(end)
 	{
 		int curr_end = end;
 		end = 0;
 
-		for(int j = 0; j < curr_end; j++)
+		for(int j = 1; j < curr_end; j++)
 		{
 			cnt++;
-			if(a[j] > a[j+1])
+			if(a[j-1] > a[j])
 			{
 				end = j;
-				SWAP(a[j], a[j+1]);
+				SWAP(a[j-1], a[j]);
 			}
 		}
 	}
@@ -72,8 +72,8 @@ void test_bubble()
 {
 	PRINT_FUNCTION_NAME;
 
-	int a1[] = {49,38,65,97,26,13,27,49,55};
-	int a2[] = {49,38,65,97,26,13,27,49,55};
+	int a1[] = {1,1,0,0,3,4,5,2,2,0};
+	int a2[] = {1,1,0,0,3,4,5,2,2,0};
 	bubble_lv1(a1, Len(a1));
 	PRINT_ARRAY(a1, Len(a1));
 	
@@ -276,10 +276,7 @@ int heap_down(int hp[])
 		if(last < hp[child])
 			break;
 		else
-		{
 			hp[i] = hp[child];
-			i = child;
-		}
 	}
 	hp[i] = last;
 
@@ -302,7 +299,7 @@ void test_heap()
 {
 	PRINT_FUNCTION_NAME;
 
-	int a[] = {49,38,65,97,26,13,27,49,55,4};
+	int a[] = {5,3,6,7,8,2,1};
 	heap(a, Len(a));
 	PRINT_ARRAY(a, Len(a));
 }
@@ -340,7 +337,7 @@ void *worker(void *arg)
 {
 	int time = *(int *)arg;
 	usleep(time*1000);
-	cout<<time<<endl;
+	cout<<time<<" ";
 }
 
 void sleep(int a[], int n)
@@ -350,6 +347,7 @@ void sleep(int a[], int n)
 		pthread_create(&td[i], NULL, worker ,(void *)&a[i]);
 	for(int i = 0; i < n; i++)
 		pthread_join(td[i], NULL);
+	cout<<endl;
 }
 
 void test_sleep()
@@ -367,8 +365,8 @@ int main()
 	// test_shell();
 	// test_quick();
 	// test_merge();
-	// test_heap();
+	 test_heap();
 	// test_bucket();
-	test_sleep();
+	// test_sleep();
 	return 0;
 }
