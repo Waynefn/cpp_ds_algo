@@ -151,7 +151,9 @@ void test_select()
 void shell(int a[], int n)
 {
 	for(int gap = n/2; gap > 0; gap /= 2)
+	{
 		for(int i = gap; i < n; i++)
+		{
 			if(a[i-gap] > a[i])
 			{
 				int tmp = a[i], j;
@@ -159,13 +161,15 @@ void shell(int a[], int n)
 					a[j] = a[j-gap];
 				a[j] = tmp;
 			}
+		}
+	}
 }
 
 void test_shell()
 {
 	PRINT_FUNCTION_NAME;
 
-	int a[] = {49,38,65,97,26,13,27,49,55,4};
+	int a[] = {5,4,6,2,1,3,7,9};
 	shell(a, Len(a));
 	PRINT_ARRAY(a, Len(a));
 }
@@ -362,10 +366,10 @@ int main()
 {
 	// test_bubble();
 	// test_insert();
-	// test_shell();
+	 test_shell();
 	// test_quick();
 	// test_merge();
-	 test_heap();
+	// test_heap();
 	// test_bucket();
 	// test_sleep();
 	return 0;
