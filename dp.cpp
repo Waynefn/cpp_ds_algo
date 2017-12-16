@@ -14,7 +14,8 @@ using namespace std;
 	2.二维dp
 		2.1 LCS(Longest common subsequence)
 	3.区间动态规划 interval dp
-	2.01背包
+		3.1 组成回文串的最小添加字符数
+	4.01背包
 
 */
 
@@ -188,7 +189,42 @@ void test_2_dim()
 }
 
 /**********************************************
-	2.01背包
+	3.1 组成回文串的最小添加字符数
+**********************************************/
+void create_palindrome(char str[])
+{
+	PRINT_SUB_FUNCTION_NAME;
+
+	int len = strlen(str);
+	int f[MAX][MAX];
+
+	for(int i = 0; i <= len; i++)
+	{
+		f[i][i] = 0;
+		f[i+1][i] = 0;
+	}
+
+	for(int t = 1; t < len; t++)
+	{
+		for(int i = 0, j = t; j < len; i++,j++)
+		{
+			if(str[i] == str[j])
+				f[i][j] = f[i+1][j-1];
+			else
+				f[i][j] = 1 + min(f[i+1][j], f[i][j-1]);
+		}
+	}
+
+	PRINT_MATRIX(f, len, len);
+//	cout<<f[0][len-1]<<endl;
+}
+
+void test_create_palindrome()
+{
+	create_palindrome("Ab3bd");
+}
+/**********************************************
+	4.01背包
 **********************************************/
 void packing_01_result(int f[MAX][MAX], int w[], int v[], int n, int c)	// n = item_num, c = capacity
 {
@@ -264,6 +300,7 @@ int main()
 {
 	test_1_dim();
 	test_2_dim();
+	test_create_palindrome();
 	test_package();
 
 	return 0;
