@@ -366,7 +366,7 @@ int main()
 {
 	// test_bubble();
 	// test_insert();
-	 test_shell();
+	test_shell();
 	// test_quick();
 	// test_merge();
 	// test_heap();
