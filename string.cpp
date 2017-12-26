@@ -14,40 +14,48 @@ using namespace std;
 /**********************************************
 	1.KMP
 **********************************************/
-void kmp(char t[], char p[])
+void calc_next(char p[], int next[])
 {
-	int len_t = strlen(t);
-	int len_p = strlen(p);
-	int next[len_p+1];
-	int k = -1;
-
 	next[0] = -1;
-	for(int i = 1; i <= len_p; i++)
+	int i = 0, j = -1;
+
+	while(i < strlen(p))
 	{
-		while(k >= 0 && p[k+1] != p[i])
-			k = next[k];
-		next[i] = ++k;
+		if(j == -1 || p[i] == p[j])
+			next[++i] = ++j;
+		else
+			j = next[j];
 	}
+}
 
-	PRINT_ARRAY(next, len_p+1);
+void kmp(char t[], char p[], int next[])
+{
+	calc_next(p, next);
+	PRINT_ARRAY(next, strlen(p));
 
-	k = 0;
-	for(int i = 1; i <= len_t; i++)
+	int i = 0, j = 0;
+	while(i < strlen(t) && j < strlen(p))
 	{
-		while(k >= 0 && p[k+1] != t[i])
-			k = next[k];
-		k++;
-		if(k == len_t)	// p匹配到了t[i-len_p+1 ~ i]
-		{
-			k = next[k];
-			cout<<"result:"<<i-len_p+1<<endl;
+		cout<<"t["<<i<<"] = "<<t[i]<<" , p["<<j<<"] = "<<p[j]<<endl;
+		if(j == -1 || t[i] == p[j])
+		{	
+			i++;
+			j++;	
 		}
+		else						
+			j = next[j];
 	}
+
+	if(j == strlen(p))
+		cout<<"found at "<<i-j<<endl;
+	else
+		cout<<"failed"<<endl;
 }
 
 void test_kmp()
 {
-	kmp("ABC ABCDAB ABCDABCDABDE", "ABCDABD");
+	int next[10] = {0};
+	kmp("ababababca", "abababca", next);
 }
 
 int main()
