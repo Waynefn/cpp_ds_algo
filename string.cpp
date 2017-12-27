@@ -7,55 +7,113 @@
 using namespace std;
 
 /*
-	1.KMP
-
+	1.kmp lps 		使用lps数组，找到所有匹配
+	2.kmp next 		使用next数组，找到所有匹配
 */
 
+#define MAX (100)
 /**********************************************
-	1.KMP
+	1.kmp lps
 **********************************************/
-void calc_next(char p[], int next[])
+void kmp_lps(char t[], char p[])
 {
-	next[0] = -1;
-	int i = 0, j = -1;
+	PRINT_SUB_FUNCTION_NAME;
 
-	while(i < strlen(p))
+	int len_t = strlen(t), len_p = strlen(p);
+	int lps[MAX];
+	int i,j;
+
+	lps[0] = 0;
+	i = 1, j = 0;
+	while(i < len_t)
+	{
+		if(p[i] == p[j])
+		{
+			j++;
+			lps[i] = j;
+			i++;
+		}
+		else
+		{
+			if(j != 0)
+				j = lps[j-1];
+			else
+			{
+				lps[i] = 0;
+				i++;
+			}
+		}
+	}
+	PRINT_ARRAY(lps, len_p);
+
+	i = 0, j = 0;
+	while(i < len_t)
+	{
+		if(p[j] == t[i])
+            j++, i++;
+        if(j == len_p)
+        {
+            cout<<"found '"<<p<<"' -> p["<<i-j<<"]"<<endl;
+            j = lps[j-1];
+        }
+        else if(i < len_t && p[j] != t[i])
+        {
+            if (j != 0)
+                j = lps[j-1]; // [0..lps[j-1]]无需再匹配
+            else
+                i++;
+        }
+	}
+}
+
+/**********************************************
+	2.kmp next
+**********************************************/
+void kmp_next(char t[], char p[])
+{
+	PRINT_SUB_FUNCTION_NAME;
+
+	int len_t = strlen(t), len_p = strlen(p);
+	int next[MAX];
+	int i,j;
+	
+	next[0] = -1;
+	i = 0, j = -1;
+	while(i < len_p)
 	{
 		if(j == -1 || p[i] == p[j])
 			next[++i] = ++j;
 		else
 			j = next[j];
 	}
-}
+	PRINT_ARRAY(next, len_p);
 
-void kmp(char t[], char p[], int next[])
-{
-	calc_next(p, next);
-	PRINT_ARRAY(next, strlen(p));
-
-	int i = 0, j = 0;
-	while(i < strlen(t) && j < strlen(p))
+	i = 0, j = 0;
+	while(i < len_t && j < len_p)
 	{
-		cout<<"t["<<i<<"] = "<<t[i]<<" , p["<<j<<"] = "<<p[j]<<endl;
+//		cout<<"t["<<i<<"] = "<<t[i]<<" , p["<<j<<"] = "<<p[j]<<endl;
 		if(j == -1 || t[i] == p[j])
-		{	
+		{
 			i++;
-			j++;	
+			j++;
+			if(j == len_p)
+			{
+				cout<<"found '"<<p<<"' -> p["<<i-j<<"]"<<endl;
+				j = next[j];
+			}
 		}
-		else						
+		else				
 			j = next[j];
 	}
-
-	if(j == strlen(p))
-		cout<<"found at "<<i-j<<endl;
-	else
-		cout<<"failed"<<endl;
 }
 
 void test_kmp()
 {
-	int next[10] = {0};
-	kmp("ababababca", "abababca", next);
+	char t[] = {"aaaaab"};
+	char p[] = {"aaaa"};
+
+	kmp_lps(t, p);
+	kmp_next(t, p);
 }
 
 int main()
@@ -64,3 +122,48 @@ int main()
 
 	return 0;
 }
+
+/**********************************************
+	3.kmp next
+		standard code, DO NOT use it
+**********************************************/
+// void kmp_next(char t[], char p[])
+// {
+// 	PRINT_SUB_FUNCTION_NAME;
+
+// 	int len_t = strlen(t);
+// 	int len_p = strlen(p);
+// 	int next[MAX];
+// 	int i,j;
+	
+// 	next[0] = -1;
+// 	i = 0, j = -1;
+// 	while(i < len_p)
+// 	{
+// 		if(j == -1 || p[i] == p[j])
+// 			next[++i] = ++j;
+// 		else
+// 			j = next[j];
+// 	}
+// 	PRINT_ARRAY(next, len_p);
+
+// 	i = 0, j = 0;
+// 	while(i < len_t)
+// 	{
+// //		cout<<"t["<<i<<"] = "<<t[i]<<" , p["<<j<<"] = "<<p[j]<<endl;
+// 		if(p[j] == t[i])
+//             j++, i++;
+//         if(j == len_p)
+//         {
+//             cout<<"found '"<<p<<"' -> p["<<i-j<<"]"<<endl;
+//             j = next[j];
+//         }
+//         else if(i < len_t && p[j] != t[i])
+//         {
+//             if(j != 0)
+//                 j = next[j]; // [0..next[j]]无需再匹配
+//             else
+//                 i++;
+//         }
+// 	}
+// }
