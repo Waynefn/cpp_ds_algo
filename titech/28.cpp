@@ -1,6 +1,6 @@
 /*
 https://www.titech.ac.jp/graduate_school/admissions/pdf/cs_h28.pdf
-问题3->subset sum problem
+问题3->d sum problem
 */
 
 #include <iostream>
@@ -11,6 +11,20 @@ using namespace std;
 
 #define MAX (20)
 #define Len(x)		sizeof(x)/sizeof(x[0])	
+#define PRINT_MATRIX(a,m,n){for(int i = 0; i < m; i++){for(int j = 0; j < n; j++) cout<<a[i][j]<<"|"; cout<<endl;}}
+
+bool subset_sum(int a[], int n, int k)
+{
+	if (k == 0)
+		return true;
+	if (n == 0 && k != 0)
+		return false;
+	if (a[n-1] > k)
+		return subset_sum(a, n-1, k);
+
+	// 递归地查询【包含last元素】和【不包含last元素】的结果
+	return subset_sum(a, n-1, k) || subset_sum(a, n-1, k-a[n-1]);
+}
 
 int f(int a[], int n, int k, int s, int i)
 {
@@ -32,8 +46,15 @@ void g(int a[], int n, int k)
 			b[i][j] = 0;
 		for(j = 0; j <= k; j++)
 		{
-			if(j == 0)
+			/*	case 1
+				难点:注意最小子问题的所有情况
+			*/
+			if(j == 0 || j == a[i])	
 				b[i][j] = 1;
+
+			/*	case2
+				难点:注意此题对b[i][j]的定义(通过结果存储在b[n-1][k]可知)
+			*/
 			if(i > 0)
 			{
 				if(b[i-1][j])
@@ -44,64 +65,17 @@ void g(int a[], int n, int k)
 		}
 	}
 
-	for(i = 0; i < n; i++)
-	{
-		for(j = 0; j <= k; j++)
-			cout<<b[i][j]<<" ";
-		cout<<endl;
-	}
-	
-	cout<<"ret = "<<b[n-1][k]<<endl;
-}
-
-bool isSubsetSum(int set[], int n, int sum)
-{
-	if (sum == 0)
-		return true;
-	if (n == 0 && sum != 0)
-		return false;
-	if (set[n-1] > sum)
-		return isSubsetSum(set, n-1, sum);
-	return isSubsetSum(set, n-1, sum) || isSubsetSum(set, n-1, sum-set[n-1]);
-}
-
-bool dp_isSubsetSum(int set[], int n, int sum)
-{
-    bool subset[n+1][sum+1];
-
-    for (int i = 0; i <= n; i++)
-      subset[i][0] = true;
-    for (int i = 1; i <= sum; i++)
-      subset[0][i] = false;
-
-	for (int i = 1; i <= n; i++)
-	{
-		for (int j = 1; j <= sum; j++)
-		{
-			if(j<set[i-1])
-				subset[i][j] = subset[i-1][j];
-			if (j >= set[i-1])
-				subset[i][j] = subset[i-1][j] || subset[i - 1][j-set[i-1]];
-		}
-	}
-  
-	for(int i = 0; i <= n; i++)
-	{
-		for(int j = 0; j <= sum; j++)
-			cout<<subset[i][j]<<" ";
-		cout<<endl;
-	}
-  
-	return subset[n][sum];
+	PRINT_MATRIX(b, n, k+1);
+	cout<<"g() result: "<<b[n-1][k]<<endl;	// 此题的b[i][j]指的是:从a[0]到a[i]为止,是否存在某几个元素组成j,所以考虑取舍的last元素是a[i]
 }
 
 void test_1()
 {
-	int a[] = {8,2,4};
-	int k = 10;
-//	cout<<f(a, Len(a), k, 0, 0)<<endl;
-	cout<<dp_isSubsetSum(a, Len(a), k)<<endl;
-//	g(a, Len(a), k);
+	int a[] = {3,2,4};
+	int k = 5;
+	cout<<"subset_sum() result: "<<subset_sum(a, Len(a), k)<<endl;
+	cout<<"f() result: "<<f(a, Len(a), k, 0, 0)<<endl;
+	g(a, Len(a), k);
 }
 
 int main()

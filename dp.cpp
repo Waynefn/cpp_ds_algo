@@ -16,7 +16,7 @@ using namespace std;
 	3.区间动态规划 interval dp
 		3.1 组成回文串的最小添加字符数
 	4.子集和(subset sum)
-	4.01背包
+	5.01背包
 
 */
 
@@ -64,7 +64,7 @@ void test_1_dim()
 	2.1 LCS(Longest common subsequence)
 		x:ABCBDAB
 		y:BDCABC
-		LCS = 4 -> BCBA,BCAB,BDAB
+		LCS = 4 -> BCAB,BDAB
 	** 尚未引入flag[][]，无法正确显示所有LCS结果
 **********************************************/
 void longest_common_subsequence_result(int d[MAX][MAX], char x[], int i, char y[], int j)
@@ -180,6 +180,10 @@ void longest_common_substring(char x[], char y[])
 	}
 	cout<<"LCS["<<x<<"]["<<y<<"] = "<<curr_max<<endl;
 
+#ifdef DEBUG_LOG
+	PRINT_MATRIX(d, len_x+1, len_y+1);
+#endif
+
 	longest_common_substring_result(d, x, y, p, q);
 }
 
@@ -226,11 +230,19 @@ void test_create_palindrome()
 }
 
 /**********************************************
-	子集和(subset sum)
-	d[i][j] = true : a[0]~a[i-1]存在几个元素能组合得到k
+	4.子集和(subset sum)
+	d[i][j] = true : 数组的前i个元素里面,存在几个元素能组合得到k
 		case1:不包含a[i-1]元素，则d[i][j] == d[i-1][j]
 		case2:包含a[i-1]元素，则d[i][j] == d[i-1][j-a[i-1]]
 
+	为什么是判断a[i-1]而不是a[i]? a[]={3,2,4,5} k = 6为例:
+		0.直观地考虑,d[i][j]的定义就是【前面i个元素】,所以a[i-1]是前i个元素的last元素
+		1.因为像大多数dp问题一样,d[0][j]和d[i][0]都是作为【最小子问题】,供回溯.
+			d[0][1~k]初始化为false: 表示回溯到i=0而j>0时,不可能相加得到k
+			d[i][0]初始化为true: j-a[i-1]回溯,最后如果能回溯到d[i][0]就说明必然结果为true.所以指定d[i][0]=true
+			所以i和j的for循环都从1开始,取数组元素比较时,就用a[i-1]来实现.
+		2.如果i和j的for循环都从0开始,则【缺少了默认的初始化数据】
+			就要按照./titech/28.cpp的做法,i
 **********************************************/
 void subset_sum(int a[], int n, int k)
 {
@@ -263,12 +275,12 @@ void subset_sum(int a[], int n, int k)
 
 void test_subset_sum()
 {
-	int a[] = {8,2,4};
-	int k = 10;
+	int a[] = {3,2,4};
+	int k = 5;
 	subset_sum(a, Len(a), k);
 }
 /**********************************************
-	4.01背包
+	5.01背包
 **********************************************/
 void packing_01_result(int d[MAX][MAX], int w[], int v[], int n, int c)	// n = item_num, c = capacity
 {
