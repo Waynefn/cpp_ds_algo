@@ -76,8 +76,10 @@ void insert2(CELL **head_p, int data)
 {
 	CELL *node = CELL_alloc(data);
 	CELL **p = head_p;
+	
 	while(NULL != (*p) && data > (*p)->data)
-		p = &(*p)->next;
+		p = &(*p)->next; 
+
 	node->next = *p;
 	*p = node;
 }
@@ -86,15 +88,16 @@ void test_2()
 {
 	CELL *h1 = NULL;
 	
-	h1 = insert1(h1, 10);
-	h1 = insert1(h1, 30);
-	h1 = insert1(h1, 20);
-	print_list(h1);
+	// h1 = insert1(h1, 10);
+	// h1 = insert1(h1, 30);
+	// h1 = insert1(h1, 20);
+	// print_list(h1);
 
 	CELL *h2 = NULL;
+	insert2(&h2, 1);
 	insert2(&h2, 10);
-	insert2(&h2, 30);
-	insert2(&h2, 20);
+	insert2(&h2, 3);
+	insert2(&h2, 5);
 	print_list(h2);
 }
 
@@ -145,28 +148,28 @@ void test_3()
 	h1 = insert1(h1, 10);
 	h1 = insert1(h1, 30);
 	h1 = insert1(h1, 20);
-	h1 = reverse1(h1);
+//	h1 = reverse1(h1);
 	print_list(h1);
 
-	CELL *h2 = NULL;
-	h2 = insert1(h2, 10);
-	h2 = insert1(h2, 30);
-	h2 = insert1(h2, 20);
-	h2 = reverse2(h2, NULL);
-	print_list(h2);
+	// CELL *h2 = NULL;
+	// h2 = insert1(h2, 10);
+	// h2 = insert1(h2, 30);
+	// h2 = insert1(h2, 20);
+	// h2 = reverse2(h2, NULL);
+	// print_list(h2);
 
-	CELL *h3 = NULL;
-	h3 = insert1(h3, 10);
-	h3 = insert1(h3, 30);
-	h3 = insert1(h3, 20);
-	h3 = reverse3(h3);
-	print_list(h3);
+	// CELL *h3 = NULL;
+	// h3 = insert1(h3, 10);
+	// h3 = insert1(h3, 30);
+	// h3 = insert1(h3, 20);
+	// h3 = reverse3(h3);
+	// print_list(h3);
 }
 
 int main()
 {
 //	test_1();
-//	test_2();
-	test_3();
+	test_2();
+//	test_3();
 	return 0;
 }

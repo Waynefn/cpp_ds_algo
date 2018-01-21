@@ -71,8 +71,8 @@ void g(int a[], int n, int k)
 
 void test_1()
 {
-	int a[] = {3,2,4};
-	int k = 5;
+	int a[] = {8,2,4};
+	int k = 6;
 	cout<<"subset_sum() result: "<<subset_sum(a, Len(a), k)<<endl;
 	cout<<"f() result: "<<f(a, Len(a), k, 0, 0)<<endl;
 	g(a, Len(a), k);
