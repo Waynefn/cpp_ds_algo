@@ -28,6 +28,8 @@ bool subset_sum(int a[], int n, int k)
 
 int f(int a[], int n, int k, int s, int i)
 {
+	if(s > k)
+		return 0;
 	if(i == n)
 		return s == k;
 	else
@@ -46,20 +48,13 @@ void g(int a[], int n, int k)
 			b[i][j] = 0;
 		for(j = 0; j <= k; j++)
 		{
-			/*	case 1
-				难点:注意最小子问题的所有情况
-			*/
-			if(j == 0 || j == a[i])	
+			if(j == 0 || j == a[i])	// 难点1 由于b[i][j]的定义导致需要小心处理子问题的结果
 				b[i][j] = 1;
-
-			/*	case2
-				难点:注意此题对b[i][j]的定义(通过结果存储在b[n-1][k]可知)
-			*/
 			if(i > 0)
 			{
 				if(b[i-1][j])
 					b[i][j] = 1;
-				if(j >= a[i] && b[i-1][j-a[i]])
+				if(j >= a[i] && b[i-1][j-a[i]])	// 难点2 注意问题对b[i][j]的定义
 					b[i][j] = 1;
 			}
 		}
@@ -71,7 +66,7 @@ void g(int a[], int n, int k)
 
 void test_1()
 {
-	int a[] = {8,2,4};
+	int a[] = {3,2,4};
 	int k = 6;
 	cout<<"subset_sum() result: "<<subset_sum(a, Len(a), k)<<endl;
 	cout<<"f() result: "<<f(a, Len(a), k, 0, 0)<<endl;
