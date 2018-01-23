@@ -2,7 +2,7 @@
 
 #include "utils.h"
 
-using namespace std;  
+using namespace std;
 
 #define MAX (20)
 
@@ -36,17 +36,17 @@ void subset_sum(int a[], int n, int curr, int sum, int ret[])
                     cout<<a[i]<<" | ";  
             cout<<endl;  
         }
-        return;  
+        return;  // 探索到叶子节点，必须返回
     }
 
     // 对curr的策略1：不纳入
-    ret[curr]=false;  
+    ret[curr] = false;  
     subset_sum(a, n, curr+1, sum, ret); 
 
     // 对curr的策略2：纳入（前提是a[curr]不大于目标值）
     if(a[curr] <= sum)
     {
-        ret[curr]=true;  
+        ret[curr] = true;  
         subset_sum(a, n, curr+1, sum-a[curr], ret);  
     } 
 }  
