@@ -31,21 +31,21 @@ int pf(int m, int n)
 	return f;
 }
 
-int comb2(int n, int k)
-{
-	int i, j;
-	if(n >= 2*k)
-	{
-		i = n-k+1;
-		j = k;
-	}
-	else
-	{
-		i = k+1;
-		j = n-k;
-	}
-	return 
-}
+// int comb2(int n, int k)
+// {
+// 	int i, j;
+// 	if(n >= 2*k)
+// 	{
+// 		i = n-k+1;
+// 		j = k;
+// 	}
+// 	else
+// 	{
+// 		i = k+1;
+// 		j = n-k;
+// 	}
+// 	return
+// }
 
 void test_comb()
 {
