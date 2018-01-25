@@ -18,7 +18,7 @@ using namespace std;
         if(cnrr >= n)
             if(sum == target)    
                 print result        //树形解空间的叶子节点，确认方案正确性后，输出结果
-            return
+                return
         for(i = curr的各种方案)
             if(方案目前看来可行)    // 子集和问题：能加上a[curr]元素，n皇后：curr皇后能放在此处
                 fun(curr+1)         // 探索下一层解空间
@@ -39,12 +39,10 @@ void subset_sum(int a[], int n, int curr, int sum, int ret[])
         return;  // 探索到叶子节点，必须返回
     }
 
-    // 对curr的策略1：不纳入
-    ret[curr] = false;  
+    ret[curr] = false;      // 对curr的策略1：不纳入
     subset_sum(a, n, curr+1, sum, ret); 
 
-    // 对curr的策略2：纳入（前提是a[curr]不大于目标值）
-    if(a[curr] <= sum)
+    if(a[curr] <= sum)      // 对curr的策略2：纳入（前提是a[curr]不大于目标值）
     {
         ret[curr] = true;  
         subset_sum(a, n, curr+1, sum-a[curr], ret);  

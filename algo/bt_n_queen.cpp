@@ -1,44 +1,43 @@
 #include<iostream>  
-#include<cstdlib> 
+#include<cmath> 
 
 #include "utils.h"
 
 using namespace std;
 
-#define MAX (20)
-
-bool check(int i,int column[]){  
-    for(int j=0;j<i;j++){  
-        if(column[j]==column[i]
-        || abs(column[i]-column[j]) == (i-j))	//斜率等于±1  
+bool check(int a[], int curr_x, int y)
+{
+    for(int prev_x = 0; prev_x < curr_x; prev_x++)
+    {
+        if(a[prev_x] == y
+        || curr_x - prev_x == abs(y - a[prev_x]))
             return false;
-    }  
-    return true;  
-}  
-//start表示搜索的行，column表示该行的所放的列  
-void eightQueen(int start,int column[],int &sum){  
-    if(start>=8){  
-        for(int j=0;j<8;j++){  
-            cout<<column[j]<<" ";  
-        }  
-        cout<<endl<<"-----------------"<<endl;  
-        sum++;  
-        return;  
-    }  
-    for(int j=0;j<8;j++){  
-        column[start]=j;  
-        if(check(start,column)){   
-            eightQueen(start+1,column,sum);  
-        }  
-    }//end for  
-}  
+    }
+    return true;
+}
+
+void n_queen(int a[], int n, int curr_x)
+{
+    if(curr_x >= n)             // 到达解空间的叶子节点
+    {
+        PRINT_ARRAY(a, n);
+        return;
+    }
+
+    for(int y = 0; y < n; y++)  // 对queen(curr_x, y)探索所有y的可能性分支
+    {
+        if(check(a, curr_x, y)) // 如果合法，则探索下去
+        {
+            a[curr_x] = y;
+            n_queen(a, n, curr_x+1);
+        }
+    }
+}
 
 void test_n_queen()
 {
-	int column[8];  
-    int sum=0;  
-    eightQueen(0,column,sum);  
-    cout<<sum<<endl;  
+    int a[5] = {0}; 
+    n_queen(a, Len(a), 0);  
 }
 
 int main()
