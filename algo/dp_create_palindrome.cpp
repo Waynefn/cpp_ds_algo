@@ -5,8 +5,6 @@
 
 using namespace std;
 
-#define MAX (20)
-
 /**********************************************
 	组成回文串的最小添加字符数
 **********************************************/
@@ -40,7 +38,7 @@ void create_palindrome(char str[])
 
 void test_create_palindrome()
 {
-	create_palindrome("Ab3bd");
+	create_palindrome((char *)"Ab3bd");
 }
 
 int main()

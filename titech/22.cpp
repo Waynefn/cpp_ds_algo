@@ -48,7 +48,7 @@ int comb_2(int n, int k)
 }
 
 /**********************************************
-	comb_2
+	comb_3
 **********************************************/
 int comb_3(int n, int k)
 {
@@ -73,7 +73,7 @@ int comb_3(int n, int k)
 
 void test_comb()
 {
-	cout<<"comb_1 :"<<comb_1(7, 3)<<endl;
+	cout<<"comb_1 :"<<comb_1(5, 3)<<endl;
 	cout<<"comb_2 :"<<comb_2(7, 3)<<endl;
 	cout<<"comb_3 :"<<comb_3(7, 4)<<endl;
 }

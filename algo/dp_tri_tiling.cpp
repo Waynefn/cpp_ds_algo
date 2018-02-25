@@ -4,8 +4,6 @@
 
 using namespace std;
 
-#define MAX (20)
-
 void tri_tiling(int n)
 {
 	PRINT_SUB_FUNCTION_NAME;

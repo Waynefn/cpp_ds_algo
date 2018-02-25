@@ -15,8 +15,6 @@
 
 using namespace std;
 
-#define MAX (40)
-
 /**********************************************
 	DP方法计算LIS
 **********************************************/
@@ -24,11 +22,8 @@ void longest_increasing_subsequence(int a[], int n)
 {
 	PRINT_SUB_FUNCTION_NAME;
 
-	int dp[MAX];
+	int dp[MAX] = {1};
 	int ret = 1;
-
-	for(int i = 0; i < n; i++)
-		dp[i] = 1;
 
 	for(int i = 1; i < n; i++)
 	{
@@ -55,14 +50,14 @@ void test_lis()
 }
 
 /**********************************************
-	O(n*lgn)方法计算LIS
+	O(N*logN)方法计算LIS
 **********************************************/
 void longest_increasing_subsequence_modified(int a[], int n)
 {
 	PRINT_SUB_FUNCTION_NAME;
 
-	int end, ret = 0;
-	int tmp[MAX];			// 算法用到的临时数组
+	int ret = 0;
+	int tmp[MAX];
 
 	tmp[0] = INT_MIN;
 	for(int i = 0; i < n; i++)
@@ -71,7 +66,6 @@ void longest_increasing_subsequence_modified(int a[], int n)
 		if(curr > tmp[ret])
 		{
 			tmp[++ret] = curr;	// LIS长度一旦增加，就会被记录到ret中
-			end = curr;			// 虽然算法不能追溯LIS元素，但末尾元素仍然能记录
 		}
 		else				// 二分搜索找到a[i]应放入的位置
 		{
@@ -88,7 +82,6 @@ void longest_increasing_subsequence_modified(int a[], int n)
 	}
 
 	cout<<"LIS = "<<ret<<", 上述输出只是算法过程，不是LIS的结果"<<endl;
-	cout<<"end = "<<end<<endl;
 }
 
 void test_lis_modified()

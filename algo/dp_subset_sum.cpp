@@ -4,8 +4,6 @@
 
 using namespace std;
 
-#define MAX (20)
-
 /**********************************************
 	子集和(subset sum)
 	d[i][j] = true : 数组的前i个元素里面,存在几个元素能组合得到k

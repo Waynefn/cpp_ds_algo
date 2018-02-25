@@ -6,8 +6,6 @@
 
 using namespace std;
 
-#define MAX (20)
-
 /**********************************************
 	LCS(Longest common subsequence)
 		x:ABCBDAB
