@@ -18,7 +18,7 @@ int rear = 0;
 void insert(int a[], int size, int d)
 {
 	int p, left, right, m, i;
-	if(rear > suze-1)
+	if(rear > size-1)
 	{
 		cout<<"Overflow"<<endl;
 		exit(1);
@@ -52,13 +52,13 @@ void insert(int a[], int size, int d)
 	while(i > p)
 	{
 		a[i] = a[i-1];
-		i--;
-		a[p] = d;
-		rear++;
+		i--;	
 	}
+	a[p] = d;
+	rear++;
 }
 
-int delete(int a[])
+int del(int a[])
 {
 	int x;
 	if(front == rear)
@@ -74,19 +74,20 @@ void test_question_1()
 {
 	int i;
 	int a[20];
+	int size = 20;
 	int a1[] = {10,5,20,6,13};
 	int a2[] = {2,5,18,7,5};
 
 	for(i = 0; i < 5; i++)
-		insert(a, Len(a), a1[i]);
+		insert(a, size, a1[i]);
 	for(i = 0; i < 3; i++)
-		cout<<delete(a)<<"|";
+		cout<<del(a)<<"|";
 	cout<<endl;
 
 	for(i = 0; i < 5; i++)
-		insert(a, Len(a), a2[i]);
+		insert(a, size, a2[i]);
 	for(i = 0; i < 7; i++)
-		cout<<delete(a)<<"|";
+		cout<<del(a)<<"|";
 	cout<<endl;
 }
 
