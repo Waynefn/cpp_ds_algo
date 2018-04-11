@@ -8,8 +8,10 @@
 using namespace std;
 
 /*
-	1.不带头结点|单向|非循环链表
-	2.带头结点|双向|循环链表
+	1.不带头结点|单向|非循环链表		type1
+	2.List2 带头结点|双向|循环链表	type2
+	3.合并两个有序链表				type1
+
 */
 
 /**********************************************	
@@ -101,11 +103,13 @@ void ListNode1_Trvl(ListNode1 *h)
 
 void test_list1()
 {
-	// ListNode1 *list1 = NULL;
-	// list1 = ListNode1_InsertHead(list1, 1);
-	// list1 = ListNode1_InsertHead(list1, 2);
-	// list1 = ListNode1_InsertHead(list1, 3);
-	// ListNode1_Trvl(list1);
+	PRINT_FUNCTION_NAME;
+
+	ListNode1 *list1 = NULL;
+	list1 = ListNode1_InsertHead(list1, 1);
+	list1 = ListNode1_InsertHead(list1, 2);
+	list1 = ListNode1_InsertHead(list1, 3);
+	ListNode1_Trvl(list1);
 	
 	ListNode1 *list2 = NULL;
 	list2 = ListNode1_InsertTail(list2, 4);
@@ -114,7 +118,7 @@ void test_list1()
 	list2 = ListNode1_Delete(list2, 4);
 	list2 = ListNode1_Delete(list2, 6);
 	ListNode1_Trvl(list2);
-	cout<<ListNode1_Search(list2, 4)<<endl;
+	cout<<"Search result : "<<ListNode1_Search(list2, 4)<<endl;
 }
 
 /**********************************************	
@@ -200,6 +204,8 @@ void ListNode2_Trvl(ListNode2 *h)
 
 void test_list2()
 {
+	PRINT_FUNCTION_NAME;
+
 	ListNode2 *list1 = NULL;
 	list1 = ListNode2_InsertHead(list1, 1);
 	list1 = ListNode2_InsertHead(list1, 2);
@@ -213,10 +219,12 @@ void test_list2()
 	list2 = ListNode2_Delete(list2, 4);
 	list2 = ListNode2_Delete(list2, 6);
 	ListNode2_Trvl(list2);
-	cout<<ListNode2_Search(list2, 6)<<endl;
+	cout<<"Search result : "<<ListNode2_Search(list2, 5)<<endl;
 }
 
-// 链表h1和h2(不带头结点|单向|非循环链表)是有序的,合并为一条有序链表h
+/**********************************************	
+	链表h1和h2(不带头结点|单向|非循环链表)是有序的,合并为一条有序链表h
+**********************************************/
 ListNode1 *ListNode1_MergeList(ListNode1 *h1, ListNode1 *h2)
 {
 	if(NULL == h2)	return h1;
@@ -259,10 +267,11 @@ ListNode1 *ListNode1_MergeList(ListNode1 *h1, ListNode1 *h2)
 
 void test_list1_merge()
 {
+	PRINT_FUNCTION_NAME;
+
 	ListNode1 *h1 = NULL, *h2 = NULL;
 	h1 = ListNode1_InsertTail(h1,1);
 	h1 = ListNode1_InsertTail(h1,3);
-	h1 = ListNode1_InsertTail(h1,5);
 	
 	h2 = ListNode1_InsertTail(h2,2);
 	h2 = ListNode1_InsertTail(h2,4);
@@ -273,11 +282,50 @@ void test_list1_merge()
 	ListNode1_Trvl(h);
 }
 
+/**********************************************	
+	链表h(不带头结点|单向|非循环链表),进行翻转
+**********************************************/
+ListNode1 *ListNode1_Reverse(ListNode1 *h)
+{
+	PRINT_FUNCTION_NAME;
+	
+	if(NULL == h || NULL == h->next)
+		return h;
+
+	ListNode1 *dummy = new ListNode1(0);
+	dummy->next = h;
+
+	ListNode1 *i = dummy, *j = dummy->next, *k;
+	while(j)
+	{
+		k = j->next;
+		j->next = i;
+		i = j; j = k;
+	}
+	dummy->next->next = NULL;
+	delete dummy;
+	return j;
+}
+
+void test_list1_reverse()
+{
+	ListNode1 *h = NULL;
+	h = ListNode1_InsertHead(h, 1);
+	h = ListNode1_InsertHead(h, 2);
+	h = ListNode1_InsertHead(h, 3);
+	h = ListNode1_InsertHead(h, 4);
+	ListNode1_Trvl(h);
+
+	h = ListNode1_Reverse(h);
+	ListNode1_Trvl(h);
+}
+
 int main()
 {
 	test_list1();
-	// test_list2();
-	// test_list1_merge();
+	test_list2();
+	test_list1_merge();
+	test_list1_reverse();
 	return 0;
 }
 
@@ -425,32 +473,6 @@ void list_trvl(ListNode *head)
 // 	return head;
 // }
 
-// /**********************************************
-// 	提供一个带头节点的链表，将链表反转,利用stack实现
-// **********************************************/
-// ListNode *list_reverse_byStack(ListNode *head)
-// {
-// 	PRINT_SUB_FUNCTION_NAME;
-
-// 	stack<ListNode *> s;
-// 	ListNode *i = head->next;
-// 	while(i)
-// 	{
-// 		s.push(i);
-// 		i = i->next;
-// 	}
-
-// 	ListNode *dummy = head;
-// 	while(!s.empty())
-// 	{
-// 		dummy->next = s.top(); s.pop();
-// 		dummy = dummy->next;
-// 	}
-// 	dummy->next = NULL;
-
-// 	return head;
-// }
-
 // void test_list_reverse()
 // {
 // 	PRINT_FUNCTION_NAME;
@@ -467,29 +489,7 @@ void list_trvl(ListNode *head)
 // 	list_trvl(rev_2);
 // }
 
-// /**********************************************
-// 	提供链表list,然后删除链表中指定的元素
-// **********************************************/
-// ListNode *list_deleteX(ListNode *head, int x)
-// {
-// 	PRINT_SUB_FUNCTION_NAME;
 
-// 	NULL_CHK(head);
-
-// 	for(ListNode *i = head; i != NULL && i->next != NULL;)
-// 	{
-// 		if(i->next->val != x)
-// 			i = i->next;
-// 		else	// 此时不能移动i指针，为什么？
-// 		{
-// 			ListNode *tmp = i->next;
-// 			i->next = i->next->next;
-// 			delete(tmp);
-// 		}
-// 	}
-
-// 	return head;
-// }
 
 // /**********************************************
 // 	提供一个带头节点的有序链表，将多于一个的元素删除
