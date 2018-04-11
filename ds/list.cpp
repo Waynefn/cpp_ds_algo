@@ -35,7 +35,7 @@ ListNode1 *ListNode1_InsertHead(ListNode1 *h, int v)
 		return n;
 	n->next = dummy;
 	dummy = n;
-	return h;
+	return dummy;
 }
 
 ListNode1 *ListNode1_InsertTail(ListNode1 *h, int v)
@@ -59,21 +59,23 @@ ListNode1 *ListNode1_Delete(ListNode1 *h, int v)
 {
 	if(NULL == h)
 		return h;
-
-// 要删除头部元素,直接返回h->next即可
-	if(h->val == v)			
-		return h->next;
-// 单向链表中为了删除指定node,必须记录node的前一个位置.所以这里需要判断dummy->next->val与val是否相等
-	for(ListNode1 *dummy = h; dummy->next != NULL; dummy = dummy->next)
+	ListNode1 *head = new ListNode1(0);
+	head->next = h;
+	ListNode1 *dummy = head;
+	while(dummy->next)
 	{
 		if(dummy->next->val == v)
 		{
-			ListNode1 *tmp = dummy->next;
-			dummy->next = dummy->next->next;
-			delete tmp;
+			ListNode1 *n = dummy->next;
+			dummy->next = n->next;
+			delete n;
 		}
+		else
+			dummy = dummy->next;
 	}
-	return h;
+	dummy = head->next;
+	delete head;
+	return dummy;
 }
 
 bool ListNode1_Search(ListNode1 *h, int v)
@@ -97,20 +99,20 @@ void ListNode1_Trvl(ListNode1 *h)
 	cout<<endl;
 }
 
-void test_list_1()
+void test_list1()
 {
-	ListNode1 *list1 = NULL;
-	list1 = ListNode1_InsertHead(list1, 1);
-	list1 = ListNode1_InsertHead(list1, 2);
-	list1 = ListNode1_InsertHead(list1, 3);
-	ListNode1_Trvl(list1);
+	// ListNode1 *list1 = NULL;
+	// list1 = ListNode1_InsertHead(list1, 1);
+	// list1 = ListNode1_InsertHead(list1, 2);
+	// list1 = ListNode1_InsertHead(list1, 3);
+	// ListNode1_Trvl(list1);
 	
 	ListNode1 *list2 = NULL;
 	list2 = ListNode1_InsertTail(list2, 4);
 	list2 = ListNode1_InsertTail(list2, 5);
 	list2 = ListNode1_InsertTail(list2, 6);
 	list2 = ListNode1_Delete(list2, 4);
-	list2 = ListNode1_Delete(list2, 5);
+	list2 = ListNode1_Delete(list2, 6);
 	ListNode1_Trvl(list2);
 	cout<<ListNode1_Search(list2, 4)<<endl;
 }
@@ -196,7 +198,7 @@ void ListNode2_Trvl(ListNode2 *h)
 	cout<<endl;
 }
 
-void test_list_2()
+void test_list2()
 {
 	ListNode2 *list1 = NULL;
 	list1 = ListNode2_InsertHead(list1, 1);
@@ -209,20 +211,73 @@ void test_list_2()
 	list2 = ListNode2_InsertTail(list2, 5);
 	list2 = ListNode2_InsertTail(list2, 6);
 	list2 = ListNode2_Delete(list2, 4);
-	list2 = ListNode2_Delete(list2, 5);
+	list2 = ListNode2_Delete(list2, 6);
 	ListNode2_Trvl(list2);
 	cout<<ListNode2_Search(list2, 6)<<endl;
 }
 
-ListNode2 *ListNode2_MergeList(ListNode2 *h1, ListNode2 *h2)
+// 链表h1和h2(不带头结点|单向|非循环链表)是有序的,合并为一条有序链表h
+ListNode1 *ListNode1_MergeList(ListNode1 *h1, ListNode1 *h2)
 {
-	return NULL;
+	if(NULL == h2)	return h1;
+	if(NULL == h1)	return h2;
+
+	ListNode1 *h = new ListNode1(0);
+	ListNode1 *dummy = h;
+
+	while(h1 && h2)
+	{
+		if(h1->val < h2->val)
+		{
+			dummy->next = h1;
+			h1 = h1->next;
+		}
+		else
+		{
+			dummy->next = h2;
+			h2 = h2->next;
+		}
+		dummy = dummy->next;
+	}
+	while(h1)
+	{
+		dummy->next = h1;
+		h1 = h1->next;
+		dummy = dummy->next;
+	}
+	while(h2)
+	{
+		dummy->next = h2;
+		h2 = h2->next;
+		dummy = dummy->next;
+	}
+
+	dummy = h->next;
+	delete h;
+	return dummy;
+}
+
+void test_list1_merge()
+{
+	ListNode1 *h1 = NULL, *h2 = NULL;
+	h1 = ListNode1_InsertTail(h1,1);
+	h1 = ListNode1_InsertTail(h1,3);
+	h1 = ListNode1_InsertTail(h1,5);
+	
+	h2 = ListNode1_InsertTail(h2,2);
+	h2 = ListNode1_InsertTail(h2,4);
+	h2 = ListNode1_InsertTail(h2,6);
+	
+	ListNode1 *h = ListNode1_MergeList(h1,h2);
+	h = ListNode1_Delete(h, 6);
+	ListNode1_Trvl(h);
 }
 
 int main()
 {
-	// test_list_1();
-	test_list_2();
+	test_list1();
+	// test_list2();
+	// test_list1_merge();
 	return 0;
 }
 
