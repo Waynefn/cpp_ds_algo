@@ -76,22 +76,16 @@ ListNode1 *ListNode1_Delete(ListNode1 *h, int v)
 	return h;
 }
 
-void ListNode1_Search(ListNode1 *h, int v)
+bool ListNode1_Search(ListNode1 *h, int v)
 {
 	if(NULL == h)
-		return;
+		return false;
 
-	ListNode1 *dummy = h;
-	while(dummy != NULL)
-	{
+	for(ListNode1 *dummy = h; dummy != NULL; dummy = dummy->next)
 		if(dummy->val == v)
-		{
-			cout<<"found "<<v<<endl;
-			return;
-		}
-		dummy = dummy->next;
-	}
-	cout<<"NOT found "<<v<<endl;
+			return true;
+
+	return false;
 }
 
 void ListNode1_Trvl(ListNode1 *h)
@@ -118,7 +112,7 @@ void test_list_1()
 	list2 = ListNode1_Delete(list2, 4);
 	list2 = ListNode1_Delete(list2, 5);
 	ListNode1_Trvl(list2);
-	ListNode1_Search(list2, 4);
+	cout<<ListNode1_Search(list2, 4)<<endl;
 }
 
 /**********************************************	
@@ -138,37 +132,67 @@ typedef struct _ListNode2
 ListNode2 *ListNode2_InsertHead(ListNode2 *h, int v)
 {
 	ListNode2 *n = new ListNode2(v);
-	ListNode2 *dummy = h;
+	if(NULL == h)	// 发现链表为空,则构造头结点
+		h = new ListNode2(0);
 
-	n->next = dummy->next;
-	n->prev = dummy;
-	dummy->next->prev = n;
-	dummy->next = n;
+	n->next = h->next;
+	n->prev = h;
+	h->next->prev = n;
+	h->next = n;
 
 	return h;
 }
 
 ListNode2 *ListNode2_InsertTail(ListNode2 *h, int v)
 {
-	return NULL;
+	ListNode2 *n = new ListNode2(v);
+	if(NULL == h)	// 发现链表为空,则构造头结点
+		h = new ListNode2(0);
+
+	n->next = h;
+	n->prev = h->prev;
+	h->prev->next = n;
+	h->prev = n;
+
+	return h;
 }
 
 ListNode2 *ListNode2_Delete(ListNode2 *h, int v)
 {
-	return NULL;
+	if(NULL == h)
+		return h;
+
+// 有头结点的循环链表,注意for循环语句
+	for(ListNode2 *dummy = h->next; dummy != h; dummy = dummy->next)
+	{
+		if(dummy->val == v)
+		{
+			dummy->prev->next = dummy->next;
+			dummy->next->prev = dummy->prev;
+			delete dummy;
+		}
+	}
+	return h;
 }
 
-void ListNode2_Search(ListNode2 *h, int v)
+bool ListNode2_Search(ListNode2 *h, int v)
 {
+	if(NULL == h)
+		return false;
 
+	for(ListNode2 *dummy = h->next; dummy != h; dummy = dummy->next)
+		if(dummy->val == v)
+			return true;
+
+	return false;
 }
 
 void ListNode2_Trvl(ListNode2 *h)
 {
-	if(NULL == h->next)
+	if(NULL == h)
 		return;
-	for(ListNode2 *dummy = h; dummy->next != NULL; dummy = dummy->next)
-		cout<<dummy->next->val<<",";
+	for(ListNode2 *dummy = h->next; dummy != h; dummy = dummy->next)
+		cout<<dummy->val<<",";
 	cout<<endl;
 }
 
@@ -187,21 +211,20 @@ void test_list_2()
 	list2 = ListNode2_Delete(list2, 4);
 	list2 = ListNode2_Delete(list2, 5);
 	ListNode2_Trvl(list2);
-	ListNode2_Search(list2, 4);
+	cout<<ListNode2_Search(list2, 6)<<endl;
+}
+
+ListNode2 *ListNode2_MergeList(ListNode2 *h1, ListNode2 *h2)
+{
+	return NULL;
 }
 
 int main()
 {
-	test_list_1();
-	// test_list_2();
+	// test_list_1();
+	test_list_2();
 	return 0;
 }
-
-/*
-	1.单向链表
-	2.双向循环链表
-	3.linux内核链表
-*/
 
 typedef struct _ListNode
 {
@@ -490,103 +513,6 @@ void list_trvl(ListNode *head)
 // 	list_trvl(del_2);
 // 	ListNode *del_3 = delete_duplicates(list3);
 // 	list_trvl(del_3);
-// }
-
-// /**********************************************
-// 	双向循环链表
-// **********************************************/
-// typedef struct _DoublyListNode
-// {
-// 	int val;
-// 	_DoublyListNode *next;
-// 	_DoublyListNode *prev;
-// 	_DoublyListNode(int val)
-// 	{
-// 		this->val = val;
-// 		this->next = this;
-// 		this->prev = this;
-// 	}
-// }DoublyListNode;
-
-// void doubly_list_trvl(DoublyListNode *head)
-// {
-// 	NULL_CHK(head);
-// 	NULL_CHK(head->next);
-
-// 	cout<<"|next:";
-// 	for(DoublyListNode *i = head->next; i != NULL && i != head; i = i->next)
-// 		cout<<i->val<<" ";
-// 	cout<<"\n|prev:";
-// 	for(DoublyListNode *i = head->prev; i != NULL && i != head; i = i->prev)
-// 		cout<<i->val<<" ";
-// 	cout<<endl;
-// }
-
-// DoublyListNode *doubly_list_insertHead(int a[], int n)
-// {
-// 	DoublyListNode *head = new DoublyListNode(0);
-// 	DoublyListNode *dummy = head;
-// 	for(int i = 0; i < n; i++)
-// 	{
-// 		DoublyListNode *tmp = new DoublyListNode(a[i]);
-		
-// 		tmp->next = dummy->next;
-// 		tmp->prev = dummy;
-// 		dummy->next->prev = tmp;
-// 		dummy->next = tmp;
-// 	}
-
-// 	return head;
-// }
-
-// DoublyListNode *doubly_list_insertTail(int a[], int n)
-// {
-// 	DoublyListNode *head = new DoublyListNode(0);
-// 	DoublyListNode *dummy = head;
-
-// 	for(int i = 0; i < n; i++)
-// 	{
-// 		DoublyListNode *tmp = new DoublyListNode(a[i]);
-
-// 		tmp->prev = dummy->prev;
-// 		tmp->next = dummy;
-// 		dummy->prev->next = tmp;
-// 		dummy->prev = tmp;
-// 	}
-
-// 	return head;
-// }
-
-// DoublyListNode *doubly_list_delete(DoublyListNode *head, int x)
-// {
-// 	PRINT_SUB_FUNCTION_NAME;
-
-// 	NULL_CHK(head);
-// 	NULL_CHK(head->next);
-
-// 	for(DoublyListNode *i = head->next; i != NULL && i != head; i = i->next)
-// 	{
-// 		if(i->val == x)
-// 		{
-// 			i->next->prev = i->prev;
-// 			i->prev->next = i->next;
-// 			delete i;
-// 		}
-// 	}
-
-// 	return head;
-// }
-
-// void test_doubly_list()
-// {
-// 	PRINT_FUNCTION_NAME;
-
-// 	int l1[10] = {6,7,8,9,10,9,9,9,9,9};
-// 	DoublyListNode *list1 = doubly_list_insertHead(l1, Len(l1));
-// 	doubly_list_trvl(list1);
-
-// 	list1 = doubly_list_delete(list1, 9);
-// 	doubly_list_trvl(list1);
 // }
 
 // /**********************************************
