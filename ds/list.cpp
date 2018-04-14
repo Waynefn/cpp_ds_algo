@@ -350,23 +350,14 @@ ListNode1 *ListNode1_DeleteOneMore(ListNode1 *h)
 		return h;
 
 	ListNode1 *i = h, *j = i->next;
-	while(j)
+	while(i && j)
 	{
-		if(i->val != j->val)
-		{
-			i = i->next;
+		while(j && j->val == i->val)
 			j = j->next;
-		}
-		else
-		{
-			while(j && j->val == i->val)
-			{
-				ListNode1 *n = j;
-				j = j->next;
-				delete n;
-			}
-			i->next = j;
-		}
+		i->next = j;
+		i = j;
+		if(j)
+			j = j->next;
 	}
 
 	return h;
@@ -393,23 +384,43 @@ void test_list1_deleteOneMore()
 **********************************************/
 ListNode1 *ListNode1_DeleteRepeat(ListNode1 *h)
 {
-	if(NULL == h)
+	PRINT_SUB_FUNCTION_NAME;
+
+	if(NULL == h || NULL == h->next)
 		return h;
 
-	ListNode1 *dummy = new ListNode1(0);
-	dummy->next = h;
-
-	ListNode1 *i = dummy, *j = i->next;
-	while(j)
+	ListNode1 *head = new ListNode1(0);
+	head->next = h;
+	ListNode1 *dummy = head;
+	
+	while(dummy->next && dummy->next->next)
 	{
-		ListNode1 *k = j->next;
-		if(NULL == k)
-			break;
-		if(j->val == k->val)
+		if(dummy->next->val != dummy->next->next->val)
+			dummy = dummy->next;
+		else
 		{
-			
+			ListNode1 *i = dummy->next->next;
+			while(i && i->val == dummy->next->val)
+				i = i->next;
+			dummy->next = i;
 		}
 	}
+	return head->next;	// 注意这里不能返回h，因为h指向的第一个元素可能因为重复而被删除了
+}
+
+void test_list1_deleteRepeat()
+{
+	PRINT_FUNCTION_NAME;
+
+	ListNode1 *h = NULL;
+	h = ListNode1_InsertTail(h,1);
+	h = ListNode1_InsertTail(h,1);
+	h = ListNode1_InsertTail(h,2);
+	h = ListNode1_InsertTail(h,3);
+	h = ListNode1_InsertTail(h,3);
+	h = ListNode1_InsertTail(h,4);
+	h = ListNode1_DeleteRepeat(h);
+	ListNode1_Trvl(h);
 }
 
 int main()
@@ -419,87 +430,9 @@ int main()
 	// test_list1_merge();
 	// test_list1_reverse();
 	test_list1_deleteOneMore();
+	test_list1_deleteRepeat();
 	return 0;
 }
-
-// /**********************************************
-// 	提供一个带头节点的有序链表，将多于一个的元素删除
-// **********************************************/
-// ListNode *delete_moreOne(ListNode *head)
-// {
-// 	PRINT_SUB_FUNCTION_NAME;
-
-// 	NULL_CHK(head);
-// 	NULL_CHK(head->next);
-
-// 	if(head->next->next == NULL)
-// 		return head;
-
-// 	ListNode *i = head->next, *j = i->next;
-
-// 	while(i && j)
-// 	{
-// 		while(j && i->val == j->val)
-// 			j = j->next;
-// 		i->next = j;
-// 		i = j; 
-// 		if(j)
-// 			j = j->next;
-// 	}
-
-// 	return head;
-// }
-
-// /**********************************************
-// 	提供一个带头节点的有序链表，将所有重复数字【完全删除，不留一个】
-// **********************************************/
-// ListNode *delete_duplicates(ListNode *head)
-// {
-// 	PRINT_SUB_FUNCTION_NAME;
-	
-// 	NULL_CHK(head);
-// 	NULL_CHK(head->next)
-
-// 	if(head->next->next == NULL)
-// 		return head;
-
-// 	ListNode *i = head->next, *j = i->next;
-// 	ListNode *dummy = head;
-
-// 	while(dummy->next && dummy->next->next)
-// 	{
-// 		if(dummy->next->val != dummy->next->next->val)
-// 			dummy = dummy->next;
-// 		else
-// 		{
-// 			ListNode *tmp = dummy->next->next;
-// 			while(tmp && tmp->val == dummy->next->val)
-// 				tmp = tmp->next;
-// 			dummy->next = tmp;
-// 		}
-// 	}
-
-// 	return head;
-// }
-
-// void test_list_delete()
-// {
-// 	PRINT_FUNCTION_NAME;
-
-// 	int l1[10] = {1,2,3,3,4,5,6,7,7,8};
-// 	int l2[10] = {1,2,3,3,4,5,6,7,7,8};
-// 	int l3[10] = {1,2,3,3,4,5,6,7,7,8};
-// 	ListNode *list1 = list_insertHead(l1, Len(l1));
-// 	ListNode *list2 = list_insertHead(l2, Len(l2));
-// 	ListNode *list3 = list_insertHead(l3, Len(l3));
-
-// 	ListNode *del_1 = list_deleteX(list1, 3);
-// 	list_trvl(del_1);
-// 	ListNode *del_2 = delete_moreOne(list2);
-// 	list_trvl(del_2);
-// 	ListNode *del_3 = delete_duplicates(list3);
-// 	list_trvl(del_3);
-// }
 
 // /**********************************************
 // 	Linux内核双向循环链表
@@ -607,17 +540,4 @@ int main()
 // 		cout<<"name:"<<s->name<<", age:"<<s->age<<endl;
 // 	}
 
-// }
-
-// int main()
-// {
-// 	test_list_merge();
-// 	test_list_reverse();
-// 	test_list_delete();
-
-// 	test_doubly_list();
-
-// 	test_kernel_list();
-
-// 	return 0;
 // }
