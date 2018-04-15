@@ -261,18 +261,10 @@ ListNode1 *ListNode1_MergeList(ListNode1 *h1, ListNode1 *h2)
 		}
 		dummy = dummy->next;
 	}
-	while(h1)
-	{
+	if(h1)
 		dummy->next = h1;
-		h1 = h1->next;
-		dummy = dummy->next;
-	}
-	while(h2)
-	{
+	if(h2)
 		dummy->next = h2;
-		h2 = h2->next;
-		dummy = dummy->next;
-	}
 
 	dummy = h->next;
 	delete h;
@@ -427,7 +419,7 @@ int main()
 {
 	// test_list1();
 	// test_list2();
-	// test_list1_merge();
+	test_list1_merge();
 	// test_list1_reverse();
 	test_list1_deleteOneMore();
 	test_list1_deleteRepeat();
