@@ -24,43 +24,43 @@ typedef struct _Node
 	}
 }Node;
 
-typedef struct _Queue_byList
+typedef struct _Queue1
 {
 	Node *first;
 	Node *tail;
-	_Queue_byList()
+	_Queue1()
 	{
 		this->first = NULL;
 		this->tail = NULL;
 	}
-}Queue_byList;
+}Queue1;
 
-bool queue_isEmpty_byList(Queue_byList *q)
+bool Queue_Empty(Queue1 *q)
 {
 	return q->first == NULL;
 }
 
-void queue_push_byList(Queue_byList *q, int val)
+void Queue_Push(Queue1 *q, int val)
 {
-	Node *node = new Node(val);
+	Node *n = new Node(val);
 
 	if(NULL == q->first)
 	{
-		q->first = node;
-		q->tail = node;
+		q->first = n;
+		q->tail = n;
 	}
 	else
 	{
-		q->tail->next = node;
-		q->tail = node;
+		q->tail->next = n;
+		q->tail = n;
 	}
 }
 
-int queue_pop_byList(Queue_byList *q)
+int Queue_Pop(Queue1 *q)
 {
-	if(queue_isEmpty_byList(q))
+	if(Queue_Empty(q))
 	{
-		cout<<"queue_byList is empty"<<endl;
+		cout<<"Queue1 is empty"<<endl;
 		return -1;
 	}
 
@@ -73,22 +73,22 @@ int queue_pop_byList(Queue_byList *q)
 
 	delete tmp;
 
-	cout<<"queue_byList pop :"<<ret<<endl;
+	cout<<"Queue1 pop :"<<ret<<endl;
 	return ret;
 }
 
-void test_queue_byList()
+void test_queue1()
 {
 	PRINT_FUNCTION_NAME;
 
-	Queue_byList *q = new Queue_byList;
-	queue_push_byList(q, 3);
-	queue_push_byList(q, 5);
-	queue_push_byList(q, 7);
-	queue_pop_byList(q);
-	queue_pop_byList(q);
-	queue_pop_byList(q);
-	queue_pop_byList(q);
+	Queue1 *q = new Queue1;
+	Queue_Push(q, 3);
+	Queue_Push(q, 5);
+	Queue_Push(q, 7);
+	Queue_Pop(q);
+	Queue_Pop(q);
+	Queue_Pop(q);
+	Queue_Pop(q);
 }
 
 /**********************************************
@@ -102,20 +102,20 @@ typedef struct
 {
 	stack<int> s1;
 	stack<int> s2;
-}Queue_byStack;
+}Queue2;
 
-bool queue_isEmpty_byStack(Queue_byStack &q)
+bool Queue2_Empty(Queue2 &q)
 {
 	return q.s1.empty() && q.s2.empty();
 }
 
-void queue_push_byStack(Queue_byStack &q, int x)
+void Queue2_Push(Queue2 &q, int x)
 {
 	cout<<"queue_byStack push :"<<x<<endl;
 	q.s1.push(x);
 }
 
-int queue_pop_byStack(Queue_byStack &q)
+int Queue2_Pop(Queue2 &q)
 {
 	int res = 0;
 
@@ -140,31 +140,31 @@ int queue_pop_byStack(Queue_byStack &q)
 	return res;
 }
 
-void test_queue_byStack()
+void test_queue2()
 {
 	PRINT_FUNCTION_NAME;
 	
-	Queue_byStack q;
+	Queue2 q;
 
-	queue_push_byStack(q, 1);
-	queue_push_byStack(q, 2);
-	queue_push_byStack(q, 3);
-	queue_push_byStack(q, 4);
+	Queue2_Push(q, 1);
+	Queue2_Push(q, 2);
+	Queue2_Push(q, 3);
+	Queue2_Push(q, 4);
 
-	queue_pop_byStack(q);
-	queue_pop_byStack(q);
+	Queue2_Pop(q);
+	Queue2_Pop(q);
 
-	queue_push_byStack(q, 5);
-	queue_push_byStack(q, 6);
+	Queue2_Push(q, 5);
+	Queue2_Push(q, 6);
 
-	while(!queue_isEmpty_byStack(q))
-		queue_pop_byStack(q);
+	while(!Queue2_Empty(q))
+		Queue2_Pop(q);
 }
 
 int main()
 {
-	test_queue_byList();
-	test_queue_byStack();
+	test_queue1();
+	test_queue2();
 
 	return 0;
 }

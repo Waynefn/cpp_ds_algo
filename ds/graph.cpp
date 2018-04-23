@@ -11,7 +11,7 @@ using namespace std;
 	1.BFS & DFS
 	2.拓扑排序
 	3.无权最短路径
-	4.dijkstra
+	4.Dijkstra
 	 		图参照onenote笔记
 	5.floyd
 	6.最小生成树 minimal spanning tree
@@ -43,7 +43,7 @@ int g[V][V] =
 	{M,M,M,M,M,M,M},
 };
 
-void bfs(int start)
+void Bfs(int start)
 {
 	bool visited[V] = {false};
 	queue<int> q;
@@ -74,7 +74,7 @@ void bfs(int start)
 	cout<<endl;
 }
 
-void dfs(int start)
+void Dfs(int start)
 {
 	static bool visited[V] = {false};
 
@@ -83,19 +83,14 @@ void dfs(int start)
 	for(int to = 0; to < V; to++)
 	{
 		if(!visited[to] && g[start][to] < M)
-			dfs(to);
+			Dfs(to);
 	}
-}
-
-void dfs_2(int start)
-{
-	
 }
 
 void test_bfs_dfs()
 {
-	bfs(0);
-	cout<<"DFS搜索结果：";dfs(0);cout<<endl;
+	Bfs(0);
+	cout<<"DFS搜索结果：";Dfs(0);cout<<endl;
 }
 
 /**********************************************
@@ -114,7 +109,7 @@ int g_top[V_TOP][V_TOP] =
 	{0,0,0,0,0,1,0},
 };
 
-void topsort_calc_indegree(int indegree[])
+void Topsort_CalcIndegree(int indegree[])
 {
 	// 计算所有顶点的入度
 	for(int from = 0; from < V_TOP; from++)
@@ -124,7 +119,7 @@ void topsort_calc_indegree(int indegree[])
 }
 
 // 删除del,del指向的顶点的入度也将减少
-void topsort_remove_node(int del, int indegree[], queue<int> &q)
+void Topsort_RemoveNode(int del, int indegree[], queue<int> &q)
 {
 	for(int to = 0; to < V_TOP; to++)
 	{
@@ -137,7 +132,7 @@ void topsort_remove_node(int del, int indegree[], queue<int> &q)
 	}
 }
 
-void topsort_print_result(queue<int> &ret)
+void Topsort_PrintResult(queue<int> &ret)
 {
 	while(!ret.empty())
 	{
@@ -146,13 +141,13 @@ void topsort_print_result(queue<int> &ret)
 	}cout<<endl;
 }
 
-void topsort()
+void Topsort()
 {
 	int indegree[V_TOP] = {0};
 	queue<int> q;
 	queue<int> ret;
 
-	topsort_calc_indegree(indegree);
+	Topsort_CalcIndegree(indegree);
 
 	// 找到起始顶点，入队
 	for(int i = 0; i < V_TOP; i++)
@@ -164,16 +159,16 @@ void topsort()
 	{
 		int del_node = q.front(); q.pop();
 		ret.push(del_node);
-		topsort_remove_node(del_node, indegree, q);
+		Topsort_RemoveNode(del_node, indegree, q);
 	}
 
-	topsort_print_result(ret);
+	Topsort_PrintResult(ret);
 }
 
-void test_topsort()
+void test_Topsort()
 {
 	PRINT_FUNCTION_NAME;
-	topsort();
+	Topsort();
 }
 
 /**********************************************
@@ -187,7 +182,7 @@ typedef struct
 	int dis;
 }V_UNWEIGHTED_SET;
 
-int g_unweighted[V_UNWEIGHTED][V_UNWEIGHTED] = 
+int g_Unweighted[V_UNWEIGHTED][V_UNWEIGHTED] = 
 {
 	{0,1,M,1,M,M,M},
 	{M,0,M,1,1,M,M},
@@ -198,7 +193,7 @@ int g_unweighted[V_UNWEIGHTED][V_UNWEIGHTED] =
 	{M,M,M,M,M,1,0},
 };
 
-void unweighted(int start, int goal)
+void Unweighted(int start, int goal)
 {
 	V_UNWEIGHTED_SET set[V_UNWEIGHTED];
 	queue<int> q;
@@ -221,7 +216,7 @@ void unweighted(int start, int goal)
 		for(int to = 0; to < V_UNWEIGHTED; to++)
 		{
 			// 从[已知顶点]向外探索,发现可以前往的[未知顶点]
-			if(!set[to].known && g_unweighted[from][to] < M)
+			if(!set[to].known && g_Unweighted[from][to] < M)
 			{
 				// 更新[前往未知顶点的距离],并标记为已知,然后入队以便下一轮往更深处探索
 				set[to].known = true;
@@ -235,14 +230,14 @@ void unweighted(int start, int goal)
 		cout<<"from "<<start<<" to "<<i<<" dis = "<<set[i].dis<<endl;
 }
 
-void test_unweighted()
+void test_Unweighted()
 {
 	PRINT_FUNCTION_NAME;
-	unweighted(2, 6);
+	Unweighted(2, 6);
 }
 
 /**********************************************
-	4.dijkstra 有权最短路径 
+	4.Dijkstra 有权最短路径 
 **********************************************/
 #define V_WEIGHTED (7)
 
@@ -257,10 +252,10 @@ int g_weighted[V_WEIGHTED][V_WEIGHTED] =
 	{M,M,M,M,M,1,0},
 };
 
-void dijkstra_print_process(queue<int> &path)
+void Dijkstra_PrintProcess(queue<int> &path)
 {
 	// 输出算法探索顶点的过程
-	cout<<"dijkstra process : ";
+	cout<<"Dijkstra process : ";
 	while(!path.empty())
 	{
 		int v = path.front(); path.pop();
@@ -268,7 +263,7 @@ void dijkstra_print_process(queue<int> &path)
 	}cout<<endl;
 }
 
-void dijkstra_print_path(int start, int goal, int dis[], int prev[])
+void Dijkstra_PrintPath(int start, int goal, int dis[], int prev[])
 {
 	int find = goal;
 	stack<int> ret;
@@ -287,7 +282,7 @@ void dijkstra_print_path(int start, int goal, int dis[], int prev[])
 	}cout<<endl;
 }
 
-int dijkstra_find_min(int dis[], bool visited[])
+int Dijkstra_FindMin(int dis[], bool visited[])
 {
 	// 从dis[]中找到当前最短路径的顶点(第一轮必定找到start顶点), 标记为已知
 	int curr, min = M;
@@ -303,7 +298,7 @@ int dijkstra_find_min(int dis[], bool visited[])
 	return curr;
 }
 
-void dijkstra(int start, int goal)
+void Dijkstra(int start, int goal)
 {
 	PRINT_SUB_FUNCTION_NAME;
 
@@ -322,7 +317,7 @@ void dijkstra(int start, int goal)
 
 	while(!visited[goal])		// 还有未探索顶点就继续
 	{
-		int curr = dijkstra_find_min(dis, visited); // 找到本轮最短距离的顶点curr
+		int curr = Dijkstra_FindMin(dis, visited); // 找到本轮最短距离的顶点curr
 
 		visited[curr] = true;	// curr顶点已访问
 		path.push(curr);		// 入队保存算法过程
@@ -340,8 +335,8 @@ void dijkstra(int start, int goal)
 		}
 	}
 
-	dijkstra_print_process(path);
-	dijkstra_print_path(start, goal, dis, prev);
+	Dijkstra_PrintProcess(path);
+	Dijkstra_PrintPath(start, goal, dis, prev);
 }	
 
 void floyd()
@@ -375,7 +370,7 @@ void floyd()
 void test_weighted()
 {
 	PRINT_FUNCTION_NAME;
-	dijkstra(1, 0);
+	Dijkstra(1, 0);
 	floyd();
 }
 
@@ -395,7 +390,7 @@ int g_mst[V][V] =
 	{14,M,M,M,8,9,M},
 };
 
-int prim_find_min(bool visited[], int dist[])
+int Prim_FindMin(bool visited[], int dist[])
 {
 	int min_dist = M, to;
 	for(int i = 0; i < V; i++)
@@ -429,7 +424,7 @@ void prim(int start)
 	int mst_target_edge = V-1;		// 加入的边达到V-1时，算法结束
 	while(mst_target_edge)
 	{
-		int to = prim_find_min(visited, dist);	// 找到目前能探索到的最短边的顶点
+		int to = Prim_FindMin(visited, dist);	// 找到目前能探索到的最短边的顶点
 		int from = prev[to];					// 找到边的另一端顶点
 		cout<<"add edge ["<<from<<"]["<<to<<"] = "<<g_mst[from][to]<<endl;
 
@@ -449,9 +444,9 @@ void prim(int start)
 		ret_mst_cost += g_mst[from][to];
 	}
 
-	cout<<"prim mst_cost:"<<ret_mst_cost<<endl;
+	cout<<"prim mst cost:"<<ret_mst_cost<<endl;
 }
-
+ 
 void test_mst()
 {
 	PRINT_FUNCTION_NAME;
@@ -460,9 +455,9 @@ void test_mst()
 
 int main()
 {
-	// test_bfs_dfs();
-	// test_topsort();
-	// test_unweighted();
+	test_bfs_dfs();
+	test_Topsort();
+	test_Unweighted();
 	test_weighted();
 
 	test_mst();

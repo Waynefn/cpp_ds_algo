@@ -23,22 +23,22 @@ using namespace std;
 			step4:find(1),由于S[1] == 1,所以返回1
 			final:最终得到find(8) = 1,8与1属于同一个集合
 **********************************************/
-void uf_init_v1(int S[])
+void UF_Init1(int S[])
 {
 	for(int i = 0; i < SET_NUM; i++)
 		S[i] = i;
 }
 
-int uf_find_v1(int S[], int x)
+int UF_Find1(int S[], int x)
 {
 	while(x != S[x])	// refer to stanford cs97si ppt
 		x = S[x];
 	return x;
 }
 
-void uf_union_v1(int S[], int e1, int e2)
+void UF_Union1(int S[], int e1, int e2)
 {
-	S[uf_find_v1(S, e2)] = uf_find_v1(S, e1); // refer to stanford cs97si ppt
+	S[UF_Find1(S, e2)] = UF_Find1(S, e1); // refer to stanford cs97si ppt
 }
 
 void test_union_find_v1()
@@ -46,14 +46,14 @@ void test_union_find_v1()
 	PRINT_FUNCTION_NAME;
 
 	int S[SET_NUM];
-	uf_init_v1(S);
+	UF_Init1(S);
 
-	uf_union_v1(S,3,4);
-	uf_union_v1(S,4,5);
-	uf_union_v1(S,5,7);
+	UF_Union1(S,3,4);
+	UF_Union1(S,4,5);
+	UF_Union1(S,5,7);
 
-	cout<<"find :"<<uf_find_v1(S,7)<<endl;
-	cout<<"find :"<<uf_find_v1(S,4)<<endl;
+	cout<<"find :"<<UF_Find1(S,7)<<endl;
+	cout<<"find :"<<UF_Find1(S,4)<<endl;
 
 	PRINT_ARRAY(S, SET_NUM);
 }
@@ -97,7 +97,7 @@ void test_union_find_v1()
 **********************************************/
 // 初始时S[0~n-1]都为-1,随着元素的增加,S[0~n-1]--
 // 注意,由于初始化不为0,所以S[0]也可以作为元素使用了
-void uf_init_v2(int S[])
+void UF_Init2(int S[])
 {
 	for(int i = 0; i < SET_NUM; i++)
 		S[i] = -1;
@@ -111,21 +111,21 @@ void uf_init_v2(int S[])
 			1<--8	8到root距离近了一步
 			1<--x 	x到root距离近了两步
 */ 
-int uf_find_v2(int S[], int x)
+int UF_Find2(int S[], int x)
 {
 	if(S[x] < 0)
 		return x;
 	else
-		return S[x] = uf_find_v2(S, S[x]);
+		return S[x] = UF_Find2(S, S[x]);
 }
 
 /*
 	不再轻易地让e2指向e1集合,而是考虑到e1与e2当前的深度
 */
-void uf_union_v2(int S[], int e1, int e2)
+void UF_Union2(int S[], int e1, int e2)
 {
-	int r1 = uf_find_v2(S, e1);	// 两个集合union时，只对root点进行操作
-	int r2 = uf_find_v2(S, e2);
+	int r1 = UF_Find2(S, e1);	// 两个集合union时，只对root点进行操作
+	int r2 = UF_Find2(S, e2);
 
 	if(S[r1] == S[r2])		// r1与r2的深度一样,此时r1深度+1,r2指向r1
 	{
@@ -144,14 +144,14 @@ void test_union_find_v2()
 	PRINT_FUNCTION_NAME;
 
 	int S[SET_NUM];
-	uf_init_v2(S);
+	UF_Init2(S);
 
-	uf_union_v2(S,3,4);
-	uf_union_v2(S,4,5);
-	uf_union_v2(S,5,7);
+	UF_Union2(S,3,4);
+	UF_Union2(S,4,5);
+	UF_Union2(S,5,7);
 
-	cout<<"find :"<<uf_find_v2(S,7)<<endl;
-	cout<<"find :"<<uf_find_v2(S,4)<<endl;
+	cout<<"find :"<<UF_Find2(S,7)<<endl;
+	cout<<"find :"<<UF_Find2(S,4)<<endl;
 
 	PRINT_ARRAY(S, SET_NUM);
 }

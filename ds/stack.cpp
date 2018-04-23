@@ -9,12 +9,12 @@
 using namespace std;
 
 /*
-	1.list实现stack
-	2.两个stack实现O(1)时间内返回最小值的stack
+	1.list实现s
+	2.两个s实现O(1)时间内返回最小值的s
 */
 
 /**********************************************
-	用list来实现stack,从下往上生长
+	用list来实现s,从下往上生长
 	设置一个sp指针,指向栈顶元素,初始化为NULL
 	push时：新节点node指向sp,sp再等于node,即可完成类似头插
 	pop时：sp指向的节点即是栈顶,所以保存它的值,然后sp指向下一个节点
@@ -31,90 +31,78 @@ typedef struct _Node
 	}
 }Node;
 
-typedef struct _stack_byList
+typedef struct _Stack1
 {
 	Node *sp;
-	_stack_byList() {	this->sp = NULL;}
-}stack_byList;
+	_Stack1() {	this->sp = NULL;}
+}Stack1;
 
-stack_byList *make_stack()
+bool Stack1_Empty(Stack1 *s)
 {
-	stack_byList *stack = new stack_byList;
-	return stack;
+	return s->sp == NULL;
 }
 
-bool stack_isEmpty_byList(stack_byList *stack)
-{
-	return stack->sp == NULL;
-}
-
-void stack_push_byList(stack_byList *stack, int val)
+void Stack1_Push(Stack1 *s, int val)
 {
 	Node *node = new Node(val);
 
-	node->next = stack->sp;
-	stack->sp = node;
+	node->next = s->sp;
+	s->sp = node;
 }
 
-int stack_pop_byList(stack_byList *stack)
+int Stack1_Pop(Stack1 *s)
 {
-	if(stack_isEmpty_byList(stack))
+	if(Stack1_Empty(s))
 	{
-		cout<<"stack_byList is empty"<<endl;
+		cout<<"Stack1 is empty"<<endl;
 		return -1;
 	}
 
-	Node *tmp = stack->sp;
+	Node *tmp = s->sp;
 	int ret = tmp->val;
 
-	stack->sp = stack->sp->next;
+	s->sp = s->sp->next;
 	delete tmp;
 
-	cout<<"stack_byList pop :"<<ret<<endl;
+	cout<<"Stack1 pop :"<<ret<<endl;
 	return ret;
 }
 
-void test_stack_byList()
+void test_stack1()
 {
 	PRINT_FUNCTION_NAME;
 
-	stack_byList *s = make_stack();
-	stack_push_byList(s, 1);
-	stack_push_byList(s, 2);
-	stack_push_byList(s, 3);
-	stack_push_byList(s, 4);
+	Stack1 *s = new Stack1;
+	Stack1_Push(s, 1);
+	Stack1_Push(s, 2);
+	Stack1_Push(s, 3);
+	Stack1_Push(s, 4);
 
-	stack_pop_byList(s);
-	stack_pop_byList(s);
-	stack_pop_byList(s);
-	stack_pop_byList(s);
-	stack_pop_byList(s);
+	Stack1_Pop(s);
+	Stack1_Pop(s);
+	Stack1_Pop(s);
+	Stack1_Pop(s);
+	Stack1_Pop(s);
 }
 
 /**********************************************
-	stack实现方法min()可以O(1)时间内返回stack中的最小值
+	s实现方法min()可以O(1)时间内返回s中的最小值
 	s1:正常的操作
 	s2：与s1保持元素一样多，每次pop时和s1一样。但push时只push当前最小值
 	min()：s2.pop()即可
 **********************************************/
-typedef struct _minStack
+typedef struct _MinStack
 {
 	int min;
 	stack<int> s1;
 	stack<int> s2;
-	_minStack()
+	_MinStack()
 	{
 		this->min = INT_MAX;
 	}
-}minStack;
+}MinStack;
 
-minStack *make_minStack()
-{
-	minStack *ms = new minStack;
-	return ms;
-}
-
-void minStack_push(minStack *ms, int x)
+void MinStack_Push(MinStack *ms, int x)
 {
 	if(ms->s2.empty())
 		ms->min = INT_MAX;
@@ -126,11 +114,11 @@ void minStack_push(minStack *ms, int x)
 	ms->s2.push(ms->min);
 }
 
-int minStack_pop(minStack *ms)
+int MinStack_Pop(MinStack *ms)
 {
 	if(ms->s1.empty())
 	{
-		cout<<"minStack is empty"<<endl;
+		cout<<"MinStack is empty"<<endl;
 		return -1;
 	}
 
@@ -143,40 +131,40 @@ int minStack_pop(minStack *ms)
 	return res;
 }
 
-int minStack_min(minStack *ms)
+int MinStack_Min(MinStack *ms)
 {
 	if(ms->s1.empty())
 	{
-		cout<<"minStack is empty, min = "<<ms->min<<endl;
+		cout<<"MinStack is empty, min = "<<ms->min<<endl;
 		return -1;
 	}
 	int res = ms->s2.top();
-	cout<<"minStack min = "<<res<<endl;
+	cout<<"MinStack min = "<<res<<endl;
 	return res;
 }
 
-void test_stack_minStack()
+void test_minstack()
 {
 	PRINT_FUNCTION_NAME;
 	
-	minStack *ms = make_minStack();
+	MinStack *ms = new MinStack();
 
-	minStack_push(ms, 5); minStack_min(ms);
-	minStack_push(ms, 4); minStack_min(ms);
-	minStack_push(ms, 8); minStack_min(ms);
-	minStack_push(ms, 1); minStack_min(ms);
-	minStack_push(ms, 2); minStack_min(ms);
-	minStack_pop(ms); minStack_min(ms);
-	minStack_pop(ms); minStack_min(ms);
-	minStack_pop(ms); minStack_min(ms);
-	minStack_pop(ms); minStack_min(ms);
-	minStack_pop(ms); minStack_min(ms);
+	MinStack_Push(ms, 5); MinStack_Min(ms);
+	MinStack_Push(ms, 4); MinStack_Min(ms);
+	MinStack_Push(ms, 8); MinStack_Min(ms);
+	MinStack_Push(ms, 1); MinStack_Min(ms);
+	MinStack_Push(ms, 2); MinStack_Min(ms);
+	MinStack_Pop(ms); MinStack_Min(ms);
+	MinStack_Pop(ms); MinStack_Min(ms);
+	MinStack_Pop(ms); MinStack_Min(ms);
+	MinStack_Pop(ms); MinStack_Min(ms);
+	MinStack_Pop(ms); MinStack_Min(ms);
 }
 
 int main()
 {
-	test_stack_byList();
-	test_stack_minStack();
+	test_stack1();
+	test_minstack();
 
 	return 0;
 }

@@ -9,14 +9,14 @@ using namespace std;
 
 /*
 	1.bubble
-	2.insert
-	3.select
-	4.shell
-	5.quick
-	6.merge
-	7.heap
-	8.bucket
-	9.sleep
+	2.Insert
+	3.Select
+	4.Shell
+	5.Quick
+	6.Merge
+	7.Heap
+	8.Bucket
+	9.Sleep
 */
 
 /**********************************************	
@@ -24,7 +24,7 @@ using namespace std;
 	lv1:无论数组排序如何,都完整地冒泡直至结束
 	lv2:每一轮冒泡时记录[最后发生大小交换的位置],假如第一轮发现数组在a[x]之后都是有序的,则下一轮只冒泡到下标x
 **********************************************/
-void bubble_lv1(int a[], int n)
+void Bubble1(int a[], int n)
 {
 	PRINT_SUB_FUNCTION_NAME;
 
@@ -36,7 +36,6 @@ void bubble_lv1(int a[], int n)
 			cnt++;
 			if(a[j-1] > a[j])
 			{
-				
 				SWAP(a[j-1], a[j]);
 			}
 		}
@@ -44,7 +43,7 @@ void bubble_lv1(int a[], int n)
 	cout<<"lv1 cnt = "<<cnt<<endl;
 }
 
-void bubble_lv2(int a[], int n)
+void Bubble2(int a[], int n)
 {
 	PRINT_SUB_FUNCTION_NAME;
 
@@ -74,10 +73,10 @@ void test_bubble()
 
 	int a1[] = {1,1,0,0,3,4,5,2,2,0};
 	int a2[] = {1,1,0,0,3,4,5,2,2,0};
-	bubble_lv1(a1, Len(a1));
+	Bubble1(a1, Len(a1));
 	PRINT_ARRAY(a1, Len(a1));
 	
-	bubble_lv2(a2, Len(a2));
+	Bubble2(a2, Len(a2));
 	PRINT_ARRAY(a2, Len(a2));
 }
 
@@ -90,7 +89,7 @@ void test_bubble()
 		3.2 直至发现a[j-1]不再大于tmp || j已经移动到a[0],结束移动
 		3.3 已经找到了[合适的位置],令a[j] = tmp,完成本轮的移动
 **********************************************/
-void insert(int a[], int n)
+void Insert(int a[], int n)
 {
 	for(int i = 1; i < n; i++)
 	{
@@ -109,7 +108,7 @@ void test_insert()
 	PRINT_FUNCTION_NAME;
 
 	int a[] = {49,38,65,97,26,13,27,49,55,4};
-	insert(a, Len(a));
+	Insert(a, Len(a));
 	PRINT_ARRAY(a, Len(a));
 }
 
@@ -119,7 +118,7 @@ void test_insert()
 	2.a[min]与a[start]交换,保证每一轮总是能够找到当前区间的最小值,并把它移动到最前面
 	3.start+1,直至start==end,结束
 **********************************************/
-void select(int a[], int n)
+void Select(int a[], int n)
 {
 	for(int i = 0; i < n; i++)
 	{
@@ -136,7 +135,7 @@ void test_select()
 	PRINT_FUNCTION_NAME;
 
 	int a[] = {49,38,65,97,26,13,27,49,55,4};
-	select(a, Len(a));
+	Select(a, Len(a));
 	PRINT_ARRAY(a, Len(a));
 }
 
@@ -148,7 +147,7 @@ void test_select()
 		1.数组分为4段,[1]与[3],[2]与[4]做插入排序
 		2.[1][2][3][4]合起来再做完整的插入排序
 **********************************************/
-void shell(int a[], int n)
+void Shell(int a[], int n)
 {
 	for(int gap = n/2; gap > 0; gap /= 2)
 	{
@@ -170,14 +169,14 @@ void test_shell()
 	PRINT_FUNCTION_NAME;
 
 	int a[] = {5,4,6,2,1,3,7,9};
-	shell(a, Len(a));
+	Shell(a, Len(a));
 	PRINT_ARRAY(a, Len(a));
 }
 
 /**********************************************	
 快速排序
 **********************************************/
-void sub_quick(int a[], int s, int e)
+void QuickSub(int a[], int s, int e)
 {
 	if(s >= e)
 		return;
@@ -192,13 +191,13 @@ void sub_quick(int a[], int s, int e)
 	}
 	a[i] = x;
 
-	sub_quick(a, s, i-1);
-	sub_quick(a, i+1, e);
+	QuickSub(a, s, i-1);
+	QuickSub(a, i+1, e);
 }
 
-void quick(int a[], int n)
+void Quick(int a[], int n)
 {
-	sub_quick(a, 0, n-1);
+	QuickSub(a, 0, n-1);
 }
 
 void test_quick()
@@ -206,14 +205,14 @@ void test_quick()
 	PRINT_FUNCTION_NAME;
 
 	int a[] = {49,38,65,97,26,13,27,49,55,4};
-	quick(a, Len(a));
+	Quick(a, Len(a));
 	PRINT_ARRAY(a, Len(a));
 }
 
 /**********************************************	
 归并排序
 **********************************************/
-void merge_array(int a[], int s, int m, int e, int p[])
+void Merge_MergeArray(int a[], int s, int m, int e, int p[])
 {
 	int i = s, j = m+1, k = 0;
 
@@ -229,21 +228,21 @@ void merge_array(int a[], int s, int m, int e, int p[])
 		a[s+i] = p[i];
 }
 
-void divide(int a[], int s, int e, int p[])
+void Merge_Divide(int a[], int s, int e, int p[])
 {
 	if(s < e)
 	{
 		int m = (s + e) / 2;
-		divide(a, s, m, p);
-		divide(a, m+1, e, p);
-		merge_array(a, s, m, e, p);
+		Merge_Divide(a, s, m, p);
+		Merge_Divide(a, m+1, e, p);
+		Merge_MergeArray(a, s, m, e, p);
 	}
 }
 
-void merge(int a[], int n)
+void Merge(int a[], int n)
 {
 	int *p = new int[n];
-	divide(a, 0, n-1, p);
+	Merge_Divide(a, 0, n-1, p);
 }
 
 void test_merge()
@@ -251,14 +250,14 @@ void test_merge()
 	PRINT_FUNCTION_NAME;
 
 	int a[] = {49,38,65,97,26,13,27,49,55,4};
-	merge(a, Len(a));
+	Merge(a, Len(a));
 	PRINT_ARRAY(a, Len(a));
 }
 
 /**********************************************	
 堆排序
 **********************************************/
-void heap_up(int hp[], int add)
+void Heap_Up(int hp[], int add)
 {
 	int i = ++hp[0];
 
@@ -267,7 +266,7 @@ void heap_up(int hp[], int add)
 	hp[i] = add;
 }
 
-int heap_down(int hp[])
+int Heap_Down(int hp[])
 {
 	int ret = hp[1], last = hp[hp[0]--];
 	int child, i;
@@ -287,16 +286,16 @@ int heap_down(int hp[])
 	return ret;
 }
 
-void heap(int a[], int n)
+void Heap(int a[], int n)
 {
 	int *hp = new int[n+1];
 	hp[0] = 0;
 
 	for(int i = 0; i < n; i++)
-		heap_up(hp, a[i]);
+		Heap_Up(hp, a[i]);
 	PRINT_ARRAY(hp, n+1);
 	for(int i = 0; i < n; i++)
-		a[i] = heap_down(hp);
+		a[i] = Heap_Down(hp);
 }
 
 void test_heap()
@@ -304,14 +303,14 @@ void test_heap()
 	PRINT_FUNCTION_NAME;
 
 	int a[] = {5,3,6,7,8,2,1};
-	heap(a, Len(a));
+	Heap(a, Len(a));
 	PRINT_ARRAY(a, Len(a));
 }
 
 /**********************************************	
 桶排序
 **********************************************/
-void bucket(int a[], int n, int max)
+void Bucket(int a[], int n, int max)
 {
     int *buf = new int[max];
 
@@ -330,25 +329,25 @@ void test_bucket()
 	PRINT_FUNCTION_NAME;
 
 	int a[] = {4,5,1,3,8,4,2,8,9};
-	bucket(a, Len(a), 9);
+	Bucket(a, Len(a), 9);
 	PRINT_ARRAY(a, Len(a));
 }
 
 /**********************************************	
 睡觉排序
 **********************************************/
-void *worker(void *arg)
+void *Sleep_Worker(void *arg)
 {
 	int time = *(int *)arg;
 	usleep(time*1000);
 	cout<<time<<" ";
 }
 
-void sleep(int a[], int n)
+void Sleep(int a[], int n)
 {
 	pthread_t td[100];
 	for(int i = 0; i < n; i++)
-		pthread_create(&td[i], NULL, worker ,(void *)&a[i]);
+		pthread_create(&td[i], NULL, Sleep_Worker ,(void *)&a[i]);
 	for(int i = 0; i < n; i++)
 		pthread_join(td[i], NULL);
 	cout<<endl;
@@ -359,18 +358,18 @@ void test_sleep()
 	PRINT_FUNCTION_NAME;
 
 	int a[] = {4,5,65,77,23,54,2,9,2,3,7,10};
-	sleep(a, Len(a));
+	Sleep(a, Len(a));
 }
 
 int main()
 {
-	// test_bubble();
-	// test_insert();
+	test_bubble();
+	test_insert();
 	test_shell();
-	// test_quick();
-	// test_merge();
-	// test_heap();
-	// test_bucket();
-	// test_sleep();
+	test_quick();
+	test_merge();
+	test_heap();
+	test_bucket();
+	test_sleep();
 	return 0;
 }

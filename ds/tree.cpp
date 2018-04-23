@@ -30,7 +30,7 @@ typedef struct _TreeNode
 	}
 }TreeNode;
 
-bool tree_search(TreeNode *t, int x)
+bool Tree_Search(TreeNode *t, int x)
 {
 	TreeNode *tmp = t;
 
@@ -51,44 +51,44 @@ bool tree_search(TreeNode *t, int x)
 	return false;
 }
 
-int tree_node_count(TreeNode *t)
+int Tree_NodeCount(TreeNode *t)
 {
 	if(NULL == t)
 		return 0;
 
-	return 1 + tree_node_count(t->left) + tree_node_count(t->right);
+	return 1 + Tree_NodeCount(t->left) + Tree_NodeCount(t->right);
 }
 
-int tree_val_sum(TreeNode *t)
+int Tree_NodeSum(TreeNode *t)
 {
 	if(NULL == t)
 		return 0;
-	return t->val + tree_val_sum(t->left) + tree_val_sum(t->right);
+	return t->val + Tree_NodeSum(t->left) + Tree_NodeSum(t->right);
 }
 
-int tree_height(TreeNode *t)
+int Tree_Height(TreeNode *t)
 {
 	if(NULL == t)
 		return 0;
 
-	return 1 + max(tree_height(t->left),tree_height(t->right));
+	return 1 + max(Tree_Height(t->left),Tree_Height(t->right));
 }
 
-TreeNode *tree_insert(TreeNode *t, int val)
+TreeNode *Tree_Insert(TreeNode *t, int val)
 {
 	if(NULL == t)
 		t = new TreeNode(val);
 	else if(val < t->val)
-		t->left = tree_insert(t->left, val);
+		t->left = Tree_Insert(t->left, val);
 	else if(val > t->val)
-		t->right = tree_insert(t->right, val);
+		t->right = Tree_Insert(t->right, val);
 	else
 		;
 
 	return t;
 }
 
-TreeNode *tree_insert_nonRecursive(TreeNode *t, int val)
+TreeNode *Tree_Insert_nonRecursive(TreeNode *t, int val)
 {
 	TreeNode *node = new TreeNode(val);
 	if(NULL == t)
@@ -114,15 +114,15 @@ TreeNode *tree_insert_nonRecursive(TreeNode *t, int val)
 	return t;
 }
 
-TreeNode *tree_delete(TreeNode *t, int x)
+TreeNode *Tree_Delete(TreeNode *t, int x)
 {
 	if(NULL == t)
 		return NULL;
 
 	if(x < t->val)
-		t->left = tree_delete(t->left, x);
+		t->left = Tree_Delete(t->left, x);
 	else if(x > t->val)
-		t->right = tree_delete(t->right, x);
+		t->right = Tree_Delete(t->right, x);
 	else
 	{
 		TreeNode *tmp;
@@ -132,7 +132,7 @@ TreeNode *tree_delete(TreeNode *t, int x)
 			while(tmp->left)
 				tmp = tmp->left;		// 找到后驱:右子树中最小的节点
 			t->val = tmp->val;
-			t->right = tree_delete(t->right, tmp->val);
+			t->right = Tree_Delete(t->right, tmp->val);
 		}
 		else
 		{
@@ -146,34 +146,34 @@ TreeNode *tree_delete(TreeNode *t, int x)
 	return t;
 }
 
-void tree_trvl_prev(TreeNode *t)
+void Tree_TrvlPrev(TreeNode *t)
 {
 	if(NULL == t)
 		return;
 	cout<<t->val<<" ";
-	tree_trvl_prev(t->left);
-	tree_trvl_prev(t->right);
+	Tree_TrvlPrev(t->left);
+	Tree_TrvlPrev(t->right);
 }
 
-void tree_trvl_in(TreeNode *t)
+void Tree_TrvlIn(TreeNode *t)
 {
 	if(NULL == t)
 		return;
-	tree_trvl_in(t->left);
+	Tree_TrvlIn(t->left);
 	cout<<t->val<<" ";
-	tree_trvl_in(t->right);
+	Tree_TrvlIn(t->right);
 }
 
-void tree_trvl_post(TreeNode *t)
+void Tree_TrvlPost(TreeNode *t)
 {
 	if(NULL == t)
 		return;
-	tree_trvl_post(t->left);
-	tree_trvl_post(t->right);
+	Tree_TrvlPost(t->left);
+	Tree_TrvlPost(t->right);
 	cout<<t->val<<" ";
 }
 
-void tree_trvl_prev_nonRecursive(TreeNode *t)
+void Tree_TrvlPrev_nonRecursive(TreeNode *t)
 {
 	PRINT_SUB_FUNCTION_NAME;
 
@@ -205,7 +205,7 @@ void tree_trvl_prev_nonRecursive(TreeNode *t)
 	cout<<endl;
 }
 
-void tree_trvl_prev_nonRecursive_improve(TreeNode *t)
+void Tree_TrvlPrev_nonRecursive_improve(TreeNode *t)
 {
 	PRINT_SUB_FUNCTION_NAME;
 
@@ -225,7 +225,7 @@ void tree_trvl_prev_nonRecursive_improve(TreeNode *t)
 	cout<<endl;
 }
 
-void tree_trvl_in_nonRecursive(TreeNode *t)
+void Tree_TrvlIn_nonRecursive(TreeNode *t)
 {
 	PRINT_SUB_FUNCTION_NAME;
 
@@ -245,7 +245,7 @@ void tree_trvl_in_nonRecursive(TreeNode *t)
 	cout<<endl;
 }
 
-void tree_trvl_post_nonRecursive(TreeNode *t)
+void Tree_TrvlPost_nonRecursive(TreeNode *t)
 {
 	PRINT_SUB_FUNCTION_NAME;
 
@@ -273,7 +273,7 @@ void tree_trvl_post_nonRecursive(TreeNode *t)
 	cout<<endl;
 }
 
-void tree_trvl_level(TreeNode *t)
+void Tree_TrvlLevel(TreeNode *t)
 {
 	PRINT_SUB_FUNCTION_NAME;
 
@@ -301,7 +301,7 @@ void tree_trvl_level(TreeNode *t)
 	}
 }
 
-void tree_trvl_level_reverse(TreeNode *t)
+void Tree_TrvlLevel_reverse(TreeNode *t)
 {
 	PRINT_SUB_FUNCTION_NAME;
 
@@ -340,7 +340,7 @@ void tree_trvl_level_reverse(TreeNode *t)
 	}
 }
 
-void tree_trvl_zigzag(TreeNode *t)
+void Tree_TrvlZigzag(TreeNode *t)
 {
 	PRINT_SUB_FUNCTION_NAME;
 
@@ -381,24 +381,24 @@ void test_tree()
 	TreeNode *t = NULL;
 
 	for(int i = 0; i < Len(a); i++)
-		t = tree_insert(t, a[i]);
+		t = Tree_Insert(t, a[i]);
 
-	tree_search(t, 3);
-	tree_search(t, 9);
-	tree_search(t, 33);
+	Tree_Search(t, 3);
+	Tree_Search(t, 9);
+	Tree_Search(t, 33);
 
-	cout<<"tree node num = "<<tree_node_count(t)<<endl;
-	cout<<"tree height = "<<tree_height(t)<<endl;
+	cout<<"tree node num = "<<Tree_NodeCount(t)<<endl;
+	cout<<"tree height = "<<Tree_Height(t)<<endl;
 
-	tree_trvl_prev_nonRecursive_improve(t); 
-	tree_trvl_in_nonRecursive(t);
-	tree_trvl_post(t); cout<<endl;
+	Tree_TrvlPrev_nonRecursive_improve(t); 
+	Tree_TrvlIn_nonRecursive(t);
+	Tree_TrvlPost(t); cout<<endl;
 
-	tree_delete(t, 0);
+	Tree_Delete(t, 0);
 
-	tree_trvl_level(t);
-	tree_trvl_level_reverse(t);
-	tree_trvl_zigzag(t);
+	Tree_TrvlLevel(t);
+	Tree_TrvlLevel_reverse(t);
+	Tree_TrvlZigzag(t);
 }
 
 /**********************************************
@@ -410,11 +410,8 @@ void test_tree()
 
 void print_tarjan_info(bool visited[], int ancestors[], int n)
 {
-	cout<<"vis = ";
-	PRINT_ARRAY(visited, n);
-	
-	cout<<"anc = ";
-	PRINT_ARRAY(ancestors, n);
+	cout<<"vis = "; PRINT_ARRAY(visited, n);
+	cout<<"anc = "; PRINT_ARRAY(ancestors, n);
 	
 	cout<<"idx = ";
 	for(int i = 0; i < n; i++)
@@ -441,7 +438,7 @@ int uf_find(int S[], int x)
 		return uf_find(S, S[x]);
 }
 
-void tarjan_lca(TreeNode *t, bool visited[], int ancestors[], int n, int x, int y)
+void Tree_TarjanLCA(TreeNode *t, bool visited[], int ancestors[], int n, int x, int y)
 {
 	if(NULL == t)
 		return;
@@ -453,12 +450,12 @@ void tarjan_lca(TreeNode *t, bool visited[], int ancestors[], int n, int x, int 
 
 	if(t->left)
 	{
-		tarjan_lca(t->left, visited, ancestors, n, x, y);	// dfs遍历树
+		Tree_TarjanLCA(t->left, visited, ancestors, n, x, y);	// dfs遍历树
 		uf_union(ancestors, t->val, t->left->val);		// 合并子树到自身集合
 	}
 	if(t->right)
 	{
-		tarjan_lca(t->right, visited, ancestors, n, x, y);
+		Tree_TarjanLCA(t->right, visited, ancestors, n, x, y);
 		uf_union(ancestors, t->val, t->right->val);
 	}
 
@@ -476,7 +473,7 @@ void tarjan_lca(TreeNode *t, bool visited[], int ancestors[], int n, int x, int 
 */
 }
 
-void test_tarjan_lca()
+void test_tree_TarjanLCA()
 {
 	PRINT_FUNCTION_NAME;
 
@@ -484,15 +481,15 @@ void test_tarjan_lca()
 	TreeNode *t = NULL;
 
 	for(int i = 0; i < Len(a); i++)
-		t = tree_insert(t, a[i]);
-	tree_trvl_level(t);
+		t = Tree_Insert(t, a[i]);
+	Tree_TrvlLevel(t);
 
 	bool visited[MAX] = {false};
 	int ancestors[MAX];
 
 	uf_init(ancestors, MAX);
 
-	tarjan_lca(t, visited, ancestors, MAX, 1, 0);	
+	Tree_TarjanLCA(t, visited, ancestors, MAX, 1, 0);	
 
 	print_tarjan_info(visited, ancestors, MAX);
 }
@@ -512,7 +509,7 @@ typedef struct _TrieTreeNode
 	}
 }TrieTreeNode;
 
-void trie_tree_insert(TrieTreeNode *t, string word)
+void TrieTree_Insert(TrieTreeNode *t, string word)
 {
 	TrieTreeNode *dummy = t;
 
@@ -526,7 +523,7 @@ void trie_tree_insert(TrieTreeNode *t, string word)
 	dummy->exist = true;
 }
 
-bool trie_tree_search(TrieTreeNode *t, string word)
+bool TrieTree_Search(TrieTreeNode *t, string word)
 {
 	TrieTreeNode *dummy = t;
 
@@ -547,31 +544,31 @@ void test_trie_tree()
 
 	TrieTreeNode *t = new TrieTreeNode;
 
-	trie_tree_insert(t, "abc");
-	trie_tree_insert(t, "abcd");
-	trie_tree_insert(t, "abd");
+	TrieTree_Insert(t, "abc");
+	TrieTree_Insert(t, "abcd");
+	TrieTree_Insert(t, "abd");
 
-	cout<<"found result: "<<trie_tree_search(t, "ab")<<endl;
-	cout<<"found result: "<<trie_tree_search(t, "abc")<<endl;
+	cout<<"found result: "<<TrieTree_Search(t, "ab")<<endl;
+	cout<<"found result: "<<TrieTree_Search(t, "abc")<<endl;
 }
 
 /**********************************************
 	线段树(Segment)
 **********************************************/
-typedef struct _SegmentNode
+typedef struct _SegmentTreeNode
 {
 	int start, end, max, min, sum;
-	_SegmentNode *left, *right;
-	_SegmentNode(int s, int end, int val)
+	_SegmentTreeNode *left, *right;
+	_SegmentTreeNode(int s, int end, int val)
 	{
 		this->start = s;
 		this->end = end;
 		this->max = this->min = this->sum = val;
 		this->left = this->right = NULL;
 	}
-}SegmentNode;
+}SegmentTreeNode;
 
-void segment_tree_trvl(SegmentNode *t, int curr_level = 1)
+void SegmentTree_Trvl(SegmentTreeNode *t, int curr_level = 1)
 {
 	if(NULL == t)
 		return;
@@ -579,22 +576,22 @@ void segment_tree_trvl(SegmentNode *t, int curr_level = 1)
 	for(int i = 0; i < curr_level; i++)
 		cout<<"#";
 	cout<<"["<<t->start<<"~"<<t->end<<"]:max = "<<t->max<<", min = "<<t->min<<", sum = "<<t->sum<<endl;
-	segment_tree_trvl(t->left, curr_level+1);
-	segment_tree_trvl(t->right, curr_level+1);
+	SegmentTree_Trvl(t->left, curr_level+1);
+	SegmentTree_Trvl(t->right, curr_level+1);
 }
 
-SegmentNode *segment_tree_build(int a[], int s, int e)
+SegmentTreeNode *SegmentTree_Build(int a[], int s, int e)
 {
 	if(s > e)
 		return NULL;
 
-	SegmentNode *node = new SegmentNode(s, e, a[s]);
+	SegmentTreeNode *node = new SegmentTreeNode(s, e, a[s]);
 	if(s == e)
 		return node;
 
 	int m = (s + e) / 2;
-	node->left = segment_tree_build(a, s, m);
-	node->right = segment_tree_build(a, m+1, e);
+	node->left = SegmentTree_Build(a, s, m);
+	node->right = SegmentTree_Build(a, m+1, e);
 
 	node->max = node->left->max > node->right->max ? node->left->max : node->right->max;
 	node->min = node->left->min < node->right->min ? node->left->min : node->right->min;
@@ -603,7 +600,7 @@ SegmentNode *segment_tree_build(int a[], int s, int e)
 	return node;
 }
 
-void segment_tree_improve(SegmentNode *t, int index, int val)
+void SegmentTree_Improve(SegmentTreeNode *t, int index, int val)
 {
 	if(NULL == t || index < t->start || index > t->end)
 		return;
@@ -615,9 +612,9 @@ void segment_tree_improve(SegmentNode *t, int index, int val)
 
 	int m = (t->start + t->end) / 2;
 	if(index <= m)
-		segment_tree_improve(t->left, index, val);
+		SegmentTree_Improve(t->left, index, val);
 	else
-		segment_tree_improve(t->right, index, val);
+		SegmentTree_Improve(t->right, index, val);
 	
 	t->max = max(t->left->max, t->right->max);
 	t->min = min(t->left->min, t->right->min);
@@ -625,7 +622,7 @@ void segment_tree_improve(SegmentNode *t, int index, int val)
 }
 
 // 返回a[from]到a[to]的数据的和
-int segment_tree_query_sum(SegmentNode *t, int from, int to)
+int SegmentTree_QuerySum(SegmentTreeNode *t, int from, int to)
 {
 	if(from > to)
 		return 0;
@@ -634,57 +631,57 @@ int segment_tree_query_sum(SegmentNode *t, int from, int to)
 
 	int m = (t->start + t->end) / 2;
 	if(m > to)
-		return segment_tree_query_sum(t->left, from, to);
+		return SegmentTree_QuerySum(t->left, from, to);
 	else if(m < from)
-		return segment_tree_query_sum(t->right, from, to);
+		return SegmentTree_QuerySum(t->right, from, to);
 	else
 	{
-		int left = segment_tree_query_sum(t->left, from, m);
-		int right = segment_tree_query_sum(t->right, m+1, to);
+		int left = SegmentTree_QuerySum(t->left, from, m);
+		int right = SegmentTree_QuerySum(t->right, m+1, to);
 		return left + right;
 	}
 }
 
-void test_segment_tree_build()
+void test_SegmentTree_Build()
 {
 	PRINT_SUB_FUNCTION_NAME;
 
 	int a[] = {1,2,7,8,5};
-	SegmentNode *t = segment_tree_build(a, 0, Len(a)-1);
-	segment_tree_trvl(t);
+	SegmentTreeNode *t = SegmentTree_Build(a, 0, Len(a)-1);
+	SegmentTree_Trvl(t);
 }
 
-void test_segment_tree_improve()
+void test_SegmentTree_Improve()
 {
 	PRINT_SUB_FUNCTION_NAME;
 
 	int a[] = {1,2,7,8,5};
-	SegmentNode *t = segment_tree_build(a, 0, Len(a)-1);
+	SegmentTreeNode *t = SegmentTree_Build(a, 0, Len(a)-1);
 
 	cout<<"----------improve----------"<<endl;
-	segment_tree_improve(t, 2, 9);
-	segment_tree_trvl(t);
+	SegmentTree_Improve(t, 2, 9);
+	SegmentTree_Trvl(t);
 }
 
-void test_segment_tree_query_sum()
+void test_SegmentTree_QuerySum()
 {
 	PRINT_SUB_FUNCTION_NAME;
 
 	int a[] = {1,2,7,8,5};
-	SegmentNode *t = segment_tree_build(a, 0, Len(a)-1);
+	SegmentTreeNode *t = SegmentTree_Build(a, 0, Len(a)-1);
 
 	cout<<"----------query sum----------"<<endl;
-	segment_tree_trvl(t);
-	cout<<"query sum = "<<segment_tree_query_sum(t, 0, 2)<<endl;
+	SegmentTree_Trvl(t);
+	cout<<"query sum = "<<SegmentTree_QuerySum(t, 0, 2)<<endl;
 }
 
 void test_segment_tree()
 {
 	PRINT_FUNCTION_NAME;
 
-	test_segment_tree_build();
-	test_segment_tree_improve();
-	test_segment_tree_query_sum();
+	test_SegmentTree_Build();
+	test_SegmentTree_Improve();
+	test_SegmentTree_QuerySum();
 }
 
 /**********************************************
@@ -702,19 +699,19 @@ typedef struct _AvlTreeNode
 	}
 }AvlTreeNode;
 
-int avl_tree_height(AvlTreeNode *t)
+int AvlTree_Height(AvlTreeNode *t)
 {
 	if(NULL == t)
 		return 0;
 	return t->height;
 }
 
-void avl_tree_update_height(AvlTreeNode *t)
+void AvlTree_UpdateHeight(AvlTreeNode *t)
 {
-	t->height = 1 + max(avl_tree_height(t->left), avl_tree_height(t->right));
+	t->height = 1 + max(AvlTree_Height(t->left), AvlTree_Height(t->right));
 }
 
-void avl_tree_trvl_level(AvlTreeNode *t)
+void AvlTree_TrvlLevel(AvlTreeNode *t)
 {
 	PRINT_SUB_FUNCTION_NAME;
 
@@ -752,15 +749,15 @@ void avl_tree_trvl_level(AvlTreeNode *t)
 	 /  					  
 	A     				    	
 */
-AvlTreeNode *avl_tree_left_left(AvlTreeNode *k2)
+AvlTreeNode *AvlTree_LeftLeft(AvlTreeNode *k2)
 {
 	AvlTreeNode *k1 = k2->left;
 
 	k2->left = k1->right;
 	k1->right = k2;
 
-	avl_tree_update_height(k1);
-	avl_tree_update_height(k2);	
+	AvlTree_UpdateHeight(k1);
+	AvlTree_UpdateHeight(k2);	
 
 	return k1;
 }
@@ -774,15 +771,15 @@ AvlTreeNode *avl_tree_left_left(AvlTreeNode *k2)
 		    \			   
 		 	 A 				
 */
-AvlTreeNode *avl_tree_right_right(AvlTreeNode *k1)
+AvlTreeNode *AvlTree_RightRight(AvlTreeNode *k1)
 {
 	AvlTreeNode *k2 = k1->right;
 
 	k1->right = k2->left;
 	k2->left = k1;
 
-	avl_tree_update_height(k1);
-	avl_tree_update_height(k2);
+	AvlTree_UpdateHeight(k1);
+	AvlTree_UpdateHeight(k2);
 
 	return k2;
 }
@@ -797,10 +794,10 @@ AvlTreeNode *avl_tree_right_right(AvlTreeNode *k1)
 	    \			   /	  
 	     k2 		  k1	    	   
 */
-AvlTreeNode *avl_tree_left_right(AvlTreeNode *k3)
+AvlTreeNode *AvlTree_LeftRight(AvlTreeNode *k3)
 {
-	k3->left = avl_tree_right_right(k3->left);
-	return avl_tree_left_left(k3);
+	k3->left = AvlTree_RightRight(k3->left);
+	return AvlTree_LeftLeft(k3);
 }
 
 /*	insert(k2),造成k1不平衡
@@ -813,13 +810,13 @@ AvlTreeNode *avl_tree_left_right(AvlTreeNode *k3)
 	  /   			   	 \ 
 	 K2 		  		  k3	    	   
 */
-AvlTreeNode *avl_tree_right_left(AvlTreeNode *k1)
+AvlTreeNode *AvlTree_RightLeft(AvlTreeNode *k1)
 {
-	k1->right = avl_tree_left_left(k1->right);
-	return avl_tree_right_right(k1);
+	k1->right = AvlTree_LeftLeft(k1->right);
+	return AvlTree_RightRight(k1);
 }
 
-AvlTreeNode *avl_tree_insert(AvlTreeNode *t, int val)
+AvlTreeNode *AvlTree_Insert(AvlTreeNode *t, int val)
 {
 	if(NULL == t)
 	{
@@ -827,62 +824,62 @@ AvlTreeNode *avl_tree_insert(AvlTreeNode *t, int val)
 	}
 	else if(val < t->val)
 	{
-		t->left = avl_tree_insert(t->left, val);
-		if(2 == abs(avl_tree_height(t->left) - avl_tree_height(t->right)))
+		t->left = AvlTree_Insert(t->left, val);
+		if(2 == abs(AvlTree_Height(t->left) - AvlTree_Height(t->right)))
 		{
 			
 			if(val < t->left->val)
-				t = avl_tree_left_left(t);
+				t = AvlTree_LeftLeft(t);
 			else
-				t = avl_tree_left_right(t);
+				t = AvlTree_LeftRight(t);
 		}
 	}
 	else if(val > t->val)
 	{
-		t->right = avl_tree_insert(t->right, val);
-		if(2 == abs(avl_tree_height(t->left) - avl_tree_height(t->right)))
+		t->right = AvlTree_Insert(t->right, val);
+		if(2 == abs(AvlTree_Height(t->left) - AvlTree_Height(t->right)))
 		{
 			
 			if(val > t->right->val)
-				t = avl_tree_right_right(t);
+				t = AvlTree_RightRight(t);
 			else
-				t = avl_tree_right_left(t);
+				t = AvlTree_RightLeft(t);
 		}
 	}
 	else
 		;
 
-	avl_tree_update_height(t);
+	AvlTree_UpdateHeight(t);
 	return t;
 }
 
-AvlTreeNode *avl_tree_delete(AvlTreeNode *t, int x)
+AvlTreeNode *AvlTree_Delete(AvlTreeNode *t, int x)
 {
 	if(NULL == t)
 		return NULL;
 
 	if(x < t->val)	// x在t的左子树部分,删除后可能导致t的右子树不平衡
 	{
-		t->left = avl_tree_delete(t->left, x);
-		if(2 == abs(avl_tree_height(t->left) - avl_tree_height(t->right)))	// RR or RL
+		t->left = AvlTree_Delete(t->left, x);
+		if(2 == abs(AvlTree_Height(t->left) - AvlTree_Height(t->right)))	// RR or RL
 		{
 			AvlTreeNode *R = t->right;
-			if(avl_tree_height(R->right) > avl_tree_height(R->left))		// RR
-				t = avl_tree_right_right(t);
+			if(AvlTree_Height(R->right) > AvlTree_Height(R->left))		// RR
+				t = AvlTree_RightRight(t);
 			else
-				t = avl_tree_right_left(t);									// RL
+				t = AvlTree_RightLeft(t);									// RL
 		}
 	}
 	else if(x > t->val)	// x在t的右子树部分,删除后可能导致t的左子树不平衡
 	{
-		t->right = avl_tree_delete(t->right, x);
-		if(2 == abs(avl_tree_height(t->left) - avl_tree_height(t->right)))	// LL or LR
+		t->right = AvlTree_Delete(t->right, x);
+		if(2 == abs(AvlTree_Height(t->left) - AvlTree_Height(t->right)))	// LL or LR
 		{
 			AvlTreeNode *L = t->left;
-			if(avl_tree_height(L->left) > avl_tree_height(L->right))		// LL
-				t = avl_tree_left_left(t);
+			if(AvlTree_Height(L->left) > AvlTree_Height(L->right))		// LL
+				t = AvlTree_LeftLeft(t);
 			else															// LR
-				t = avl_tree_left_right(t);
+				t = AvlTree_LeftRight(t);
 		}
 	}
 	else
@@ -890,14 +887,14 @@ AvlTreeNode *avl_tree_delete(AvlTreeNode *t, int x)
 		AvlTreeNode *tmp;
 		if(t->left && t->right)	// 根据左右子树的高度,再选择用前驱or后驱元素替代
 		{
-			if(avl_tree_height(t->left) > avl_tree_height(t->right))
+			if(AvlTree_Height(t->left) > AvlTree_Height(t->right))
 			{
 				// x节点的左子树>右子树,选择前驱元素替代
 				tmp = t->left;
 				while(tmp->right)
 					tmp = tmp->right;
 				t->val = tmp->val;
-				t->left = avl_tree_delete(t->left, tmp->val);
+				t->left = AvlTree_Delete(t->left, tmp->val);
 			}
 			else
 			{
@@ -906,7 +903,7 @@ AvlTreeNode *avl_tree_delete(AvlTreeNode *t, int x)
 				while(tmp->left)
 					tmp = tmp->left;
 				t->val = tmp->val;
-				t->right = avl_tree_delete(t->right, tmp->val);
+				t->right = AvlTree_Delete(t->right, tmp->val);
 			}
 		}
 		else
@@ -929,22 +926,22 @@ void test_avl_tree()
 	AvlTreeNode *t = NULL;
 
 	for(int i = 0; i < Len(a); i++)
-		t = avl_tree_insert(t, a[i]);
-	avl_tree_trvl_level(t);
-	avl_tree_delete(t, 6);
-	avl_tree_trvl_level(t);
+		t = AvlTree_Insert(t, a[i]);
+	AvlTree_TrvlLevel(t);
+	AvlTree_Delete(t, 6);
+	AvlTree_TrvlLevel(t);
 }
 
 int main()
 {
-	// test_tree();
-	// test_tarjan_lca();
+	test_tree();
+	test_tree_TarjanLCA();
 
-	 test_trie_tree();
+	test_trie_tree();
 
-	// test_segment_tree();
+	test_segment_tree();
 
-	// test_avl_tree();
+	test_avl_tree();
 
 	return 0;
 }
