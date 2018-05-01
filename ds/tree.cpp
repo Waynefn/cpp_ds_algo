@@ -309,34 +309,31 @@ void Tree_TrvlLevel_reverse(TreeNode *t)
 		return;
 
 	queue<TreeNode *> q;
-	stack<vector<int> > s;
+	stack<queue<int> > s;
 	q.push(t);
-
 	while(!q.empty())
 	{
-		int lvSize = q.size();
-		vector<int> v;
-		while(lvSize)
+		int qs = q.size();
+		queue<int> subq;
+		while(qs--)
 		{
-			lvSize--;
-			TreeNode *tmp = q.front(); q.pop();
-			v.push_back(tmp->val);
-			if(tmp->left)	q.push(tmp->left);
-			if(tmp->right)	q.push(tmp->right);
+			t = q.front(); q.pop();
+			subq.push(t->val);
+			if(t->left)		q.push(t->left);
+			if(t->right)	q.push(t->right);
 		}
-		s.push(v);
+		s.push(subq);
 	}
-
-	int level = s.size();
-	while(!s.empty())
+	int lv = s.size();
+	while(lv)
 	{
-		cout<<"lv"<<level<<" :";
-		level--;
-
-		vector<int> v = s.top(); s.pop();
-		for(int i = 0; i < v.size(); i++)
-			cout<<v[i]<<"-";
-		cout<<endl;
+		queue<int> subq = s.top(); s.pop();
+		cout<<lv--<<":";
+		while(!subq.empty())
+		{
+			int v = subq.front(); subq.pop();
+			cout<<v<<" ";
+		}cout<<endl;
 	}
 }
 
