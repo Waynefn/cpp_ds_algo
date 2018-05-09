@@ -494,35 +494,39 @@ void test_tree_TarjanLCA()
 /**********************************************
 	字典树(Trie)
 **********************************************/
-typedef struct _TrieTreeNode
+typedef struct _TrieNode
 {
-	bool exist;	// 用于以后删除单词时,不破坏树结构
-	_TrieTreeNode *child[26];
-	_TrieTreeNode()
+	bool exist;	// 1.路径上存在的字母不一定组成单词 2.删除单词时直接改标记不破坏结构 
+	_TrieNode *child[26];
+	_TrieNode()
 	{
 		this->exist = false;
 		for(int i = 0; i < 26; i++)
 			this->child[i] = NULL;
 	}
-}TrieTreeNode;
+}TrieNode;
 
-void TrieTree_Insert(TrieTreeNode *t, string word)
+TrieNode *Trie_Insert(TrieNode *t, string word)
 {
-	TrieTreeNode *dummy = t;
+	if(NULL == t)
+		t = new TrieNode;
+
+	TrieNode *dummy = t;
 
 	for(int i = 0; i < word.length(); i++)
 	{
 		int c = word[i] - 'a';
 		if(NULL == dummy->child[c])
-			dummy->child[c] = new TrieTreeNode;
+			dummy->child[c] = new TrieNode;
 		dummy = dummy->child[c];
 	}
 	dummy->exist = true;
+	return t;
 }
 
-bool TrieTree_Search(TrieTreeNode *t, string word)
+bool Trie_Search(TrieNode *t, string word)
 {
-	TrieTreeNode *dummy = t;
+	TrieNode *dummy = t;
 
 	for(int i = 0; i < word.length(); i++)
 	{
@@ -539,33 +543,33 @@ void test_trie_tree()
 {
 	PRINT_FUNCTION_NAME;
 
-	TrieTreeNode *t = new TrieTreeNode;
+	TrieNode *t = NULL;
 
-	TrieTree_Insert(t, "abc");
-	TrieTree_Insert(t, "abcd");
-	TrieTree_Insert(t, "abd");
+	t = Trie_Insert(t, "abc");
+	t = Trie_Insert(t, "abcd");
+	t = Trie_Insert(t, "abd");
 
-	cout<<"found result: "<<TrieTree_Search(t, "ab")<<endl;
-	cout<<"found result: "<<TrieTree_Search(t, "abc")<<endl;
+	cout<<"trie search: "<<Trie_Search(t, "ab")<<endl;
+	cout<<"trie search: "<<Trie_Search(t, "abc")<<endl;
 }
 
 /**********************************************
 	线段树(Segment)
 **********************************************/
-typedef struct _SegmentTreeNode
+typedef struct _SegmentNode
 {
 	int start, end, max, min, sum;
-	_SegmentTreeNode *left, *right;
-	_SegmentTreeNode(int s, int end, int val)
+	_SegmentNode *left, *right;
+	_SegmentNode(int s, int end, int val)
 	{
 		this->start = s;
 		this->end = end;
 		this->max = this->min = this->sum = val;
 		this->left = this->right = NULL;
 	}
-}SegmentTreeNode;
+}SegmentNode;
 
-void SegmentTree_Trvl(SegmentTreeNode *t, int curr_level = 1)
+void Segment_Trvl(SegmentNode *t, int curr_level = 1)
 {
 	if(NULL == t)
 		return;
@@ -573,22 +577,22 @@ void SegmentTree_Trvl(SegmentTreeNode *t, int curr_level = 1)
 	for(int i = 0; i < curr_level; i++)
 		cout<<"#";
 	cout<<"["<<t->start<<"~"<<t->end<<"]:max = "<<t->max<<", min = "<<t->min<<", sum = "<<t->sum<<endl;
-	SegmentTree_Trvl(t->left, curr_level+1);
-	SegmentTree_Trvl(t->right, curr_level+1);
+	Segment_Trvl(t->left, curr_level+1);
+	Segment_Trvl(t->right, curr_level+1);
 }
 
-SegmentTreeNode *SegmentTree_Build(int a[], int s, int e)
+SegmentNode *Segment_Build(int a[], int s, int e)
 {
 	if(s > e)
 		return NULL;
 
-	SegmentTreeNode *node = new SegmentTreeNode(s, e, a[s]);
+	SegmentNode *node = new SegmentNode(s, e, a[s]);
 	if(s == e)
 		return node;
 
 	int m = (s + e) / 2;
-	node->left = SegmentTree_Build(a, s, m);
-	node->right = SegmentTree_Build(a, m+1, e);
+	node->left = Segment_Build(a, s, m);
+	node->right = Segment_Build(a, m+1, e);
 
 	node->max = node->left->max > node->right->max ? node->left->max : node->right->max;
 	node->min = node->left->min < node->right->min ? node->left->min : node->right->min;
@@ -597,7 +601,7 @@ SegmentTreeNode *SegmentTree_Build(int a[], int s, int e)
 	return node;
 }
 
-void SegmentTree_Improve(SegmentTreeNode *t, int index, int val)
+void Segment_Improve(SegmentNode *t, int index, int val)
 {
 	if(NULL == t || index < t->start || index > t->end)
 		return;
@@ -609,9 +613,9 @@ void SegmentTree_Improve(SegmentTreeNode *t, int index, int val)
 
 	int m = (t->start + t->end) / 2;
 	if(index <= m)
-		SegmentTree_Improve(t->left, index, val);
+		Segment_Improve(t->left, index, val);
 	else
-		SegmentTree_Improve(t->right, index, val);
+		Segment_Improve(t->right, index, val);
 	
 	t->max = max(t->left->max, t->right->max);
 	t->min = min(t->left->min, t->right->min);
@@ -619,7 +623,7 @@ void SegmentTree_Improve(SegmentTreeNode *t, int index, int val)
 }
 
 // 返回a[from]到a[to]的数据的和
-int SegmentTree_QuerySum(SegmentTreeNode *t, int from, int to)
+int Segment_QuerySum(SegmentNode *t, int from, int to)
 {
 	if(from > to)
 		return 0;
@@ -628,94 +632,94 @@ int SegmentTree_QuerySum(SegmentTreeNode *t, int from, int to)
 
 	int m = (t->start + t->end) / 2;
 	if(m > to)
-		return SegmentTree_QuerySum(t->left, from, to);
+		return Segment_QuerySum(t->left, from, to);
 	else if(m < from)
-		return SegmentTree_QuerySum(t->right, from, to);
+		return Segment_QuerySum(t->right, from, to);
 	else
 	{
-		int left = SegmentTree_QuerySum(t->left, from, m);
-		int right = SegmentTree_QuerySum(t->right, m+1, to);
+		int left = Segment_QuerySum(t->left, from, m);
+		int right = Segment_QuerySum(t->right, m+1, to);
 		return left + right;
 	}
 }
 
-void test_SegmentTree_Build()
+void test_Segment_Build()
 {
 	PRINT_SUB_FUNCTION_NAME;
 
 	int a[] = {1,2,7,8,5};
-	SegmentTreeNode *t = SegmentTree_Build(a, 0, Len(a)-1);
-	SegmentTree_Trvl(t);
+	SegmentNode *t = Segment_Build(a, 0, Len(a)-1);
+	Segment_Trvl(t);
 }
 
-void test_SegmentTree_Improve()
+void test_Segment_Improve()
 {
 	PRINT_SUB_FUNCTION_NAME;
 
 	int a[] = {1,2,7,8,5};
-	SegmentTreeNode *t = SegmentTree_Build(a, 0, Len(a)-1);
+	SegmentNode *t = Segment_Build(a, 0, Len(a)-1);
 
 	cout<<"----------improve----------"<<endl;
-	SegmentTree_Improve(t, 2, 9);
-	SegmentTree_Trvl(t);
+	Segment_Improve(t, 2, 9);
+	Segment_Trvl(t);
 }
 
-void test_SegmentTree_QuerySum()
+void test_Segment_QuerySum()
 {
 	PRINT_SUB_FUNCTION_NAME;
 
 	int a[] = {1,2,7,8,5};
-	SegmentTreeNode *t = SegmentTree_Build(a, 0, Len(a)-1);
+	SegmentNode *t = Segment_Build(a, 0, Len(a)-1);
 
 	cout<<"----------query sum----------"<<endl;
-	SegmentTree_Trvl(t);
-	cout<<"query sum = "<<SegmentTree_QuerySum(t, 0, 2)<<endl;
+	Segment_Trvl(t);
+	cout<<"query sum = "<<Segment_QuerySum(t, 0, 2)<<endl;
 }
 
 void test_segment_tree()
 {
 	PRINT_FUNCTION_NAME;
 
-	test_SegmentTree_Build();
-	test_SegmentTree_Improve();
-	test_SegmentTree_QuerySum();
+	test_Segment_Build();
+	test_Segment_Improve();
+	test_Segment_QuerySum();
 }
 
 /**********************************************
 	自平衡树(AVL)
 **********************************************/
-typedef struct _AvlTreeNode
+typedef struct _AvlNode
 {
 	int val, height;
-	_AvlTreeNode *left, *right;
-	_AvlTreeNode(int val)
+	_AvlNode *left, *right;
+	_AvlNode(int val)
 	{
 		this->val = val;
 		this->height = 0;
 		this->left = this->right = NULL;
 	}
-}AvlTreeNode;
+}AvlNode;
 
-int AvlTree_Height(AvlTreeNode *t)
+int Avl_Height(AvlNode *t)
 {
 	if(NULL == t)
 		return 0;
 	return t->height;
 }
 
-void AvlTree_UpdateHeight(AvlTreeNode *t)
+void Avl_UpdateHeight(AvlNode *t)
 {
-	t->height = 1 + max(AvlTree_Height(t->left), AvlTree_Height(t->right));
+	t->height = 1 + max(Avl_Height(t->left), Avl_Height(t->right));
 }
 
-void AvlTree_TrvlLevel(AvlTreeNode *t)
+void Avl_TrvlLevel(AvlNode *t)
 {
 	PRINT_SUB_FUNCTION_NAME;
 
 	if(NULL == t)
 		return;
 
-	queue<AvlTreeNode *> q;
+	queue<AvlNode *> q;
 	q.push(t);
 
 	int level = 0;
@@ -727,7 +731,7 @@ void AvlTree_TrvlLevel(AvlTreeNode *t)
 		while(lvSize)
 		{
 			lvSize--;
-			AvlTreeNode *tmp = q.front(); q.pop();
+			AvlNode *tmp = q.front(); q.pop();
 			cout<<tmp->val<<"-";
 			if(tmp->left)	q.push(tmp->left);
 			if(tmp->right)	q.push(tmp->right);
@@ -746,15 +750,15 @@ void AvlTree_TrvlLevel(AvlTreeNode *t)
 	 /  					  
 	A     				    	
 */
-AvlTreeNode *AvlTree_LeftLeft(AvlTreeNode *k2)
+AvlNode *Avl_LeftLeft(AvlNode *k2)
 {
-	AvlTreeNode *k1 = k2->left;
+	AvlNode *k1 = k2->left;
 
 	k2->left = k1->right;
 	k1->right = k2;
 
-	AvlTree_UpdateHeight(k1);
-	AvlTree_UpdateHeight(k2);	
+	Avl_UpdateHeight(k1);
+	Avl_UpdateHeight(k2);	
 
 	return k1;
 }
@@ -768,15 +772,15 @@ AvlTreeNode *AvlTree_LeftLeft(AvlTreeNode *k2)
 		    \			   
 		 	 A 				
 */
-AvlTreeNode *AvlTree_RightRight(AvlTreeNode *k1)
+AvlNode *Avl_RightRight(AvlNode *k1)
 {
-	AvlTreeNode *k2 = k1->right;
+	AvlNode *k2 = k1->right;
 
 	k1->right = k2->left;
 	k2->left = k1;
 
-	AvlTree_UpdateHeight(k1);
-	AvlTree_UpdateHeight(k2);
+	Avl_UpdateHeight(k1);
+	Avl_UpdateHeight(k2);
 
 	return k2;
 }
@@ -791,10 +795,10 @@ AvlTreeNode *AvlTree_RightRight(AvlTreeNode *k1)
 	    \			   /	  
 	     k2 		  k1	    	   
 */
-AvlTreeNode *AvlTree_LeftRight(AvlTreeNode *k3)
+AvlNode *Avl_LeftRight(AvlNode *k3)
 {
-	k3->left = AvlTree_RightRight(k3->left);
-	return AvlTree_LeftLeft(k3);
+	k3->left = Avl_RightRight(k3->left);
+	return Avl_LeftLeft(k3);
 }
 
 /*	insert(k2),造成k1不平衡
@@ -807,91 +811,91 @@ AvlTreeNode *AvlTree_LeftRight(AvlTreeNode *k3)
 	  /   			   	 \ 
 	 K2 		  		  k3	    	   
 */
-AvlTreeNode *AvlTree_RightLeft(AvlTreeNode *k1)
+AvlNode *Avl_RightLeft(AvlNode *k1)
 {
-	k1->right = AvlTree_LeftLeft(k1->right);
-	return AvlTree_RightRight(k1);
+	k1->right = Avl_LeftLeft(k1->right);
+	return Avl_RightRight(k1);
 }
 
-AvlTreeNode *AvlTree_Insert(AvlTreeNode *t, int val)
+AvlNode *Avl_Insert(AvlNode *t, int val)
 {
 	if(NULL == t)
 	{
-		t = new AvlTreeNode(val);
+		t = new AvlNode(val);
 	}
 	else if(val < t->val)
 	{
-		t->left = AvlTree_Insert(t->left, val);
-		if(2 == abs(AvlTree_Height(t->left) - AvlTree_Height(t->right)))
+		t->left = Avl_Insert(t->left, val);
+		if(2 == abs(Avl_Height(t->left) - Avl_Height(t->right)))
 		{
 			
 			if(val < t->left->val)
-				t = AvlTree_LeftLeft(t);
+				t = Avl_LeftLeft(t);
 			else
-				t = AvlTree_LeftRight(t);
+				t = Avl_LeftRight(t);
 		}
 	}
 	else if(val > t->val)
 	{
-		t->right = AvlTree_Insert(t->right, val);
-		if(2 == abs(AvlTree_Height(t->left) - AvlTree_Height(t->right)))
+		t->right = Avl_Insert(t->right, val);
+		if(2 == abs(Avl_Height(t->left) - Avl_Height(t->right)))
 		{
 			
 			if(val > t->right->val)
-				t = AvlTree_RightRight(t);
+				t = Avl_RightRight(t);
 			else
-				t = AvlTree_RightLeft(t);
+				t = Avl_RightLeft(t);
 		}
 	}
 	else
 		;
 
-	AvlTree_UpdateHeight(t);
+	Avl_UpdateHeight(t);
 	return t;
 }
 
-AvlTreeNode *AvlTree_Delete(AvlTreeNode *t, int x)
+AvlNode *Avl_Delete(AvlNode *t, int x)
 {
 	if(NULL == t)
 		return NULL;
 
 	if(x < t->val)	// x在t的左子树部分,删除后可能导致t的右子树不平衡
 	{
-		t->left = AvlTree_Delete(t->left, x);
-		if(2 == abs(AvlTree_Height(t->left) - AvlTree_Height(t->right)))	// RR or RL
+		t->left = Avl_Delete(t->left, x);
+		if(2 == abs(Avl_Height(t->left) - Avl_Height(t->right)))	// RR or RL
 		{
-			AvlTreeNode *R = t->right;
-			if(AvlTree_Height(R->right) > AvlTree_Height(R->left))		// RR
-				t = AvlTree_RightRight(t);
+			AvlNode *R = t->right;
+			if(Avl_Height(R->right) > Avl_Height(R->left))		// RR
+				t = Avl_RightRight(t);
 			else
-				t = AvlTree_RightLeft(t);									// RL
+				t = Avl_RightLeft(t);									// RL
 		}
 	}
 	else if(x > t->val)	// x在t的右子树部分,删除后可能导致t的左子树不平衡
 	{
-		t->right = AvlTree_Delete(t->right, x);
-		if(2 == abs(AvlTree_Height(t->left) - AvlTree_Height(t->right)))	// LL or LR
+		t->right = Avl_Delete(t->right, x);
+		if(2 == abs(Avl_Height(t->left) - Avl_Height(t->right)))	// LL or LR
 		{
-			AvlTreeNode *L = t->left;
-			if(AvlTree_Height(L->left) > AvlTree_Height(L->right))		// LL
-				t = AvlTree_LeftLeft(t);
+			AvlNode *L = t->left;
+			if(Avl_Height(L->left) > Avl_Height(L->right))		// LL
+				t = Avl_LeftLeft(t);
 			else															// LR
-				t = AvlTree_LeftRight(t);
+				t = Avl_LeftRight(t);
 		}
 	}
 	else
 	{
-		AvlTreeNode *tmp;
+		AvlNode *tmp;
 		if(t->left && t->right)	// 根据左右子树的高度,再选择用前驱or后驱元素替代
 		{
-			if(AvlTree_Height(t->left) > AvlTree_Height(t->right))
+			if(Avl_Height(t->left) > Avl_Height(t->right))
 			{
 				// x节点的左子树>右子树,选择前驱元素替代
 				tmp = t->left;
 				while(tmp->right)
 					tmp = tmp->right;
 				t->val = tmp->val;
-				t->left = AvlTree_Delete(t->left, tmp->val);
+				t->left = Avl_Delete(t->left, tmp->val);
 			}
 			else
 			{
@@ -900,7 +904,7 @@ AvlTreeNode *AvlTree_Delete(AvlTreeNode *t, int x)
 				while(tmp->left)
 					tmp = tmp->left;
 				t->val = tmp->val;
-				t->right = AvlTree_Delete(t->right, tmp->val);
+				t->right = Avl_Delete(t->right, tmp->val);
 			}
 		}
 		else
@@ -920,13 +924,13 @@ void test_avl_tree()
 	PRINT_FUNCTION_NAME;
 
 	int a[] = {6,4,8,2,7,9,1,3,10,0};
-	AvlTreeNode *t = NULL;
+	AvlNode *t = NULL;
 
 	for(int i = 0; i < Len(a); i++)
-		t = AvlTree_Insert(t, a[i]);
-	AvlTree_TrvlLevel(t);
-	AvlTree_Delete(t, 6);
-	AvlTree_TrvlLevel(t);
+		t = Avl_Insert(t, a[i]);
+	Avl_TrvlLevel(t);
+	Avl_Delete(t, 6);
+	Avl_TrvlLevel(t);
 }
 
 int main()
