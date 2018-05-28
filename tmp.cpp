@@ -6,55 +6,50 @@
 
 using namespace std;
 
-typedef struct _TrieNode
-{
-	bool exist;
-	_TrieNode *child[26];
-	_TrieNode()
-	{
-		this->exist = false;
-		for(int i = 0;  i < 26; i++)
-			this->child[i] = NULL;
-	}
-}TrieNode;
+#define Len(x)		sizeof(x)/sizeof(x[0])	
+#define PRINT_ARRAY(a,n){for(int i = 0; i < n; i++) cout<<a[i]<<"|"; cout<<endl;}
+#define SWAP(x, y)	{int c = x; x = y; y = c;	}
 
-TrieNode *Insert(TrieNode *t, string word)
+void up(int a[], int idx)
 {
-	if(NULL == t)
-		t = new TrieNode;
-
-	TrieNode *tmp = t;
-	for(int i = 0; i < word.length(); i++)
-	{
-		int c = word[i] - 'a';
-		if(NULL == tmp->child[c])
-			tmp->child[c] = new TrieNode;
-		tmp = tmp->child[c];
-	}
-	tmp->exist = true;
-	return t;
+	int i = idx, add = a[idx];
+	for(; i && add > a[(i-1)/2]; i = (i-1)/2)
+		a[i] = a[(i-1)/2];
+	a[i] = add;
 }
 
-bool Search(TrieNode *t, string word)
+void down(int a[], int last)
 {
-	TrieNode *tmp = t;
-	for(int i = 0; i < word.length(); i++)
+	int curr = a[last];
+	SWAP(a[0], a[last]);
+
+	int i = 0, child, smallest = 0;
+	for(; i < last; i = child)
 	{
-		int c = word[i] - 'a';
-		if(NULL == tmp->child[c])
-			return false;
-		tmp = tmp->child[c];
+		child = 2*i+1;
+		if(child+1 < last && a[child] < a[child+1])
+			child++;
+		if(child < last && curr < a[child])
+			a[i] = a[child];
+		else
+			break;
 	}
-	return tmp->exist;
+	a[i] = curr;
+}
+
+void heap(int a[], int n)
+{
+	for(int i = 0; i < n; i++)
+		up(a, i);
+	for(int i = n; i > 0; i--)
+		down(a, i-1);
+	PRINT_ARRAY(a, n);
 }
 
 int main()
 {
-	TrieNode *root = NULL;
-	root = Insert(root, "hello");
-	root = Insert(root, "haha");
-
-	cout<<Search(root, "hah")<<endl;
+	int a[] = {5,6,4,3,2,7,8,6,0};
+	heap(a, Len(a));
 
 	return 0;
 }

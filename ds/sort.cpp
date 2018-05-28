@@ -256,8 +256,10 @@ void test_merge()
 
 /**********************************************	
 堆排序
+Heap1() : 借助额外的数组
+Heap2() : 数组自身完成堆排
 **********************************************/
-void Heap_Up(int hp[], int add)
+void Heap1_Up(int hp[], int add)
 {
 	int i = ++hp[0];
 
@@ -266,7 +268,7 @@ void Heap_Up(int hp[], int add)
 	hp[i] = add;
 }
 
-int Heap_Down(int hp[])
+int Heap1_Down(int hp[])
 {
 	int ret = hp[1], last = hp[hp[0]--];
 	int child, i;
@@ -286,24 +288,59 @@ int Heap_Down(int hp[])
 	return ret;
 }
 
-void Heap(int a[], int n)
+void Heap1(int a[], int n)
 {
 	int *hp = new int[n+1];
 	hp[0] = 0;
 
 	for(int i = 0; i < n; i++)
-		Heap_Up(hp, a[i]);
-	PRINT_ARRAY(hp, n+1);
+		Heap1_Up(hp, a[i]);
 	for(int i = 0; i < n; i++)
-		a[i] = Heap_Down(hp);
+		a[i] = Heap1_Down(hp);
+}
+
+void Heap2_Up(int a[], int idx)
+{
+	int i = idx, add = a[idx];
+	for(; i && add > a[(i-1)/2]; i = (i-1)/2)
+		a[i] = a[(i-1)/2];
+	a[i] = add;
+}
+
+void Heap2_Down(int a[], int last)
+{
+	int curr = a[last];
+	SWAP(a[0], a[last]);
+
+	int i = 0, child, smallest = 0;
+	for(; i < last; i = child)
+	{
+		child = 2*i+1;
+		if(child+1 < last && a[child] < a[child+1])
+			child++;
+		if(child < last && curr < a[child])
+			a[i] = a[child];
+		else
+			break;
+	}
+	a[i] = curr;
+}
+
+void Heap2(int a[], int n)
+{
+	for(int i = 0; i < n; i++)
+		Heap2_Up(a, i);
+	for(int i = n; i > 0; i--)
+		Heap2_Down(a, i-1);
 }
 
 void test_heap()
 {
 	PRINT_FUNCTION_NAME;
 
-	int a[] = {5,3,6,7,8,2,1};
-	Heap(a, Len(a));
+	int a[] = {7,6,5,4,3,2,1};
+	// Heap1(a, Len(a));
+	Heap2(a, Len(a));
 	PRINT_ARRAY(a, Len(a));
 }
 
