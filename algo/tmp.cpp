@@ -6,23 +6,26 @@
 
 using namespace std;
 
-int a[] = {8,2,4};
-int tmp[3];
-bool label[] = {false};
-
-bool f(int n, int x, int s, int k)
+int bs(int a[], int n, int x)
 {
-    if(x >= n)
-        return s == k;
-    else
-    {
-        return f(n, x+1, s, k) || f(n, x+1, s+a[x], k);
-    }
+	int i = 0, j = n-1;
+	while(i <= j)
+	{
+		int m = i+(j-i)/2;
+
+		if(x == a[m])
+			return m;
+		else if(x < a[m])
+			j = m-1;
+		else
+			i = m+1;
+	}
+	return -1;
 }
 
 int main()
 {
-    bool ret = f(3, 0, 0, 10);
-    cout<<"ret = "<<ret<<endl;
+    int a[] = {2,4,6,7,8,9};
+    cout<<bs(a, Len(a), 1)<<endl;
     return 0;
 }
