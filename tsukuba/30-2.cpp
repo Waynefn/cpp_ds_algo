@@ -27,9 +27,9 @@ void print_list(List *l)
 List *new_list()
 {
 	List *l = new List();
-	l->array = NULL;
 	l->size = 0;
 	l->capacity = CAPACITY;
+	l->array = new int[l->capacity];
 	return l;
 }
 
@@ -42,20 +42,18 @@ void free_List(List *l)
 void expand(List *l)	// 数组空间不足，增加容量
 {
 	
-
 }
 
 int find_pos(List *l, int x)	// 二分搜索找x插入的位置
 {
-	cout<<"find_pos"<<endl;
 	int lower, upper, i;
-	lower = 0, upper = l->size-1;
-	while(lower < upper)			// R
+	lower = 0, upper = l->size;
+	while(lower < upper)				// R
 	{
-		i = lower+(upper-lower)/2;		// S
+		i = lower+(upper-lower)/2;		// S *(lower+upper) maybe overflow
 		if(x == l->array[i])
-			return i; 				// T
-		else if(x < l->array[i])	// U
+			return i; 					// T
+		else if(x < l->array[i])		// U
 			upper = i-1;
 		else
 			lower = i+1;				// V
@@ -63,15 +61,16 @@ int find_pos(List *l, int x)	// 二分搜索找x插入的位置
 	return lower;
 }
 
-void insert(List *l, int x)	// 按升序插入x
+void insert(List *l, int x)		// 按升序插入x
 {
 	cout<<"insert"<<endl;
 	int i,j;
 	if(l->size == l->capacity)
 		expand(l);
+	cout<<"size = "<<l->size<<endl;
 	i = find_pos(l, x);
-	cout<<i<<endl;
-	for(j = l->size; j > i; j--)	// Q
+	cout<<"find pos = "<<i<<endl;
+	for(j = l->size; j >= i; j--)		// Q
 		l->array[j+1] = l->array[j];
 	l->array[i] = x;
 	l->size++;
@@ -116,12 +115,13 @@ List *uniq(List *l)		// 链表l中的重复元素去掉，然后返回l
 
 void test_question_4()
 {
-	List *l = new_list();
-	l->array[0] = 10; l->size++;
-	l->array[1] = 20; l->size++;
-	l->array[2] = 30; l->size++;
-	cout<<find_pos(l, 10);
-	cout<<"22222"<<endl;
+	List *l = make_list();
+	l->array[0] = 20; l->size++;
+	// l->array[1] = 20; l->size++;
+	// l->array[2] = 30; l->size++;
+	// cout<<"find pos : "<<find_pos(l, 10)<<endl;
+
+
 	print_list(l);
 }
 
