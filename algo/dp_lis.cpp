@@ -24,8 +24,8 @@ void longest_increasing_subsequence(int a[], int n)
 
 	int dp[MAX] = {1};
 	int ret = 1;
-
-	for(int i = 1; i < n; i++)
+int i;
+	for( i = 1; i < n; i++)
 	{
 		int curr_max = 0;
 		for(int j = 0; j < i; j++)
@@ -35,6 +35,7 @@ void longest_increasing_subsequence(int a[], int n)
 		dp[i] = curr_max+1;		// {2,3,9,1,6} a[4] > a[3], d[2] = 3, 但curr_max = dp[1] = 2, 所以dp[4] = 3
 		ret = max(ret, dp[i]);
 	}
+	cout<<"i = "<<dp[3]<<endl;
 
 	PRINT_ARRAY(a, n);
 	PRINT_ARRAY(dp, n);
@@ -44,8 +45,8 @@ void longest_increasing_subsequence(int a[], int n)
 
 void test_lis()
 {
-	int a[] = {1,3,6,7,8,4,9,5,6};
-//	int a[] = {2,3,9,1,6};
+	// int a[] = {1,3,6,7,8,4,9,5,6};
+	int a[] = {2,3,9,1,6};
 	longest_increasing_subsequence(a, Len(a));
 }
 
