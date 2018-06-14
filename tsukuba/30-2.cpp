@@ -48,7 +48,7 @@ int find_pos(List *l, int x)	// 二分搜索找x插入的位置
 {
 	int lower, upper, i;
 	lower = 0, upper = l->size;
-	while(lower < upper)				// R
+	while(lower <= upper)				// R
 	{
 		i = lower+(upper-lower)/2;		// S *(lower+upper) maybe overflow
 		if(x == l->array[i])
@@ -63,11 +63,11 @@ int find_pos(List *l, int x)	// 二分搜索找x插入的位置
 
 void insert(List *l, int x)		// 按升序插入x
 {
-	cout<<"insert"<<endl;
+	cout<<"insert "<<x<<" ";
 	int i,j;
 	if(l->size == l->capacity)
 		expand(l);
-	cout<<"size = "<<l->size<<endl;
+	cout<<"size = "<<l->size<<" ";
 	i = find_pos(l, x);
 	cout<<"find pos = "<<i<<endl;
 	for(j = l->size; j >= i; j--)		// Q
@@ -79,9 +79,9 @@ void insert(List *l, int x)		// 按升序插入x
 void append(List *l, int x)	// 末尾追加x，若容量不足则调用expand
 {
 	cout<<"append"<<endl;
-	if(l->size < l->capacity)
-		l->array[l->size++] = x;
-
+	if(l->size == l->capacity)
+		expand(l);
+	l->array[l->size++] = x;
 }
 
 List *make_list()	// 申请空的list，追加3个整数
