@@ -1,5 +1,0 @@
-rm -rf we_exe
-g++ -o we_exe $1
-rm -rf *.o
-./we_exe
-
