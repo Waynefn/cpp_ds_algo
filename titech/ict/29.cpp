@@ -65,10 +65,11 @@ float optPolicy(int curPos, int goal)
 		return 1.0;
 	}
 
-//	调查可以到达的下一个"未访问过"的顶点
+//	DFS方式搜索,对于{0,3}的最大score求解,先递归地求解终点3的前一个节点2的score{2,3},得到结果后再逐步回溯求解
 	for(i = 0; i < numArcs(curPos); i++)
 		if(visited[curPos] == 0)
-			maxScore[i] = optPolicy(curPos, nextNode(curPos, i));	// coding
+			maxScore[i] = optPolicy(nextNode(curPos, i), goal);	// coding
+}
 
 //	找到最大价值的行动方式
 	opt = 0; max = 0.0;
