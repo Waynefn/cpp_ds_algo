@@ -62,6 +62,8 @@ int calc_skip(char *pattern)
 		skip[i] = m;		 		// 匹配时发现是p中没有的字符，则移动距离达到最大，即跳过【p串整个长度】
 	for(i = 0; i < m-1; i++)		// ！末尾字符必须设为m，不可以设为0
 		skip[pattern[i]] = m-i-1;	// coding
+	
+	print_array(skip, Len(skip));
 	return m;						// coding
 }
 
