@@ -161,6 +161,7 @@ void Shell(int a[], int n)
 				a[j] = tmp;
 			}
 		}
+		PRINT_ARRAY(a, n);
 	}
 }
 
@@ -168,7 +169,7 @@ void test_shell()
 {
 	PRINT_FUNCTION_NAME;
 
-	int a[] = {5,4,6,2,1,3,7,9};
+	int a[] = {1,8,4,2,3,6,5,7};
 	Shell(a, Len(a));
 	PRINT_ARRAY(a, Len(a));
 }
@@ -400,13 +401,13 @@ void test_sleep()
 
 int main()
 {
-	test_bubble();
-	test_insert();
+	// test_bubble();
+	// test_insert();
 	test_shell();
-	test_quick();
-	test_merge();
-	test_heap();
-	test_bucket();
-	test_sleep();
+	// test_quick();
+	// test_merge();
+	// test_heap();
+	// test_bucket();
+	// test_sleep();
 	return 0;
 }
