@@ -8,6 +8,7 @@ http://www.cs.tsukuba.ac.jp/admission/29-2.pdf
 */
 
 #include <iostream>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -19,6 +20,12 @@ using namespace std;
 		n个节点的树中,长度为k的字符串的搜索时间复杂度:
 			O(k),因为每一个字符k[i]直接通过下标随机访问确认存在or不存在,k次搜索即可完成
 	问题2->数组实现字符串buffer
+		head和tail指针记录数组中存储元素的始末位置
+		注1:空间不够时，虽然str的部分字符会被写入数组，但tail指针不会更新位置
+		注2:题目问如何防止溢出,指的是head和tail没用模SIZE,数字会不断增长
+			head = n*SIZE + x
+			tail = (n+1)*SIZE + y  (tail最大不会超过head一个SIZE)
+			此时head和tail应该同时减去n*SIZE,即可起到模SIZE的作用
 ***************************************/
 
 #define Len(x)	sizeof(x)/sizeof(x[0])
@@ -93,7 +100,7 @@ void test_trie()
 
 /*************************************************/
 
-#define BUFSIZE (10)
+#define BUFSIZE (24)
 
 typedef struct
 {
@@ -111,6 +118,7 @@ void print_array(char a[], char n)
 int put_str(buffer *buf, char *str)
 {
 	int i = buf->tail;
+	char *cp_str = str;
 
 	while(i - buf->head < BUFSIZE)
 	{
@@ -118,28 +126,35 @@ int put_str(buffer *buf, char *str)
 		if(*str == '\0')
 		{
 			buf->tail = i;
+			cout<<"put("<<cp_str<<")\tOK, tail = "<<buf->tail<<endl;
 			return 1;
 		}
 		else
 			str++;
 	}
-
+	cout<<"put("<<cp_str<<")\tfailed, tail = "<<buf->tail<<endl;
 	return 0;
 }
 
 int get_str(buffer *buf, char dest[])
 {
-	int i = buf->head;
-	int j = 0;
+	int i = buf->head;						// 为了避免操作head,用变量i读取buf的头部字符
 
-	if(i == buf->tail)						// coding
+	if(i == buf->tail)						// coding	// head == tail,buf为空
+	{
+		cout<<"get() empty"<<endl;
 		return 0;
+	}
 
 	do{
-		dest[j] = buf->store[i++ % BUFSIZE];	// coding
-	}while(dest[j++] != '\0');					// coding
+		*dest = buf->store[i++ % BUFSIZE];	// coding
+	}while(*dest++ != '\0');				// coding 先判断相等,再++
 
-	buf->head = i;							// coding
+	buf->head = i;							// coding,读取完成,更新head指针
+
+	i = (buf->head / BUFSIZE) * BUFSIZE;	
+	buf->head -= i;
+	buf->tail -= i;
 
 	return 1;
 }
@@ -149,25 +164,21 @@ void test_str_buffer()
 	buffer *buf = new buffer;
 	char res[BUFSIZE] = {""};
 
-	cout<<put_str(buf, "a")<<endl;
-	cout<<put_str(buf, "b")<<endl;
-	cout<<put_str(buf, "c")<<endl;
-	cout<<put_str(buf, "d")<<endl;
-	cout<<put_str(buf, "e")<<endl;
+	put_str(buf, "012");
+	put_str(buf, "345");
+	put_str(buf, "67890");
+	put_str(buf, "1234");
+	put_str(buf, "56789");
+	put_str(buf, "012");
+	put_str(buf, "34567");
+	print_array(buf->store, BUFSIZE);
 	
-	cout<<get_str(buf, res)<<"->get = "<<res<<endl;
-	cout<<get_str(buf, res)<<"->get = "<<res<<endl;
-	cout<<get_str(buf, res)<<"->get = "<<res<<endl;
+	get_str(buf, res); print_array(res, BUFSIZE);
+	get_str(buf, res); print_array(res, BUFSIZE);
 	
-	cout<<put_str(buf, "f")<<endl;
-	cout<<put_str(buf, "g")<<endl;
-	cout<<put_str(buf, "h")<<endl;
-	
-	cout<<get_str(buf, res)<<"->get = "<<res<<endl;
-	cout<<get_str(buf, res)<<"->get = "<<res<<endl;
-	cout<<get_str(buf, res)<<"->get = "<<res<<endl;
-
-	print_array(buf->store, BUFSIZE);	// head虽然不指向[0]了,但[0]的字符仍然被保存着
+	put_str(buf, "34567");
+	print_array(buf->store, BUFSIZE);
+	cout<<"head = "<<buf->head<<" tail = "<<buf->tail<<endl;
 }
 
 void test_question_1()
