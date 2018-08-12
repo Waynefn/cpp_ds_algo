@@ -1,5 +1,4 @@
 /*
-http://www.iii.u-tokyo.ac.jp/manage/wp-content/uploads/2016/04/2014-A.pdf
 问题2：确认是否存在过半元素，并找到
 问题3：n个元素的数组，整体左移m（即右移n-m位）
 	3-1 循环置换分解定理
@@ -9,7 +8,7 @@ http://www.iii.u-tokyo.ac.jp/manage/wp-content/uploads/2016/04/2014-A.pdf
 			......
 			groupg:[g-1][g-1+m]...[g-1+k*m]
 	3-2	分段置换
-
+	
 */
 
 #include <iostream>
@@ -20,6 +19,39 @@ using namespace std;
 #define Len(x)		sizeof(x)/sizeof(x[0])	
 #define PRINT_ARRAY(a,n){for(int i = 0; i < n; i++) cout<<a[i]<<"|"; cout<<endl;}
 
+/**********************************************
+	问题2. 过半元素
+**********************************************/
+void overhalf(int a[], int n)
+{
+	int cnt = 1, tar = a[0];
+	for(int i = 1; i < n; i++)
+	{
+		if(tar == a[i])
+			cnt++;
+		else
+		{
+			cnt--;
+			if(cnt < 0)
+			{
+				cnt = 1;
+				tar = a[i];
+			}
+		}
+	}
+	if(cnt)	cout<<"over half element : "<<tar<<endl;
+	else	cout<<"not exist over half element"<<endl;
+}
+
+void Q2()
+{
+	int a[] = {2,2,3,3,3,4,3,4,3};
+	overhalf(a, Len(a));
+}
+
+/**********************************************
+	问题3. 数组左移
+**********************************************/
 void f1(int n, int *x, int m)
 {
 	int g,i,j,k,t;
@@ -71,6 +103,8 @@ void Q3()
 
 int main()
 {
+	Q2();
+cout<<"-------------------------"<<endl;
 	Q3();
 
 	return 0;

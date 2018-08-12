@@ -5,18 +5,19 @@ using namespace std;
 
 int gcd(int m, int n)
 {
-	while(m)
+	int r = 1;
+	while(r)
 	{
-		int r = n%m;
-		n = m;
-		m = r;
+		r = m % n;
+		m = n;
+		n = r;
 	}
-	return n;
+	return m;
 }
 
 int main()
 {
-	gcd(5, 2);
+	cout<<gcd(5, 2)<<endl;
 
 	return 0;
 }
