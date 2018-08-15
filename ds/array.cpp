@@ -7,44 +7,24 @@ using namespace std;
 /***************************************
 	提供两个有序数组a[]和b[]，将他们整合到一个新的有序数组
 ***************************************/
-void Array_Merge(int a[], int m, int b[], int n, int res[], int res_size)
+void Array_Merge(int a[], int m, int b[], int n, int c[], int o)
 {
-	PRINT_SUB_FUNCTION_NAME;
-
-	NULL_CHK(a);
-	NULL_CHK(b);
-	NULL_CHK(res);
-
-	if(res_size < m+n)
-		cout<<"size not enough"<<endl;
+	if(o < m+n)
+		return;
 
 	int i = 0, j = 0, k = 0;
 	while(i < m && j < n)
 	{
 		if(a[i] < b[j])
-		{
-			res[k] = a[i];
-			k++; i++;
-		}
+			c[k++] = a[i++];
 		else
-		{
-			res[k] = b[j];
-			k++; j++;
-		}
+			c[k++] = b[j++];
 	}
 
 	while(i < m)
-	{
-		res[k] = a[i];
-		k++; i++;
-	}
+		c[k++] = a[i++];
 	while(j < n)
-	{
-		res[k] = b[j];
-		k++; j++;
-	}
-
-	PRINT_ARRAY(res, k);
+		c[k++] = b[j++];
 }
 
 /***************************************
@@ -52,18 +32,12 @@ void Array_Merge(int a[], int m, int b[], int n, int res[], int res_size)
 ***************************************/
 void Array_Reverse(int a[], int n)
 {
-	PRINT_SUB_FUNCTION_NAME;
-
-	NULL_CHK(a);
-
 	int s = 0, e = n-1;
 	while(s < e)
 	{
 		SWAP(a[s], a[e]);
 		s++; e--;
 	}
-
-	PRINT_ARRAY(a, n);
 }
 
 /***************************************

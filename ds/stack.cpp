@@ -9,9 +9,71 @@
 using namespace std;
 
 /*
-	1.list实现s
-	2.两个s实现O(1)时间内返回最小值的s
+	数组实现栈
+	list实现s
+	两个s实现O(1)时间内返回最小值的s
 */
+
+/**********************************************
+	数组实现栈
+**********************************************/
+#define BUFSIZE (100)
+
+typedef struct _Stack1
+{
+	int sp;
+	int buf[BUFSIZE];
+	_Stack1()
+	{
+		this->sp = 0;
+	}
+}Stack1;
+
+bool Stack1_Empty(Stack1 *s)
+{
+	if(0 == s->sp)
+	{
+		cout<<"stack1 empty"<<endl;
+		return true;
+	}
+	return false;
+}
+
+void Stack1_Push(Stack1 *s, int val)
+{
+	if(BUFSIZE == s->sp)
+	{
+		cout<<"stack1 full"<<endl;
+		return;
+	}
+	s->buf[s->sp++] = val;
+}
+
+int Stack1_Pop(Stack1 *s)
+{
+	if(Stack1_Empty(s))
+		return -1;
+	int ret = s->buf[--s->sp];
+	cout<<"Stack1 pop :"<<ret<<endl;
+	return ret;
+}
+
+void test_stack1()
+{
+	PRINT_FUNCTION_NAME;
+
+	Stack1 *s = new Stack1();
+	Stack1_Push(s, 1);
+	Stack1_Push(s, 2);
+	Stack1_Push(s, 3);
+	Stack1_Push(s, 4);
+
+	Stack1_Pop(s);
+	Stack1_Pop(s);
+	Stack1_Pop(s);
+	Stack1_Pop(s);
+	Stack1_Pop(s);
+}
 
 /**********************************************
 	用list来实现s,从下往上生长
@@ -31,18 +93,18 @@ typedef struct _Node
 	}
 }Node;
 
-typedef struct _Stack1
+typedef struct _Stack2
 {
 	Node *sp;
-	_Stack1() {	this->sp = NULL;}
-}Stack1;
+	_Stack2() {	this->sp = NULL;}
+}Stack2;
 
-bool Stack1_Empty(Stack1 *s)
+bool Stack2_Empty(Stack2 *s)
 {
 	return s->sp == NULL;
 }
 
-void Stack1_Push(Stack1 *s, int val)
+void Stack2_Push(Stack2 *s, int val)
 {
 	Node *node = new Node(val);
 
@@ -50,11 +112,11 @@ void Stack1_Push(Stack1 *s, int val)
 	s->sp = node;
 }
 
-int Stack1_Pop(Stack1 *s)
+int Stack2_Pop(Stack2 *s)
 {
-	if(Stack1_Empty(s))
+	if(Stack2_Empty(s))
 	{
-		cout<<"Stack1 is empty"<<endl;
+		cout<<"Stack2 is empty"<<endl;
 		return -1;
 	}
 
@@ -64,25 +126,25 @@ int Stack1_Pop(Stack1 *s)
 	s->sp = s->sp->next;
 	delete tmp;
 
-	cout<<"Stack1 pop :"<<ret<<endl;
+	cout<<"Stack2 pop :"<<ret<<endl;
 	return ret;
 }
 
-void test_stack1()
+void test_stack2()
 {
 	PRINT_FUNCTION_NAME;
 
-	Stack1 *s = new Stack1;
-	Stack1_Push(s, 1);
-	Stack1_Push(s, 2);
-	Stack1_Push(s, 3);
-	Stack1_Push(s, 4);
+	Stack2 *s = new Stack2;
+	Stack2_Push(s, 1);
+	Stack2_Push(s, 2);
+	Stack2_Push(s, 3);
+	Stack2_Push(s, 4);
 
-	Stack1_Pop(s);
-	Stack1_Pop(s);
-	Stack1_Pop(s);
-	Stack1_Pop(s);
-	Stack1_Pop(s);
+	Stack2_Pop(s);
+	Stack2_Pop(s);
+	Stack2_Pop(s);
+	Stack2_Pop(s);
+	Stack2_Pop(s);
 }
 
 /**********************************************
@@ -164,6 +226,7 @@ void test_minstack()
 int main()
 {
 	test_stack1();
+	test_stack2();
 	test_minstack();
 
 	return 0;

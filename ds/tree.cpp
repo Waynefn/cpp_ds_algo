@@ -1,5 +1,4 @@
 #include <iostream>
-#include <vector>
 #include <queue>
 #include <stack>
 #include <string>
@@ -88,7 +87,7 @@ TreeNode *Tree_Insert(TreeNode *t, int val)
 	return t;
 }
 
-TreeNode *Tree_Insert_nonRecursive(TreeNode *t, int val)
+TreeNode *Tree_Insert2(TreeNode *t, int val)
 {
 	TreeNode *node = new TreeNode(val);
 	if(NULL == t)
@@ -130,15 +129,17 @@ TreeNode *Tree_Delete(TreeNode *t, int x)
 		{
 			tmp = t->right;
 			while(tmp->left)
-				tmp = tmp->left;		// 找到后驱:右子树中最小的节点
+				tmp = tmp->left;
 			t->val = tmp->val;
 			t->right = Tree_Delete(t->right, tmp->val);
 		}
 		else
 		{
 			tmp = t;
-			if(t->left)	t = t->left;
-			else		t = t->right;
+			if(t->left)	
+				t = t->left;
+			else		
+				t = t->right;
 			delete tmp;
 		}
 	}
@@ -173,44 +174,9 @@ void Tree_TrvlPost(TreeNode *t)
 	cout<<t->val<<" ";
 }
 
-void Tree_TrvlPrev_nonRecursive(TreeNode *t)
+void Tree_TrvlPrev2(TreeNode *t)
 {
-	PRINT_SUB_FUNCTION_NAME;
-
 	stack<TreeNode *> s;
-	s.push(t);
-
-	TreeNode *tmp = NULL;
-	while(!s.empty())
-	{
-		tmp = s.top();
-		cout<<tmp->val<<"-";
-		while(tmp->left)
-		{
-			tmp = tmp->left;
-			cout<<tmp->val<<"-";
-			s.push(tmp);
-		}
-
-		while(!s.empty())
-		{
-			tmp = s.top(); s.pop();
-			if(tmp->right)
-			{
-				s.push(tmp->right);
-				break;
-			}
-		}
-	}
-	cout<<endl;
-}
-
-void Tree_TrvlPrev_nonRecursive_improve(TreeNode *t)
-{
-	PRINT_SUB_FUNCTION_NAME;
-
-	stack<TreeNode *> s;
-
 	while(!s.empty() || t)
 	{
 		while(t)
@@ -225,12 +191,9 @@ void Tree_TrvlPrev_nonRecursive_improve(TreeNode *t)
 	cout<<endl;
 }
 
-void Tree_TrvlIn_nonRecursive(TreeNode *t)
+void Tree_TrvlIn2(TreeNode *t)
 {
-	PRINT_SUB_FUNCTION_NAME;
-
 	stack<TreeNode *> s;
-
 	while(!s.empty() || t)
 	{
 		while(t)
@@ -245,13 +208,10 @@ void Tree_TrvlIn_nonRecursive(TreeNode *t)
 	cout<<endl;
 }
 
-void Tree_TrvlPost_nonRecursive(TreeNode *t)
+void Tree_TrvlPost2(TreeNode *t)
 {
-	PRINT_SUB_FUNCTION_NAME;
-
 	TreeNode *last = NULL;
 	stack<TreeNode *> s;
-
 	while(!s.empty() || t)
 	{
 		while(t)
@@ -275,11 +235,25 @@ void Tree_TrvlPost_nonRecursive(TreeNode *t)
 
 void Tree_TrvlLevel(TreeNode *t)
 {
-	PRINT_SUB_FUNCTION_NAME;
-
 	if(NULL == t)
 		return;
+	queue<TreeNode *> q;
+	q.push(t);
+	while(!q.empty())
+	{
+		TreeNode *tmp = q.front(); q.pop();
+		cout<<tmp->val<<"-";
+		if(tmp->left)
+			q.push(tmp->left);
+		if(tmp->right)
+			q.push(tmp->right);
+	}cout<<endl;
+}
 
+void Tree_TrvlLevel2(TreeNode *t)
+{
+	if(NULL == t)
+		return;
 	queue<TreeNode *> q;
 	q.push(t);
 
@@ -289,19 +263,19 @@ void Tree_TrvlLevel(TreeNode *t)
 		level++;
 		cout<<"lv"<<level<<" :";
 		int lvSize = q.size();
-		while(lvSize)
+		while(lvSize--)
 		{
-			lvSize--;
 			TreeNode *tmp = q.front(); q.pop();
 			cout<<tmp->val<<"-";
-			if(tmp->left)	q.push(tmp->left);
-			if(tmp->right)	q.push(tmp->right);
-		}
-		cout<<endl;
+			if(tmp->left)	
+				q.push(tmp->left);
+			if(tmp->right)	
+				q.push(tmp->right);
+		}cout<<endl;
 	}
 }
 
-void Tree_TrvlLevel_reverse(TreeNode *t)
+void Tree_TrvlLevel2_reverse(TreeNode *t)
 {
 	PRINT_SUB_FUNCTION_NAME;
 
@@ -339,8 +313,6 @@ void Tree_TrvlLevel_reverse(TreeNode *t)
 
 void Tree_TrvlZigzag(TreeNode *t)
 {
-	PRINT_SUB_FUNCTION_NAME;
-
 	if(NULL == t)
 		return;
 
@@ -352,20 +324,23 @@ void Tree_TrvlZigzag(TreeNode *t)
 	while(!s1.empty() || !s2.empty())
 	{
 		TreeNode *tmp;
-
 		while(!s1.empty())
 		{
 			tmp = s1.top(); s1.pop();
 			cout<<tmp->val<<"-";
-			if(tmp->left)	s2.push(tmp->left);
-			if(tmp->right)	s2.push(tmp->right);
+			if(tmp->left)	
+				s2.push(tmp->left);
+			if(tmp->right)	
+				s2.push(tmp->right);
 		}cout<<endl;
 		while(!s2.empty())
 		{
 			tmp = s2.top(); s2.pop();
 			cout<<tmp->val<<"-";
-			if(tmp->right)	s1.push(tmp->right);
-			if(tmp->left)	s1.push(tmp->left);
+			if(tmp->right)	
+				s1.push(tmp->right);
+			if(tmp->left)	
+				s1.push(tmp->left);
 		}cout<<endl;
 	}
 }
@@ -387,14 +362,14 @@ void test_tree()
 	cout<<"tree node num = "<<Tree_NodeCount(t)<<endl;
 	cout<<"tree height = "<<Tree_Height(t)<<endl;
 
-	Tree_TrvlPrev_nonRecursive_improve(t); 
-	Tree_TrvlIn_nonRecursive(t);
-	Tree_TrvlPost(t); cout<<endl;
+	Tree_TrvlIn2(t);	cout<<endl;
+	Tree_TrvlPost(t);	cout<<endl;
 
-	Tree_Delete(t, 0);
+	Tree_Delete(t, 6);
 
 	Tree_TrvlLevel(t);
-	Tree_TrvlLevel_reverse(t);
+	Tree_TrvlLevel2(t);
+	Tree_TrvlLevel2_reverse(t);
 	Tree_TrvlZigzag(t);
 }
 
@@ -479,7 +454,7 @@ void test_tree_TarjanLCA()
 
 	for(int i = 0; i < Len(a); i++)
 		t = Tree_Insert(t, a[i]);
-	Tree_TrvlLevel(t);
+	Tree_TrvlLevel2(t);
 
 	bool visited[MAX] = {false};
 	int ancestors[MAX];

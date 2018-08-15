@@ -11,9 +11,10 @@ using namespace std;
 	1.不带头结点|单向|非循环链表 type1
 	2.List2 带头结点|双向|循环链表 type2
 	3.链表h1和h2(不带头结点|单向|非循环链表)是有序的,合并为一条有序链表h
-	4.链表h(不带头结点|单向|非循环链表),进行翻转
-	5.有序链表h(不带头结点|单向|非循环链表),删除重复元素,每个元素保留一个
-	6.有序链表h(不带头结点|单向|非循环链表),如果元素重复,则完全删除
+	4.链表h(不带头结点|单向|非循环链表)实现有序插入函数
+	5.链表h(不带头结点|单向|非循环链表),进行翻转
+	6.有序链表h(不带头结点|单向|非循环链表),删除重复元素,每个元素保留一个
+	7.有序链表h(不带头结点|单向|非循环链表),如果元素重复,则完全删除
 */
 
 /**********************************************	
@@ -23,78 +24,71 @@ typedef struct _ListNode1
 {
 	int val;
 	_ListNode1 *next;
-	_ListNode1(int val)
-	{
-		this->val = val;
-		this->next = NULL;
-	}
 }ListNode1;	
+
+ListNode1 *ListNode1_MakeNode(int v)
+{
+	ListNode1 *n = new ListNode1();
+	n->val = v;
+	n->next = NULL;
+	return n;
+}
 
 ListNode1 *ListNode1_InsertHead(ListNode1 *h, int v)
 {
-	ListNode1 *n = new ListNode1(v);
-	ListNode1 *dummy = h;
+	ListNode1 *n = ListNode1_MakeNode(v);
 	
-	if(NULL == dummy)
+	if(NULL == h)
 		return n;
-	n->next = dummy;
-	dummy = n;
-	return dummy;
+	n->next = h;
+	return n;
 }
 
 ListNode1 *ListNode1_InsertTail(ListNode1 *h, int v)
 {
-	ListNode1 *n = new ListNode1(v);
-	ListNode1 *dummy = h;
+	ListNode1 *n = ListNode1_MakeNode(v);
+	ListNode1 *i = h;
 	
-	if(NULL == dummy)
+	if(NULL == i)
 		return n;
 
-// 先找到末尾node,再进行尾插
-	while(dummy->next)
-		dummy = dummy->next;
-
-// 末尾node的next指向新的节点n即可
-	dummy->next = n;
+	while(i->next)
+		i = i->next;
+	i->next = n;
 	return h;
 }
 
 ListNode1 *ListNode1_Delete(ListNode1 *h, int v)
 {
-	PRINT_SUB_FUNCTION_NAME;
-
 	if(NULL == h)
 		return h;
-	ListNode1 *head = new ListNode1(0);
-	head->next = h;
-	ListNode1 *dummy = head;
-	while(dummy->next)
+	ListNode1 *dummy = ListNode1_MakeNode(0);
+	dummy->next = h;
+	ListNode1 *i = dummy;
+	while(i->next)
 	{
-		if(dummy->next->val == v)
+		if(i->next->val == v)
 		{
-			ListNode1 *n = dummy->next;
-			dummy->next = n->next;
+			ListNode1 *n = i->next;
+			i->next = n->next;
 			delete n;
 		}
 		else
-			dummy = dummy->next;
+			i = i->next;
 	}
-	dummy = head->next;
-	delete head;
-	return dummy;
+	i = dummy->next;
+	delete dummy;
+	return i;
 }
 
 bool ListNode1_Search(ListNode1 *h, int v)
 {
-	PRINT_SUB_FUNCTION_NAME;
-
 	if(NULL == h)
 		return false;
 
-	for(ListNode1 *dummy = h; dummy != NULL; dummy = dummy->next)
-		if(dummy->val == v)
+	for(ListNode1 *i = h; i != NULL; i = i->next)
+		if(i->val == v)
 			return true;
-
 	return false;
 }
 
@@ -102,8 +96,9 @@ void ListNode1_Trvl(ListNode1 *h)
 {
 	if(NULL == h)
 		return;
-	for(ListNode1 *dummy = h; dummy != NULL; dummy = dummy->next)
-		cout<<dummy->val<<",";
+
+	for(ListNode1 *i = h; i != NULL; i = i->next)
+		cout<<i->val<<",";
 	cout<<endl;
 }
 
@@ -116,16 +111,14 @@ void test_list1()
 	list1 = ListNode1_InsertHead(list1, 2);
 	list1 = ListNode1_InsertHead(list1, 3);
 	ListNode1_Trvl(list1);
-	
-	ListNode1 *list2 = NULL;
-	list2 = ListNode1_InsertTail(list2, 4);
-	list2 = ListNode1_InsertTail(list2, 5);
-	list2 = ListNode1_InsertTail(list2, 6);
-	ListNode1_Trvl(list2);
-	list2 = ListNode1_Delete(list2, 4);
-	list2 = ListNode1_Delete(list2, 6);
-	ListNode1_Trvl(list2);
-	cout<<"Search result : "<<ListNode1_Search(list2, 4)<<endl;
+	list1 = ListNode1_InsertTail(list1, 4);
+	list1 = ListNode1_InsertTail(list1, 5);
+	list1 = ListNode1_InsertTail(list1, 6);
+	ListNode1_Trvl(list1);
+	list1 = ListNode1_Delete(list1, 6);
+	list1 = ListNode1_Delete(list1, 3);
+	ListNode1_Trvl(list1);
+	cout<<"Search result : "<<ListNode1_Search(list1, 4)<<endl;
 }
 
 /**********************************************	
@@ -135,18 +128,21 @@ typedef struct _ListNode2
 {
 	int val;
 	_ListNode2 *next, *prev;
-	_ListNode2(int val)
-	{
-		this->val = val;
-		this->next = this->prev = this;
-	}
 }ListNode2;
+
+ListNode2 *ListNode2_MakeNode(int v)
+{
+	ListNode2 *n = new ListNode2();
+	n->val = v;
+	n->next = n->prev = n;
+	return n;
+}
 
 ListNode2 *ListNode2_InsertHead(ListNode2 *h, int v)
 {
-	ListNode2 *n = new ListNode2(v);
-	if(NULL == h)	// 发现链表为空,则构造头结点
-		h = new ListNode2(0);
+	ListNode2 *n = ListNode2_MakeNode(v);
+	if(NULL == h)
+		h = ListNode2_MakeNode(0);
 
 	n->next = h->next;
 	n->prev = h;
@@ -158,9 +154,9 @@ ListNode2 *ListNode2_InsertHead(ListNode2 *h, int v)
 
 ListNode2 *ListNode2_InsertTail(ListNode2 *h, int v)
 {
-	ListNode2 *n = new ListNode2(v);
-	if(NULL == h)	// 发现链表为空,则构造头结点
-		h = new ListNode2(0);
+	ListNode2 *n = ListNode2_MakeNode(v);
+	if(NULL == h)
+		h = ListNode2_MakeNode(0);
 
 	n->next = h;
 	n->prev = h->prev;
@@ -172,19 +168,17 @@ ListNode2 *ListNode2_InsertTail(ListNode2 *h, int v)
 
 ListNode2 *ListNode2_Delete(ListNode2 *h, int v)
 {
-	PRINT_SUB_FUNCTION_NAME;
-
 	if(NULL == h)
 		return h;
 
-// 有头结点的循环链表,注意for循环语句
-	for(ListNode2 *dummy = h->next; dummy != h; dummy = dummy->next)
+	for(ListNode2 *i = h->next; i != h; i = i->next)
 	{
-		if(dummy->val == v)
+		if(i->val == v)
 		{
-			dummy->prev->next = dummy->next;
-			dummy->next->prev = dummy->prev;
-			delete dummy;
+			i->prev->next = i->next;
+			i->next->prev = i->prev;
+			delete i;
+			break;
 		}
 	}
 	return h;
@@ -192,15 +186,12 @@ ListNode2 *ListNode2_Delete(ListNode2 *h, int v)
 
 bool ListNode2_Search(ListNode2 *h, int v)
 {
-	PRINT_SUB_FUNCTION_NAME;
-
 	if(NULL == h)
 		return false;
 
-	for(ListNode2 *dummy = h->next; dummy != h; dummy = dummy->next)
-		if(dummy->val == v)
+	for(ListNode2 *i = h->next; i != h; i = i->next)
+		if(i->val == v)
 			return true;
-
 	return false;
 }
 
@@ -208,8 +199,8 @@ void ListNode2_Trvl(ListNode2 *h)
 {
 	if(NULL == h)
 		return;
-	for(ListNode2 *dummy = h->next; dummy != h; dummy = dummy->next)
-		cout<<dummy->val<<",";
+	for(ListNode2 *i = h->next; i != h; i = i->next)
+		cout<<i->val<<",";
 	cout<<endl;
 }
 
@@ -222,16 +213,14 @@ void test_list2()
 	list1 = ListNode2_InsertHead(list1, 2);
 	list1 = ListNode2_InsertHead(list1, 3);
 	ListNode2_Trvl(list1);
-	
-	ListNode2 *list2 = NULL;
-	list2 = ListNode2_InsertTail(list2, 4);
-	list2 = ListNode2_InsertTail(list2, 5);
-	list2 = ListNode2_InsertTail(list2, 6);
-	ListNode2_Trvl(list2);
-	list2 = ListNode2_Delete(list2, 4);
-	list2 = ListNode2_Delete(list2, 6);
-	ListNode2_Trvl(list2);
-	cout<<"Search result : "<<ListNode2_Search(list2, 5)<<endl;
+	list1 = ListNode2_InsertTail(list1, 4);
+	list1 = ListNode2_InsertTail(list1, 5);
+	list1 = ListNode2_InsertTail(list1, 6);
+	ListNode2_Trvl(list1);
+	list1 = ListNode2_Delete(list1, 4);
+	list1 = ListNode2_Delete(list1, 6);
+	ListNode2_Trvl(list1);
+	cout<<"Search result : "<<ListNode2_Search(list1, 5)<<endl;
 }
 
 /**********************************************	
@@ -239,36 +228,34 @@ void test_list2()
 **********************************************/
 ListNode1 *ListNode1_MergeList(ListNode1 *h1, ListNode1 *h2)
 {
-	PRINT_SUB_FUNCTION_NAME;
-
 	if(NULL == h2)	return h1;
 	if(NULL == h1)	return h2;
 
-	ListNode1 *h = new ListNode1(0);
-	ListNode1 *dummy = h;
+	ListNode1 *dummy = ListNode1_MakeNode(0);
+	ListNode1 *i = dummy;
 
 	while(h1 && h2)
 	{
 		if(h1->val < h2->val)
 		{
-			dummy->next = h1;
+			i->next = h1;
 			h1 = h1->next;
 		}
 		else
 		{
-			dummy->next = h2;
+			i->next = h2;
 			h2 = h2->next;
 		}
-		dummy = dummy->next;
+		i = i->next;
 	}
 	if(h1)
-		dummy->next = h1;
+		i->next = h1;
 	if(h2)
-		dummy->next = h2;
+		i->next = h2;
 
-	dummy = h->next;
-	delete h;
-	return dummy;
+	i = dummy->next;
+	delete dummy;
+	return i;
 }
 
 void test_list1_merge()
@@ -291,16 +278,53 @@ void test_list1_merge()
 }
 
 /**********************************************	
+	有序链表(不带头结点|单向|非循环链表),插入元素后保持有序
+**********************************************/
+ListNode1 *ListNode1_InsertSorted(ListNode1 *h, int v)
+{
+	ListNode1 *n = ListNode1_MakeNode(v);
+	if(NULL == h)
+		return n;
+
+	ListNode1 *dummy = ListNode1_MakeNode(0);
+	dummy->next = h;
+	ListNode1 *i = dummy;
+
+	while(i->next)
+	{
+		if(v < i->next->val)
+			break;
+		i = i->next;
+	}
+	n->next = i->next;
+	i->next = n;
+
+	i = dummy->next;
+	delete dummy;
+	return i;
+}
+
+void test_list1_insertSorted()
+{
+	PRINT_FUNCTION_NAME;
+
+	ListNode1 *h = NULL;
+	h = ListNode1_InsertSorted(h, 4);
+	h = ListNode1_InsertSorted(h, 3);
+	h = ListNode1_InsertSorted(h, 5);
+	h = ListNode1_InsertSorted(h, 1);
+	ListNode1_Trvl(h);
+}
+
+/**********************************************	
 	链表h(不带头结点|单向|非循环链表),进行翻转
 **********************************************/
 ListNode1 *ListNode1_Reverse(ListNode1 *h)
 {
-	PRINT_SUB_FUNCTION_NAME;
-
 	if(NULL == h || NULL == h->next)
 		return h;
 
-	ListNode1 *dummy = new ListNode1(0);
+	ListNode1 *dummy = ListNode1_MakeNode(0);
 	dummy->next = h;
 
 	ListNode1 *i = dummy, *j = dummy->next, *k;
@@ -336,8 +360,6 @@ void test_list1_reverse()
 **********************************************/
 ListNode1 *ListNode1_DeleteOneMore(ListNode1 *h)
 {
-	PRINT_SUB_FUNCTION_NAME;
-
 	if(NULL == h)
 		return h;
 
@@ -376,28 +398,28 @@ void test_list1_deleteOneMore()
 **********************************************/
 ListNode1 *ListNode1_DeleteRepeat(ListNode1 *h)
 {
-	PRINT_SUB_FUNCTION_NAME;
-
 	if(NULL == h || NULL == h->next)
 		return h;
 
-	ListNode1 *head = new ListNode1(0);
-	head->next = h;
-	ListNode1 *dummy = head;
+	ListNode1 *dummy = ListNode1_MakeNode(0);
+	dummy->next = h;
+	ListNode1 *i = dummy;
 	
-	while(dummy->next && dummy->next->next)
+	while(i->next && i->next->next)
 	{
-		if(dummy->next->val != dummy->next->next->val)
-			dummy = dummy->next;
+		if(i->next->val != i->next->next->val)
+			i = i->next;
 		else
 		{
-			ListNode1 *i = dummy->next->next;
-			while(i && i->val == dummy->next->val)
-				i = i->next;
-			dummy->next = i;
+			ListNode1 *j = i->next->next;
+			while(j && j->val == i->next->val)
+				j = j->next;
+			i->next = j;
 		}
 	}
-	return head->next;	// 注意这里不能返回h，因为h指向的第一个元素可能因为重复而被删除了
+	i = dummy->next;
+	delete dummy;
+	return i;	// 注意这里不能返回h，因为h指向的第一个元素可能因为重复而被删除了
 }
 
 void test_list1_deleteRepeat()
@@ -410,6 +432,7 @@ void test_list1_deleteRepeat()
 	h = ListNode1_InsertTail(h,2);
 	h = ListNode1_InsertTail(h,3);
 	h = ListNode1_InsertTail(h,3);
+	h = ListNode1_InsertTail(h,4);
 	h = ListNode1_InsertTail(h,4);
 	h = ListNode1_DeleteRepeat(h);
 	ListNode1_Trvl(h);
@@ -524,13 +547,14 @@ void test_kernel_list()
 
 int main()
 {
-	// test_list1();
-	// test_list2();
-	// test_list1_merge();
-	// test_list1_reverse();
-	// test_list1_deleteOneMore();
-	// test_list1_deleteRepeat();
+	test_list1();
+	test_list2();
+	test_list1_merge();
+	test_list1_insertSorted();
+	test_list1_reverse();
+	test_list1_deleteOneMore();
+	test_list1_deleteRepeat();
 
-	test_kernel_list();
+	// test_kernel_list();
 	return 0;
 }

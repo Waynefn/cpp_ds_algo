@@ -6,9 +6,67 @@
 using namespace std;
 
 /*
-	1.list实现queue
-	2.stack实现queue
+	数组实现queue
+	list实现queue
+	stack实现queue
 */
+
+/**********************************************
+	用数组实现queue,完成push,pop,empty等方法
+**********************************************/
+#define BUFSIZE (100)
+
+typedef struct _Queue1
+{
+	int buf[BUFSIZE];
+	int first,last;
+	_Queue1()
+	{
+		this->first = this->last = 0;
+	}
+}Queue1;
+
+bool Queue1_Empty(Queue1 *q)
+{
+	if(q->first == q->last)
+	{
+		cout<<"Queue1 is empty"<<endl;
+		return true;
+	}
+	return false;
+}
+
+void Queue1_Push(Queue1 *q, int val)
+{
+	if(q->last +1 == q->first)
+		return;
+	q->buf[q->last++] = val;
+	q->last = q->last % BUFSIZE;
+}
+
+int Queue1_Pop(Queue1 *q)
+{
+	if(Queue1_Empty(q))
+		return -1;
+	int ret = q->buf[q->first++];
+	q->first = q->first % BUFSIZE;
+	cout<<"Queue1 pop :"<<ret<<endl;
+	return ret;
+}
+
+void test_queue1()
+{
+	PRINT_FUNCTION_NAME;
+
+	Queue1 *q = new Queue1;
+	Queue1_Push(q, 3);
+	Queue1_Push(q, 5);
+	Queue1_Push(q, 7);
+	Queue1_Pop(q);
+	Queue1_Pop(q);
+	Queue1_Pop(q);
+	Queue1_Pop(q);
+}
 
 /**********************************************
 	用list实现queue,完成push,pop,empty等方法
@@ -24,43 +82,43 @@ typedef struct _Node
 	}
 }Node;
 
-typedef struct _Queue1
+typedef struct _Queue2
 {
 	Node *first;
-	Node *tail;
-	_Queue1()
+	Node *last;
+	_Queue2()
 	{
 		this->first = NULL;
-		this->tail = NULL;
+		this->last = NULL;
 	}
-}Queue1;
+}Queue2;
 
-bool Queue_Empty(Queue1 *q)
+bool Queue2_empty(Queue2 *q)
 {
 	return q->first == NULL;
 }
 
-void Queue_Push(Queue1 *q, int val)
+void Queue2_push(Queue2 *q, int val)
 {
 	Node *n = new Node(val);
 
 	if(NULL == q->first)
 	{
 		q->first = n;
-		q->tail = n;
+		q->last = n;
 	}
 	else
 	{
-		q->tail->next = n;
-		q->tail = n;
+		q->last->next = n;
+		q->last = n;
 	}
 }
 
-int Queue_Pop(Queue1 *q)
+int Queue2_pop(Queue2 *q)
 {
-	if(Queue_Empty(q))
+	if(Queue2_empty(q))
 	{
-		cout<<"Queue1 is empty"<<endl;
+		cout<<"Queue2 is empty"<<endl;
 		return -1;
 	}
 
@@ -69,26 +127,26 @@ int Queue_Pop(Queue1 *q)
 
 	q->first = q->first->next;
 	if(NULL == q->first)
-		q->tail = NULL;
+		q->last = NULL;
 
 	delete tmp;
 
-	cout<<"Queue1 pop :"<<ret<<endl;
+	cout<<"Queue2 pop :"<<ret<<endl;
 	return ret;
 }
 
-void test_queue1()
+void test_queue2()
 {
 	PRINT_FUNCTION_NAME;
 
-	Queue1 *q = new Queue1;
-	Queue_Push(q, 3);
-	Queue_Push(q, 5);
-	Queue_Push(q, 7);
-	Queue_Pop(q);
-	Queue_Pop(q);
-	Queue_Pop(q);
-	Queue_Pop(q);
+	Queue2 *q = new Queue2;
+	Queue2_push(q, 3);
+	Queue2_push(q, 5);
+	Queue2_push(q, 7);
+	Queue2_pop(q);
+	Queue2_pop(q);
+	Queue2_pop(q);
+	Queue2_pop(q);
 }
 
 /**********************************************
@@ -102,20 +160,20 @@ typedef struct
 {
 	stack<int> s1;
 	stack<int> s2;
-}Queue2;
+}Queue3;
 
-bool Queue2_Empty(Queue2 &q)
+bool Queue3_Empty(Queue3 &q)
 {
 	return q.s1.empty() && q.s2.empty();
 }
 
-void Queue2_Push(Queue2 &q, int x)
+void Queue3_Push(Queue3 &q, int x)
 {
 	cout<<"queue_byStack push :"<<x<<endl;
 	q.s1.push(x);
 }
 
-int Queue2_Pop(Queue2 &q)
+int Queue3_Pop(Queue3 &q)
 {
 	int res = 0;
 
@@ -140,31 +198,32 @@ int Queue2_Pop(Queue2 &q)
 	return res;
 }
 
-void test_queue2()
+void test_queue3()
 {
 	PRINT_FUNCTION_NAME;
 	
-	Queue2 q;
+	Queue3 q;
 
-	Queue2_Push(q, 1);
-	Queue2_Push(q, 2);
-	Queue2_Push(q, 3);
-	Queue2_Push(q, 4);
+	Queue3_Push(q, 1);
+	Queue3_Push(q, 2);
+	Queue3_Push(q, 3);
+	Queue3_Push(q, 4);
 
-	Queue2_Pop(q);
-	Queue2_Pop(q);
+	Queue3_Pop(q);
+	Queue3_Pop(q);
 
-	Queue2_Push(q, 5);
-	Queue2_Push(q, 6);
+	Queue3_Push(q, 5);
+	Queue3_Push(q, 6);
 
-	while(!Queue2_Empty(q))
-		Queue2_Pop(q);
+	while(!Queue3_Empty(q))
+		Queue3_Pop(q);
 }
 
 int main()
 {
 	test_queue1();
 	test_queue2();
+	test_queue3();
 
 	return 0;
 }
