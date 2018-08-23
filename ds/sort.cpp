@@ -26,45 +26,32 @@ using namespace std;
 **********************************************/
 void Bubble1(int a[], int n)
 {
-	PRINT_SUB_FUNCTION_NAME;
-
-	int cnt = 0;
-
 	for(int i = n; i > 1; i--)
-		for(int j = 1; j < i; j++)
-		{
-			cnt++;
-			if(a[j-1] > a[j])
-			{
-				SWAP(a[j-1], a[j]);
-			}
-		}
-
-	cout<<"lv1 cnt = "<<cnt<<endl;
+    {
+        for(int j = 1; j < i; j++)
+        {
+            if(a[j-1] > a[j])
+                SWAP(a[j-1], a[j]);
+        }
+    }
 }
 
 void Bubble2(int a[], int n)
 {
-	PRINT_SUB_FUNCTION_NAME;
-
-	int cnt = 0;
-	int end = n;
-	while(end)
-	{
-		int curr_end = end;
-		end = 0;
-
-		for(int j = 1; j < curr_end; j++)
-		{
-			cnt++;
-			if(a[j-1] > a[j])
-			{
-				end = j;
-				SWAP(a[j-1], a[j]);
-			}
-		}
-	}
-	cout<<"lv2 cnt = "<<cnt<<endl;
+	int last = n;
+    while(last)
+    {
+        int i = last;
+        last = 0;
+        for(int j = 1; j < i; j++)
+        {
+            if(a[j-1] > a[j])
+            {
+                last = j;
+                SWAP(a[j-1], a[j]);
+            }
+        }
+    }
 }
 
 void test_bubble()
@@ -120,22 +107,43 @@ void test_insert()
 **********************************************/
 void Select(int a[], int n)
 {
-	for(int i = 0; i < n; i++)
+	// for(int i = 0; i < n-1; i++)
+	// {
+	// 	int min = i;
+	// 	for(int j = i; j < n; j++)
+	// 		if(a[min] > a[j])
+	// 			min = j;
+	// 	SWAP(a[i], a[min]);
+	// }
+	for(int i = 0; i <= n-2; i++)
 	{
 		int min = i;
-		for(int j = i; j < n; j++)
-			if(a[min] < a[j])
+		for(int j = i; j <= n-1; j++)
+			if(a[min] > a[j])
 				min = j;
-		SWAP(a[i], a[min]);
+		SWAP(a[min], a[i]);
 	}
+}
+
+void Select_r(int a[], int s, int e)
+{
+	if(s == e)
+		return;
+	int min = s;
+	for(int i = s; i < e; i++)
+		if(a[min] > a[i])
+			min = i;
+	SWAP(a[min], a[s]);
+	Select_r(a, s+1, e);
 }
 
 void test_select()
 {
 	PRINT_FUNCTION_NAME;
 
-	int a[] = {49,38,65,97,26,13,27,49,55,4};
-	Select(a, Len(a));
+	int a[] = {99,49,38,65,97,26,13,27,49,55,4};
+	// Select(a, Len(a));
+	Select_r(a, 0, Len(a));
 	PRINT_ARRAY(a, Len(a));
 }
 
@@ -403,7 +411,8 @@ int main()
 {
 	// test_bubble();
 	// test_insert();
-	test_shell();
+	test_select();
+	// test_shell();
 	// test_quick();
 	// test_merge();
 	// test_heap();

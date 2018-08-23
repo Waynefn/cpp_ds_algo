@@ -1,18 +1,15 @@
 #include <iostream>
-#include <string>
 #include <string.h>
-
-#include "utils.h"
-
 using namespace std;
+
+#define MAX (100)
+#define PRINT_ARRAY(a,n){for(int i = 0; i < n; i++) cout<<a[i]<<"|"; cout<<endl;}
 
 /**********************************************
 	1.kmp lps
 **********************************************/
 void kmp_lps(char t[], char p[])
 {
-	PRINT_SUB_FUNCTION_NAME;
-
 	int len_t = strlen(t), len_p = strlen(p);
 	int lps[MAX];
 	int i,j;
@@ -65,8 +62,6 @@ void kmp_lps(char t[], char p[])
 **********************************************/
 void kmp_next(char t[], char p[])
 {
-	PRINT_SUB_FUNCTION_NAME;
-
 	int len_t = strlen(t), len_p = strlen(p);
 	int next[MAX];
 	int i,j;
@@ -85,7 +80,6 @@ void kmp_next(char t[], char p[])
 	i = 0, j = 0;
 	while(i < len_t && j < len_p)
 	{
-//		cout<<"t["<<i<<"] = "<<t[i]<<" , p["<<j<<"] = "<<p[j]<<endl;
 		if(j == -1 || t[i] == p[j])
 		{
 			i++;

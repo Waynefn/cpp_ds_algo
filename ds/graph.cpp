@@ -26,14 +26,8 @@ using namespace std;
 **********************************************/
 #define V (7)
 
-typedef struct
-{
-	bool known[V];
-	int cnt;
-}V_SET;
-
 int g[V][V] = 
-{
+{    
 	{M,1,M,M,M,M,M},
 	{M,M,1,M,1,1,M},
 	{M,M,M,M,1,M,M},
@@ -43,35 +37,54 @@ int g[V][V] =
 	{M,M,M,M,M,M,M},
 };
 
-void Bfs(int start)
+void Bfs_1(int start)
 {
+	cout<<"BFS：";
 	bool visited[V] = {false};
 	queue<int> q;
 
 	q.push(start);
 	visited[start] = true;
-	
-	cout<<"BFS搜索结果：";
+	while(!q.empty())
+	{
+		int from = q.front(); q.pop();
+		cout<<from<<" ";
+		for(int to = 0; to < V; to++)
+		{
+			if(!visited[to] && g[from][to] < M)
+			{
+				visited[to] = true;
+				q.push(to);
+			}
+		}
+	}cout<<endl;
+}
+
+void Bfs_2(int start)
+{
+	cout<<"BFS：";
+	bool visited[V] = {false};
+	queue<int> q;
+
+	q.push(start);
+	visited[start] = true;
 	while(!q.empty())
 	{
 		int lvSize = q.size();
-		while(lvSize)
+		while(lvSize--)
 		{
-			lvSize--;
-			int curr = q.front(); q.pop();
-			cout<<curr<<" ";
+			int from = q.front(); q.pop();
+			cout<<from;
 			for(int to = 0; to < V; to++)
 			{
-				if(!visited[to] && g[curr][to] < M)
+				if(!visited[to] && g[from][to] < M)
 				{
-					q.push(to);
 					visited[to] = true;
+					q.push(to);
 				}
 			}
-		}
-		cout<<" | ";
-	}
-	cout<<endl;
+		}cout<<"*";
+	}cout<<endl;
 }
 
 void Dfs(int start)
@@ -89,7 +102,8 @@ void Dfs(int start)
 
 void test_bfs_dfs()
 {
-	Bfs(0);
+	Bfs_1(0);
+	Bfs_2(0);
 	cout<<"DFS搜索结果：";Dfs(0);cout<<endl;
 }
 
