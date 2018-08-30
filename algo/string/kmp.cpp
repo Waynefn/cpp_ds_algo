@@ -16,7 +16,7 @@ void kmp_lps(char t[], char p[])
 
 	lps[0] = 0;
 	i = 1, j = 0;
-	while(i < len_t)
+	while(i < len_p)
 	{
 		if(p[i] == p[j])
 		{
@@ -46,13 +46,20 @@ void kmp_lps(char t[], char p[])
         {
             cout<<"found '"<<p<<"' -> p["<<i-j<<"]"<<endl;
             j = lps[j-1];
+            cout<<"j = "<<j<<endl;
         }
         else if(i < len_t && p[j] != t[i])
         {
             if (j != 0)
+            {
+            	cout<<"i,j = "<<i<<","<<j<<endl;
                 j = lps[j-1]; // [0..lps[j-1]]无需再匹配
+            }
             else
+            {
+            	cout<<"i,j = "<<i<<","<<j<<endl;
                 i++;
+            }
         }
 	}
 }
@@ -97,11 +104,11 @@ void kmp_next(char t[], char p[])
 
 void test_kmp()
 {
-	char t[] = {"aaaaab"};
-	char p[] = {"aaaa"};
+	char t[] = {"AGATACGATATATAC"};
+	char p[] = {"ATATA"};
 
 	kmp_lps(t, p);
-	kmp_next(t, p);
+	// kmp_next(t, p);
 }
 
 int main()

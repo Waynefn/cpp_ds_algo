@@ -4,14 +4,16 @@ using namespace std;
 
 #define PRINT_ARRAY(a,n){for(int i = 0; i < n; i++) cout<<a[i]<<"|"; cout<<endl;}
 
+#define A_NUM (256)	// 字符集size
+#define SIZE (100)	// buffer size
+
 /**********************************************
 	BM
 **********************************************/
-#define ASIZE (256)
 void BM_skip(int skip[], char p[])
 {
 	int np = strlen(p);
-	for(int i = 0; i < ASIZE; i++)
+	for(int i = 0; i < A_NUM; i++)
 		skip[i] = -1;
 	for(int i = 0; i < np; i++)
 		skip[p[i]] = i;
@@ -20,7 +22,7 @@ void BM_skip(int skip[], char p[])
 void BM(char t[], char p[])
 {
 	int s = 0, nt = strlen(t), np = strlen(p);
-	int skip[ASIZE];
+	int skip[A_NUM];
 	
 	BM_skip(skip, p);
 	while(s <= nt-np)
@@ -54,7 +56,7 @@ void BM(char t[], char p[])
 void Horspool_skip(int skip[], char p[])
 {
 	int np = strlen(p);
-	for(int i = 0; i < ASIZE; i++)
+	for(int i = 0; i < A_NUM; i++)
 		skip[i] = np;				// horspool 不同之处
 	for(int i = 0; i < np-1; i++)	// 注意末尾字符值仍为np
 		skip[p[i]] = np-i-1;		// horspool 不同之处
@@ -63,7 +65,7 @@ void Horspool_skip(int skip[], char p[])
 void Horspool(char t[], char p[])
 {
 	int s = 0, nt = strlen(t), np = strlen(p);
-	int skip[ASIZE];
+	int skip[A_NUM];
 
 	Horspool_skip(skip, p);
 	while(s <= nt-np)
@@ -87,7 +89,7 @@ void Horspool(char t[], char p[])
 void Sunday_skip(int skip[], char p[])
 {
 	int np = strlen(p);
-	for(int i = 0; i < ASIZE; i++)
+	for(int i = 0; i < A_NUM; i++)
 		skip[i] = np+1;		// 比horspool+1
 	for(int i = 0; i < np; i++)
 		skip[p[i]] = np-i;		// 比horspool+1
@@ -96,13 +98,13 @@ void Sunday_skip(int skip[], char p[])
 void Sunday(char t[], char p[])
 {
 	int s = 0, nt = strlen(t), np = strlen(p);
-	int skip[ASIZE];
+	int skip[A_NUM];
 
 	Sunday_skip(skip, p);
 	while(s <= nt-np)
 	{
 		int j = np-1;
-		while(p[j] == t[s+j])
+		while(j >= 0 && p[j] == t[s+j])
 			j--;
 		if(j < 0)
 		{
@@ -119,21 +121,69 @@ void Sunday(char t[], char p[])
 /**********************************************
 	KMP
 **********************************************/
+void KMP_lps(int lps[], char p[])
+{
+	int i = 1, j = 0, np = strlen(p);
+	lps[0] = 0;
+	
+	while(i < np)
+	{
+		while(i < np && p[i] == p[j])
+			lps[i++] = ++j;
+		if(i == np)
+			return;
+		if(j == 0)
+			lps[i++] = 0;
+		else
+			j = lps[j-1];
+	}
+}
+
 void KMP(char t[], char p[])
 {
+	int i = 0, j = 0, nt = strlen(t), np = strlen(p);
+	int lps[SIZE];
 
+	KMP_lps(lps, p);
+	/*
+		while循环不能使用【i <= nt-np】
+		       i
+		ATATATATAC 
+		    ATATA
+		       j
+		因为存在公共前后缀，i到t串末尾的距离很可能已经小于nt-np
+	*/
+	while(i < nt)	
+	{
+		while(j < np && p[j] == t[i])
+			i++,j++;
+		if(j == np)
+		{
+			cout<<i-j<<" ";
+			j = lps[j-1];
+		}
+		else
+		{
+			if(j == 0)
+				i++;
+			else		
+				j = lps[j-1];
+		}
+	}
 }
 
 void test_string_match(char *t, char *p)
 {
+	cout<<"-------------------------------------"<<endl;
     cout<<"BM :\t\t";		BM(t, p);		cout<<endl;
     cout<<"Horspool :\t";	Horspool(t,p);	cout<<endl;
-    cout<<"Sunday :\t";		Sunday(t,p);	cout<<endl;
-    // KMP(t,p);
+    cout<<"Sunday :\t";		Sunday(t,p);		cout<<endl;
+    cout<<"KMP :\t\t";		KMP(t,p);			cout<<endl;
 }
 
 int main()
 {
+	test_string_match("XYXZdeOXZZKWXYZ", "WXYZ");
 	test_string_match("GCAATGCCTATGTGACCTATGTG", "TATGTG");
 	test_string_match("AGATACGATATATAC", "ATATA");
 	test_string_match("CATCGCGGAGAGTATAGCAGAGAG", "GCAGAGAG");
