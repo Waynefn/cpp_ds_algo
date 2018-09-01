@@ -33,6 +33,36 @@ int Calc(int n1, int n2, char c)
 /**********************************************
     计算中缀表达式
 **********************************************/
+int CalcInfix2(const char *str)
+{
+	stack<int> val;
+	stack<char> op;
+	op.push('N');
+
+	int i = 0;
+	while(!op.empty())
+	{
+		char c = str[i];
+		if(IsNum(c))
+			val.push(c-'0');
+		else if(c == '(')
+			op.push(c);
+		else if(c == ')' && op.top() == '(')
+			op.pop();
+		else
+		{
+			while(OpLv(c) <= OpLv(op.top()))
+			{
+				int n2 = val.top(); val.pop();
+				int n1 = val.top(); val.pop(); 
+				int ret = Calc(n1,n2,op.top());
+				val.push(ret); op.pop();
+			}
+
+		}
+	}
+}
+
 int CalcInfix(const char *str)
 {
 	stack<int> val;
@@ -55,7 +85,7 @@ int CalcInfix(const char *str)
 			}
 			op.pop();
 		}
-		else 
+		else
 		{
 			while(!op.empty() && OpLv(c) <= OpLv(op.top()))
 			{
@@ -99,6 +129,7 @@ int CalcPostfix(const char *str)
 
 int main()
 {
+	CalcInfix("2-3+5");
 	CalcInfix("2*(3+6)/3");
 	CalcInfix("2-3*4+5");		CalcPostfix("234*-5+");
 	CalcInfix("(2-3)*(4+5)");	CalcPostfix("23-45+*");
