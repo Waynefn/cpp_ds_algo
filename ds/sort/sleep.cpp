@@ -1,6 +1,4 @@
-#include <iostream>
-#include <string.h>
-#include <pthread.h>
+#include <bits/stdc++.h>
 #include <unistd.h>
 
 using namespace std;
