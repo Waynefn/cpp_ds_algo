@@ -61,7 +61,7 @@ int length_r(list *p)
 		return 1 + length_r(p->next);
 }
 
-list *f(list *p, list *q)
+list *f(list *p, list *q)	// pq 连接起来
 {
 	list *pt = p;
 	if(NULL == p)
@@ -74,7 +74,7 @@ list *f(list *p, list *q)
 	return p;
 }
 
-list *cons(char *s, list *p)
+list *cons(char *s, list *p)	// p串头插s得到sp
 {
 	list *t = new list;
 	t->elem = s;
@@ -91,10 +91,10 @@ list *safe_f(list *p, list *q)
 		if(NULL == q)
 			return NULL;		// coding
 		else
-			return cons(p, safe_f(NULL, NULL));	// coding
+			return cons(q->elem, safe_f(NULL, q->next));	// coding
 	}
 	else
-		return cons(" ", safe_f(p, q));		// coding
+		return cons(p->elem, safe_f(p->next, q));		// coding
 }
 
 void test_question_1()
@@ -102,9 +102,9 @@ void test_question_1()
 	list *p1, *p2;
 	p1 = cons("blue", cons("yellow", cons("red", NULL)));
 	p2 = cons("black", cons("white", NULL));
-//	print(f(p1,p2));
+	print(f(p1,p2));
 
-	print(safe_f(p1,p2));
+	// print(safe_f(p1,p2));
 }
 
 int main()
