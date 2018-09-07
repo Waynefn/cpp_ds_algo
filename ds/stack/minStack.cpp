@@ -5,10 +5,7 @@
 using namespace std;
 
 /**********************************************
-    s实现方法min()可以O(1)时间内返回s中的最小值
-    s1:正常的操作
-    s2：与s1保持元素一样多，每次pop时和s1一样。但push时只push当前最小值
-    min()：s2.pop()即可
+    栈实现方法min()可以O(1)时间内返回栈中的最小值
 **********************************************/
 typedef struct _MinStack
 {
@@ -23,13 +20,8 @@ typedef struct _MinStack
 
 void Push(MinStack *ms, int x)
 {
-    if(ms->s2.empty())
-        ms->min = INT_MAX;
-    else    // 之前的min可能已经被pop，所以每次push时都要再次从s2获取
-        ms->min = ms->s2.top(); 
-    ms->min = ms->min < x ? ms->min : x;
-
     ms->s1.push(x);
+    ms->min = ms->min < x ? ms->min : x;
     ms->s2.push(ms->min);
 }
 
@@ -39,7 +31,8 @@ int Pop(MinStack *ms)
         return -1;
 
     int res = ms->s2.top();
-    ms->s1.pop(); ms->s2.pop();
+    ms->s1.pop(); 
+    ms->s2.pop();
     if(ms->s1.empty())
         ms->min = INT_MAX;
 

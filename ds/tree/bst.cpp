@@ -3,7 +3,6 @@
 #include <stack>
 
 using namespace std;
-
 /**********************************************
     二叉搜索树
 **********************************************/
@@ -93,11 +92,9 @@ TreeNode *Insert(TreeNode *t, int val)
 
     if(val < j->val)        
         j->left = node;
-    else if(val > j->val)   
+    else
         j->right = node;
-    else 
-        ;
-
+  
     return t;
 }
 
@@ -329,11 +326,11 @@ void TrvlZigzag(TreeNode *t)
 
 void test_Bst()
 {
-    int a[] = {6,4,8,2,7,9,1,3,10,0};
+    int a[] = {11,4,21,3,9,17,22,15,18};
     TreeNode *t = NULL;
 
     for(int i = 0; i < Len(a); i++)
-        t = Insert_r(t, a[i]);
+        t = Insert(t, a[i]);
 
     Search(t, 3);
     Search(t, 9);

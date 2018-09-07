@@ -2,6 +2,9 @@
 
 using namespace std;
 
+/********************************************** 
+    链表实现队列
+**********************************************/
 #define PRINT_QUEUE(q){for(Node *i = q->first; i; i = i->next) cout<<i->val<<"|"; cout<<endl;}
 
 typedef struct _Node

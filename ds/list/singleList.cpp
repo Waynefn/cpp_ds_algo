@@ -2,11 +2,11 @@
 
 using namespace std;
 
-/********************************************** 
-    ä¸å¸¦å¤´ç»“ç‚¹|å•å‘|éå¾ªç¯é“¾è¡¨
-**********************************************/
-#define PRINT_FUNCTION_NAME	{cout<<endl<<"********** "<<__FUNCTION__<<" **********"<<endl;	}
+#define PRINT_FUNCTION_NAME {cout<<endl<<"********** "<<__FUNCTION__<<" **********"<<endl;  }
 
+/********************************************** 
+    ²»´øÍ·½áµã|µ¥Ïò|·ÇÑ­»·Á´±í
+**********************************************/
 typedef struct _Node
 {
     int val;
@@ -21,12 +21,31 @@ Node *MakeNode(int v)
     return n;
 }
 
+void Trvl(Node *h)
+{
+    if(NULL == h)
+        return;
+
+    for(Node *i = h; i != NULL; i = i->next)
+        cout<<i->val<<",";
+    cout<<endl;
+}
+
+bool Search(Node *h, int v)
+{
+    if(NULL == h)
+        return false;
+
+    for(Node *i = h; i != NULL; i = i->next)
+        if(i->val == v)
+            return true;
+    return false;
+}
+
 Node *InsertHead(Node *h, int v)
 {
     Node *n = MakeNode(v);
     
-    if(NULL == h)
-        return n;
     n->next = h;
     return n;
 }
@@ -65,48 +84,8 @@ Node *Delete(Node *h, int v)
     return i;
 }
 
-bool Search(Node *h, int v)
-{
-    if(NULL == h)
-        return false;
-
-    for(Node *i = h; i != NULL; i = i->next)
-        if(i->val == v)
-            return true;
-    return false;
-}
-
-void Trvl(Node *h)
-{
-    if(NULL == h)
-        return;
-
-    for(Node *i = h; i != NULL; i = i->next)
-        cout<<i->val<<",";
-    cout<<endl;
-}
-
-void test_SingleList()
-{
-	PRINT_FUNCTION_NAME;
-
-    Node *h = NULL;
-    h = InsertHead(h, 1);
-    h = InsertHead(h, 2);
-    h = InsertHead(h, 3);
-    Trvl(h);
-    h = InsertTail(h, 4);
-    h = InsertTail(h, 5);
-    h = InsertTail(h, 6);
-    Trvl(h);
-    h = Delete(h, 6);
-    h = Delete(h, 3);
-    Trvl(h);
-    cout<<"Search result : "<<Search(h, 4)<<endl;
-}
-
 /********************************************** 
-    æœ‰åºé“¾è¡¨h1å’Œh2,åˆå¹¶ä¸ºä¸€æ¡æœ‰åºé“¾è¡¨h
+    ÓĞĞòÁ´±íh1ºÍh2,ºÏ²¢ÎªÒ»ÌõÓĞĞòÁ´±íh
 **********************************************/
 Node *MergeList(Node *h1, Node *h2)
 {
@@ -140,27 +119,8 @@ Node *MergeList(Node *h1, Node *h2)
     return i;
 }
 
-void test_MergeList()
-{
-	PRINT_FUNCTION_NAME;
-
-    Node *h1 = NULL, *h2 = NULL;
-    h1 = InsertTail(h1,1);
-    h1 = InsertTail(h1,3);
-    
-    h2 = InsertTail(h2,2);
-    h2 = InsertTail(h2,4);
-    h2 = InsertTail(h2,6);
-
-    Trvl(h1);
-    Trvl(h2);
-    
-    Node *h = MergeList(h1,h2);
-    Trvl(h);
-}
-
 /********************************************** 
-    æœ‰åºé“¾è¡¨(ä¸å¸¦å¤´ç»“ç‚¹|å•å‘|éå¾ªç¯é“¾è¡¨),æ’å…¥å…ƒç´ åä¿æŒæœ‰åº
+    ÓĞĞòÁ´±í(²»´øÍ·½áµã|µ¥Ïò|·ÇÑ­»·Á´±í),²åÈëÔªËØºó±£³ÖÓĞĞò
 **********************************************/
 Node *InsertSorted(Node *h, int v)
 {
@@ -180,20 +140,8 @@ Node *InsertSorted(Node *h, int v)
     return i;
 }
 
-void test_InsertSorted()
-{
-	PRINT_FUNCTION_NAME;
-
-    Node *h = NULL;
-    h = InsertSorted(h, 0);
-    h = InsertSorted(h, 3);
-    h = InsertSorted(h, 5);
-    h = InsertSorted(h, 1);
-    Trvl(h);
-}
-
 /********************************************** 
-    é“¾è¡¨è¿›è¡Œç¿»è½¬
+    Á´±í½øĞĞ·­×ª
 **********************************************/
 Node *ReverseList(Node *h)
 {
@@ -216,23 +164,8 @@ Node *ReverseList(Node *h)
     return i;
 }
 
-void test_ReverseList()
-{
-	PRINT_FUNCTION_NAME;
-
-    Node *h = NULL;
-    h = InsertHead(h, 1);
-    h = InsertHead(h, 2);
-    h = InsertHead(h, 3);
-    h = InsertHead(h, 4);
-    Trvl(h);
-
-    h = ReverseList(h);
-    Trvl(h);
-}
-
 /********************************************** 
-    æœ‰åºé“¾è¡¨h,åˆ é™¤é‡å¤å…ƒç´ ,æ¯ä¸ªå…ƒç´ ä¿ç•™ä¸€ä¸ª
+    ÓĞĞòÁ´±íh,É¾³ıÖØ¸´ÔªËØ,Ã¿¸öÔªËØ±£ÁôÒ»¸ö
 **********************************************/
 Node *DelRepeatRemainOne(Node *h)
 {
@@ -256,9 +189,103 @@ Node *DelRepeatRemainOne(Node *h)
     return h;
 }
 
+/********************************************** 
+    ÓĞĞòÁ´±íh,Èç¹ûÔªËØÖØ¸´,ÔòÍêÈ«É¾³ı
+    *ÀûÓÃdummy´´½¨Í·½áµã,¼ò»¯Ëã·¨
+**********************************************/
+Node *DelRepeat(Node *h)
+{
+    Node *dummy = MakeNode(0);
+    dummy->next = h;
+    Node *i = dummy;
+
+    //i->next==NULLÔòÖ±½ÓÍË³öwhile£¬²»»áÈ¡Öµi->next->next
+    while(i->next && i->next->next) 
+    {
+        if(i->next->val != i->next->next->val)
+            i = i->next;
+        else
+        {
+            Node *j = i->next->next;
+            while(j && j->val == i->next->val)
+                j = j->next;
+            i->next = j;
+        }
+    }
+    return dummy->next;
+}
+
+/********************************************** 
+    test
+**********************************************/
+void test_SingleList()
+{
+    PRINT_FUNCTION_NAME;
+
+    Node *h = NULL;
+    h = InsertHead(h, 1);
+    h = InsertHead(h, 2);
+    h = InsertHead(h, 3);
+    Trvl(h);
+    h = InsertTail(h, 4);
+    h = InsertTail(h, 5);
+    h = InsertTail(h, 6);
+    Trvl(h);
+    h = Delete(h, 6);
+    h = Delete(h, 3);
+    Trvl(h);
+    cout<<"Search result : "<<Search(h, 4)<<endl;
+}
+
+void test_MergeList()
+{
+    PRINT_FUNCTION_NAME;
+
+    Node *h1 = NULL, *h2 = NULL;
+    h1 = InsertTail(h1,1);
+    h1 = InsertTail(h1,3);
+    
+    h2 = InsertTail(h2,2);
+    h2 = InsertTail(h2,4);
+    h2 = InsertTail(h2,6);
+
+    Trvl(h1);
+    Trvl(h2);
+    
+    Node *h = MergeList(h1,h2);
+    Trvl(h);
+}
+
+void test_InsertSorted()
+{
+    PRINT_FUNCTION_NAME;
+
+    Node *h = NULL;
+    h = InsertSorted(h, 0);
+    h = InsertSorted(h, 3);
+    h = InsertSorted(h, 5);
+    h = InsertSorted(h, 1);
+    Trvl(h);
+}
+
+void test_ReverseList()
+{
+    PRINT_FUNCTION_NAME;
+
+    Node *h = NULL;
+    h = InsertHead(h, 1);
+    h = InsertHead(h, 2);
+    h = InsertHead(h, 3);
+    h = InsertHead(h, 4);
+    Trvl(h);
+
+    h = ReverseList(h);
+    Trvl(h);
+}
+
 void test_DelRepeatRemainOne()
 {
-	PRINT_FUNCTION_NAME;
+    PRINT_FUNCTION_NAME;
 
     Node *h = NULL;
     h = InsertTail(h,0);
@@ -272,42 +299,16 @@ void test_DelRepeatRemainOne()
     Trvl(h);
 }
 
-/********************************************** 
-    æœ‰åºé“¾è¡¨h,å¦‚æœå…ƒç´ é‡å¤,åˆ™å®Œå…¨åˆ é™¤
-    *åˆ©ç”¨dummyåˆ›å»ºå¤´ç»“ç‚¹,ç®€åŒ–ç®—æ³•
-**********************************************/
-Node *DelRepeat(Node *h)
-{
-    Node *dummy = MakeNode(0);
-    dummy->next = h;
-    Node *i = dummy, *j = i->next;
-
-    while(i->next && i->next->next)
-    {
-        if(i->next->val != i->next->next->val)
-            i = i->next;
-        else
-        {
-            Node *j = i->next->next;
-            while(j && j->val == i->next->val)
-                j = j->next;
-            i->next = j;
-        }
-    }
-
-    return dummy->next;
-}
-
 void test_DelRepeat()
 {
-	PRINT_FUNCTION_NAME;
+    PRINT_FUNCTION_NAME;
 
     Node *h = NULL;
     h = InsertTail(h,1);
     h = InsertTail(h,1);
     h = InsertTail(h,2);
     h = InsertTail(h,3);
-    h = InsertTail(h,3);
+    h = InsertTail(h,4);
     h = InsertTail(h,4);
     h = InsertTail(h,4);
     Trvl(h);

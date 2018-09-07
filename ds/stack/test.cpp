@@ -26,7 +26,7 @@ double toNum(char*s, int &k)
     }  
     return x;  
 }  
-  
+
 int priority(char c)  
 {  
     int k;  

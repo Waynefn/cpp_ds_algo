@@ -5,7 +5,6 @@ using namespace std;
 /**********************************************
     线段树(Segment)
 **********************************************/
-
 #define Len(x)      sizeof(x)/sizeof(x[0])  
 #define PRINT_ARRAY(a,n){for(int i = 0; i < n; i++) cout<<a[i]<<"|"; cout<<endl;}
 

@@ -19,6 +19,26 @@ Node *MakeNode(int v)
     return n;
 }
 
+void Trvl(Node *h)
+{
+    if(NULL == h)
+        return;
+    for(Node *i = h->next; i != h; i = i->next)
+        cout<<i->val<<",";
+    cout<<endl;
+}
+
+bool Search(Node *h, int v)
+{
+    if(NULL == h)
+        return false;
+
+    for(Node *i = h->next; i != h; i = i->next)
+        if(i->val == v)
+            return true;
+    return false;
+}
+
 Node *InsertHead(Node *h, int v)
 {
     Node *n = MakeNode(v);
@@ -63,26 +83,6 @@ Node *Delete(Node *h, int v)
         }
     }
     return h;
-}
-
-bool Search(Node *h, int v)
-{
-    if(NULL == h)
-        return false;
-
-    for(Node *i = h->next; i != h; i = i->next)
-        if(i->val == v)
-            return true;
-    return false;
-}
-
-void Trvl(Node *h)
-{
-    if(NULL == h)
-        return;
-    for(Node *i = h->next; i != h; i = i->next)
-        cout<<i->val<<",";
-    cout<<endl;
 }
 
 int main()

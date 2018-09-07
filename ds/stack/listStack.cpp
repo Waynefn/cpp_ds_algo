@@ -3,9 +3,8 @@
 using namespace std;
 
 /**********************************************
-    list实现栈
+    链表实现栈
 **********************************************/
-
 #define PRINT_STACK(s){for(Node *i = s->sp; i; i = i->next) cout<<i->val<<"|"; cout<<endl;}
 
 typedef struct _Node
