@@ -20,12 +20,10 @@ void Radix_d(int a[], int n, int d)
 {
     queue<int> q[M];
 
-    // 根据当前d位，依次进入10个
     for(int i = 0; i < n; i++)
         q[a[i]/d%M].push(a[i]);
-    // 本轮排序结果保存回原数组
-    int k = 0;
-    for(int i = 0; i < M; i++)
+
+    for(int i = 0, k = 0; i < M; i++)
         while(!q[i].empty())
             a[k++] = q[i].front(), q[i].pop();
 
@@ -34,11 +32,8 @@ void Radix_d(int a[], int n, int d)
 
 void Radix(int a[], int n)
 {
-    // 根据最大元素，确定排序的最大位数
-    int max = GetMax(a, n);
- 
-    // 从低位往高位排
-    for (int d = 1; d < max; d *= 10)
+    int max = GetMax(a, n);         // 根据max元素确定要处理的最大位数
+    for (int d = 1; d < max; d *= 10)   // 从低位往高位排
         Radix_d(a, n, d);
 }
  

@@ -7,7 +7,7 @@ using namespace std;
 #define PRINT_ARRAY(a,n){for(int i = 0; i < n; i++) cout<<a[i]<<"|"; cout<<endl;}
 
 /**********************************************	
-桶排序
+    桶排序
 **********************************************/
 void Bucket(int a[], int n, int max)
 {

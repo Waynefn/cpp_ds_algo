@@ -45,6 +45,9 @@ void Prim(int start)
 		int curr = Prim_FindMin(dist, visited);
 		visited[curr] = true;
 
+		PRINT_ARRAY(dist, V);
+		PRINT_ARRAY(prev, V);
+
 		int from = prev[curr];
 		mst_cost += g[from][curr];
 		cout<<"add edge g["<<from<<"]["<<curr<<"] = "<<g[from][curr]<<endl;
@@ -56,6 +59,8 @@ void Prim(int start)
 				prev[to] = curr;
 			}
 		}
+
+		cout<<endl;
 	}
 	cout<<"mst cost = "<<mst_cost<<endl;
 }

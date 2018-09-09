@@ -9,20 +9,20 @@ using namespace std;
 #define Len(x)      sizeof(x)/sizeof(x[0])
 #define PRINT_ARRAY(a,n){for(int i = 0; i < n; i++) cout<<a[i]<<"|"; cout<<endl;}
 
-typedef struct _TreeNode
+typedef struct _Node
 {
     int val;
-    _TreeNode *left, *right;
-    _TreeNode(int val)
+    _Node *left, *right;
+    _Node(int val)
     {
         this->val = val;
-        this->left = this->right = NULL;
+        left = right = NULL;
     }
-}TreeNode;
+}Node;
 
-bool Search(TreeNode *t, int x)
+bool Search(Node *t, int x)
 {
-    TreeNode *tmp = t;
+    Node *tmp = t;
 
     while(tmp)
     {
@@ -31,40 +31,48 @@ bool Search(TreeNode *t, int x)
         else if(x > tmp->val)
             tmp = tmp->right;
         else
-        {
-            cout<<"find "<<x<<" OK"<<endl;
             return true;
-        }
     }
-    cout<<"find "<<x<<" FAIL"<<endl;
     return false;
 }
 
-int NodeCnt(TreeNode *t)
+bool Search_r(Node *t, int x)
+{
+    if(NULL == t)
+        return false;
+    if(x < t->val)
+        return Search_r(t->left, x);
+    else if(x > t->val)
+        return Search_r(t->right, x);
+    else
+        return true;
+}
+
+int NodeCnt(Node *t)
 {
     if(NULL == t)
         return 0;
     return 1 + NodeCnt(t->left) + NodeCnt(t->right);
 }
 
-int NodeSum(TreeNode *t)
+int NodeSum(Node *t)
 {
     if(NULL == t)
         return 0;
     return t->val + NodeSum(t->left) + NodeSum(t->right);
 }
 
-int Height(TreeNode *t)
+int Height(Node *t)
 {
     if(NULL == t)
         return 0;
     return 1 + max(Height(t->left),Height(t->right));
 }
 
-TreeNode *Insert_r(TreeNode *t, int val)
+Node *Insert_r(Node *t, int val)
 {
     if(NULL == t)
-        t = new TreeNode(val);
+        t = new Node(val);
     else if(val < t->val)
         t->left = Insert_r(t->left, val);
     else if(val > t->val)
@@ -74,13 +82,13 @@ TreeNode *Insert_r(TreeNode *t, int val)
     return t;
 }
 
-TreeNode *Insert(TreeNode *t, int val)
+Node *Insert(Node *t, int val)
 {
-    TreeNode *node = new TreeNode(val);
+    Node *node = new Node(val);
     if(NULL == t)
         return node;
 
-    TreeNode *i = t, *j = NULL;
+    Node *i = t, *j = NULL;
     while(i)
     {
         j = i;
@@ -98,7 +106,7 @@ TreeNode *Insert(TreeNode *t, int val)
     return t;
 }
 
-TreeNode *Delete(TreeNode *t, int x)
+Node *Delete(Node *t, int x)
 {
     if(NULL == t)
         return NULL;
@@ -109,7 +117,7 @@ TreeNode *Delete(TreeNode *t, int x)
         t->right = Delete(t->right, x);
     else
     {
-        TreeNode *tmp;
+        Node *tmp;
         if(t->left && t->right)
         {
             tmp = t->right;
@@ -131,7 +139,7 @@ TreeNode *Delete(TreeNode *t, int x)
     return t;
 }
 
-void TrvlPrev_r(TreeNode *t)
+void TrvlPrev_r(Node *t)
 {
     if(NULL == t)
         return;
@@ -140,7 +148,7 @@ void TrvlPrev_r(TreeNode *t)
     TrvlPrev_r(t->right);
 }
 
-void TrvlIn_r(TreeNode *t)
+void TrvlIn_r(Node *t)
 {
     if(NULL == t)
         return;
@@ -149,7 +157,7 @@ void TrvlIn_r(TreeNode *t)
     TrvlIn_r(t->right);
 }
 
-void TrvlPost_r(TreeNode *t)
+void TrvlPost_r(Node *t)
 {
     if(NULL == t)
         return;
@@ -158,9 +166,9 @@ void TrvlPost_r(TreeNode *t)
     cout<<t->val<<" ";
 }
 
-void TrvlPrev(TreeNode *t)
+void TrvlPrev(Node *t)
 {
-    stack<TreeNode *> s;
+    stack<Node *> s;
     while(!s.empty() || t)
     {
         while(t)
@@ -174,9 +182,9 @@ void TrvlPrev(TreeNode *t)
     }cout<<endl;
 }
 
-void TrvlIn(TreeNode *t)
+void TrvlIn(Node *t)
 {
-    stack<TreeNode *> s;
+    stack<Node *> s;
     while(!s.empty() || t)
     {
         while(t)
@@ -190,10 +198,10 @@ void TrvlIn(TreeNode *t)
     }cout<<endl;
 }
 
-void TrvlPost(TreeNode *t)
+void TrvlPost(Node *t)
 {
-    TreeNode *last = NULL;
-    stack<TreeNode *> s;
+    Node *last = NULL;
+    stack<Node *> s;
     while(!s.empty() || t)
     {
         while(t)
@@ -214,15 +222,15 @@ void TrvlPost(TreeNode *t)
     }cout<<endl;
 }
 
-void TrvlLevel(TreeNode *t)
+void TrvlLevel(Node *t)
 {
     if(NULL == t)
         return;
-    queue<TreeNode *> q;
+    queue<Node *> q;
     q.push(t);
     while(!q.empty())
     {
-        TreeNode *tmp = q.front(); q.pop();
+        Node *tmp = q.front(); q.pop();
         cout<<tmp->val<<"-";
         if(tmp->left)
             q.push(tmp->left);
@@ -231,11 +239,11 @@ void TrvlLevel(TreeNode *t)
     }cout<<endl;
 }
 
-void TrvlLevel2(TreeNode *t)
+void TrvlLevel2(Node *t)
 {
     if(NULL == t)
         return;
-    queue<TreeNode *> q;
+    queue<Node *> q;
     q.push(t);
 
     int level = 0;
@@ -246,7 +254,7 @@ void TrvlLevel2(TreeNode *t)
         int lvSize = q.size();
         while(lvSize--)
         {
-            TreeNode *tmp = q.front(); q.pop();
+            Node *tmp = q.front(); q.pop();
             cout<<tmp->val<<"-";
             if(tmp->left)   
                 q.push(tmp->left);
@@ -256,12 +264,12 @@ void TrvlLevel2(TreeNode *t)
     }
 }
 
-void TrvlLevel2_reverse(TreeNode *t)
+void TrvlLevel2_reverse(Node *t)
 {
     if(NULL == t)
         return;
 
-    queue<TreeNode *> q;
+    queue<Node *> q;
     stack<queue<int> > s;
     q.push(t);
     while(!q.empty())
@@ -290,19 +298,19 @@ void TrvlLevel2_reverse(TreeNode *t)
     }
 }
 
-void TrvlZigzag(TreeNode *t)
+void TrvlZigzag(Node *t)
 {
     if(NULL == t)
         return;
 
     int level = 0;
-    stack<TreeNode *> s1;
-    stack<TreeNode *> s2;
+    stack<Node *> s1;
+    stack<Node *> s2;
 
     s1.push(t);
     while(!s1.empty() || !s2.empty())
     {
-        TreeNode *tmp;
+        Node *tmp;
         while(!s1.empty())
         {
             tmp = s1.top(); s1.pop();
@@ -327,14 +335,17 @@ void TrvlZigzag(TreeNode *t)
 void test_Bst()
 {
     int a[] = {11,4,21,3,9,17,22,15,18};
-    TreeNode *t = NULL;
+    Node *t = NULL;
 
     for(int i = 0; i < Len(a); i++)
         t = Insert(t, a[i]);
 
-    Search(t, 3);
-    Search(t, 9);
-    Search(t, 33);
+    cout<<"find : "<<Search(t, 3)<<endl;
+    cout<<"find : "<<Search_r(t, 3)<<endl;
+    cout<<"find : "<<Search(t, 9)<<endl;
+    cout<<"find : "<<Search_r(t, 9)<<endl;
+    cout<<"find : "<<Search(t, 33)<<endl;
+    cout<<"find : "<<Search_r(t, 33)<<endl;
 
     cout<<"tree node num = "<<NodeCnt(t)<<endl;
     cout<<"tree height = "<<Height(t)<<endl;
@@ -357,10 +368,10 @@ void test_Bst()
 **********************************************/
 #define MAX (11)
 
-void TarjanResult(bool visited[], int ancestors[], int n)
+void TarjanResult(bool visited[], int s[], int n)
 {
     cout<<"vis = "; PRINT_ARRAY(visited, n);
-    cout<<"anc = "; PRINT_ARRAY(ancestors, n);
+    cout<<"anc = "; PRINT_ARRAY(s, n);
     
     cout<<"idx = ";
     for(int i = 0; i < n; i++)
@@ -368,26 +379,26 @@ void TarjanResult(bool visited[], int ancestors[], int n)
     cout<<endl;
 }
 
-void uf_init(int S[], int n)
+void uf_init(int s[], int n)
 {
     for(int i = 0; i < n; i++)
-        S[i] = i;   // 初始化时，每个节点的祖先即是自己
+        s[i] = i;   // 初始化时，每个节点的祖先即是自己
 }
 
-void uf_union(int S[], int e1, int e2)
+void uf_union(int s[], int x, int y)
 {
-    S[e2] = e1;     // 不可以优化合并操作，否则parent节点会被合并，指向child
+    s[y] = x;     // 不可以优化合并操作，否则parent节点会被合并，指向child
 }
 
-int uf_find(int S[], int x)
+int uf_find(int s[], int x)
 {
-    if(S[x] == x)
+    if(s[x] == x)
         return x;
     else
-        return uf_find(S, S[x]);
+        return uf_find(s, s[x]);
 }
 
-void TarjanLCA(TreeNode *t, bool visited[], int ancestors[], int n, int x, int y)
+void TarjanLCA(Node *t, bool visited[], int s[], int n, int x, int y)
 {
     if(NULL == t)
         return;
@@ -399,19 +410,19 @@ void TarjanLCA(TreeNode *t, bool visited[], int ancestors[], int n, int x, int y
 
     if(t->left)
     {
-        TarjanLCA(t->left, visited, ancestors, n, x, y);   // dfs遍历树
-        uf_union(ancestors, t->val, t->left->val);      // 合并子树到自身集合
+        TarjanLCA(t->left, visited, s, n, x, y);   // dfs遍历树
+        uf_union(s, t->val, t->left->val);      // 合并子树到自身集合
     }
     if(t->right)
     {
-        TarjanLCA(t->right, visited, ancestors, n, x, y);
-        uf_union(ancestors, t->val, t->right->val);
+        TarjanLCA(t->right, visited, s, n, x, y);
+        uf_union(s, t->val, t->right->val);
     }
 
     if(x == t->val && visited[y])   // 遍历到x时，发现y已经被访问过，此时y所属集合即为结果
-        cout<<"LCA("<<x<<","<<y<<") = "<<uf_find(ancestors, y)<<endl;   
+        cout<<"LCA("<<x<<","<<y<<") = "<<uf_find(s, y)<<endl;   
     if(y == t->val && visited[x])   // 遍历到y时，发现y已经被访问过，此时y所属集合即为结果
-        cout<<"LCA("<<x<<","<<y<<") = "<<uf_find(ancestors, x)<<endl;
+        cout<<"LCA("<<x<<","<<y<<") = "<<uf_find(s, x)<<endl;
 
     visited[t->val] = true;         // 类似后续遍历,最后将自己置true
 
@@ -425,20 +436,20 @@ void TarjanLCA(TreeNode *t, bool visited[], int ancestors[], int n, int x, int y
 void test_TarjanLCA()
 {
     int a[] = {6,4,8,2,7,9,1,3,10,0};
-    TreeNode *t = NULL;
+    Node *t = NULL;
 
     for(int i = 0; i < Len(a); i++)
         t = Insert(t, a[i]);
     TrvlLevel2(t);
 
     bool visited[MAX] = {false};
-    int ancestors[MAX];
+    int s[MAX];
 
-    uf_init(ancestors, MAX);
+    uf_init(s, MAX);
 
-    TarjanLCA(t, visited, ancestors, MAX, 1, 0);   
+    TarjanLCA(t, visited, s, MAX, 1, 0);   
 
-    TarjanResult(visited, ancestors, MAX);
+    TarjanResult(visited, s, MAX);
 }
 
 int main()
