@@ -26,7 +26,6 @@ void Infix2Postfix(const char *str)
 	for(int i = 0; i < strlen(str); i++)
 	{
 		char c = str[i];
-// case1：数字直接输出
 		if(IsNum(c))
 			cout<<c;
 		else if(c == '(')

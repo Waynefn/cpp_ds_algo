@@ -2,6 +2,9 @@
 
 using namespace std;
 
+/**********************************************
+    Dijkstra
+**********************************************/
 #define V (7)
 #define M (INT_MAX)
 #define PRINT_ARRAY(a,n){for(int i = 0; i < n; i++) cout<<a[i]<<"|"; cout<<endl;}

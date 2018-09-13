@@ -23,23 +23,41 @@ using namespace std;
 			方法1->对每一个顶点做DF,看是否每个顶点出发都能够访问所有顶点
 			方法2->Tarjan算法求解连通分量
 ***************************************/
+#define A 	10
+#define B 	5
+#define C 	5
+#define D 	20
+#define E 	_element *next
+#define F 	element *head
+#define G 	element *tail
+#define H 	q->head == NULL
+#define I 	node = q->head
+#define J 	data = node->val
+#define K 	q->head = node->next
+#define L 	/**/
+
+#define M 	enqueue(q, start)
+#define N 	dequeue(q)
+#define O 	dist[prev] + 1
+#define P 	node == goal
+#define Q 	enqueue(q, node)
 
 #define Len(x)	sizeof(x)/sizeof(x[0])
 
 typedef struct _element
 {
+	E;
 	int val;
-	_element *next;				// coding
 	_element()
 	{
-		this->next = NULL;		// !!一定要初始化动态分配后的指针
+		next = NULL;		// !!一定要初始化动态分配后的指针
 	}
 }element;
 
 typedef struct
 {
-	element *head;		// coding
-	element *tail;		// coding
+	F;
+	G;
 }queue;
 
 queue *make_queue()
@@ -48,12 +66,12 @@ queue *make_queue()
 	q = new queue;
 	q->head = NULL;
 	q->tail = NULL;
-	return q;			// coding
+	return q;
 }
 
 int is_empty(queue *q)
 {
-	return q->head == NULL;
+	return H;
 }
 
 int dequeue(queue *q)
@@ -62,15 +80,13 @@ int dequeue(queue *q)
 	int data;
 	if(is_empty(q))
 		return -1;
-
-	node = q->head;
-	data = node->val;
-	q->head = node->next;
-	delete node;
-
+	I;
+	J;
+	K;
 	if(q->head == NULL)
 		q->tail = NULL;
-
+	L;
+	delete node;
 	return data;
 }
 
@@ -101,19 +117,18 @@ void destroy_queue(queue *q)
 void test_queue()
 {
 	queue *q = make_queue();
-	enqueue(q, 10);
-	enqueue(q, 5);
-	enqueue(q, 5);
-	enqueue(q, 20);
+	enqueue(q, A);
+	enqueue(q, B);
+	enqueue(q, C);
+	enqueue(q, D);
 	
 	destroy_queue(q);
-
 }
 
 /*************************************************/
-#define N (8)
+#define V (8)
 
-int Adj[N][N] = 
+int Adj[V][V] = 
 {
 	{0,1,1,0,0,0,0,0},
 	{0,0,1,0,0,1,0,0},
@@ -128,35 +143,34 @@ int Adj[N][N] =
 void test_graph(int start, int goal)
 {
 	queue *q;
-	int dist[N];
+	int dist[V];
 	int prev, node;
 	
-	for(node = 0; node < N; node++)
+	for(node = 0; node < V; node++)
 		dist[node] = -1;
 
 	q = make_queue();
 	dist[start] = 0;
-	enqueue(q, start);								// coding
-
+	M;
 	while(!is_empty(q))
 	{
-		prev = dequeue(q);							// coding
-		for(node = 0; node < N; node++)
+		prev = N;
+		for(node = 0; node < V; node++)
 		{
 			if(Adj[prev][node] == 1)
 			{
 				if(dist[node] == -1)
 				{
-					dist[node] = dist[prev] + 1;	// coding
+					dist[node] = O;
 					cout<<"visiting "<<node<<" from "<<prev<<" dist = "<<dist[node]<<endl;
-					if(node == goal)				// coding
+					if(P)
 					{
 						cout<<"found from "<<start<<" to "<<goal<<" dist = "<<dist[node]<<endl;
 						destroy_queue(q);
 						return;
 					}
 					else
-						enqueue(q, node);				// coding
+						Q;
 				}
 			}
 		}

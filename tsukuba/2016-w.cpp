@@ -19,6 +19,12 @@ using namespace std;
 		题意应该是只调用一次->n
 	5.完成insert()函数
 ***************************************/
+#define A 	node != &EMPTY
+#define B	t->left	
+#define C 	insert(t->left, v)
+#define D 	else if(v > t->val)
+#define E 	t->right
+#define F 	insert(t->right, v)
 
 #define Len(x)	sizeof(x)/sizeof(x[0])
 
@@ -44,19 +50,14 @@ tree find_node(tree t, int v)
 		else
 			t = t->right;
 	}
-
 	return t;
 }
 
-/*
-	return true:找到了v
-	return false:没有找到v
-*/
 int contains(tree t, int v)
 {
 	EMPTY.val = v;
 	tree node = find_node(t, v);
-	return node != &EMPTY;
+	return A;
 }
 
 tree insert(tree t, int v)
@@ -69,9 +70,9 @@ tree insert(tree t, int v)
 		return node;
 	}
 	if(v < t->val)
-		t->left = insert(t->left, v);	// coding
-	else if(v > t->val)					// coding
-		t->right = insert(t->right, v);	// coding
+		B = C;
+	D
+		E = F;
 
 	return t;
 }
@@ -85,7 +86,7 @@ void test_question_1()
 	for(int i = 0; i < Len(a); i++)
 		t = insert(t, a[i]);
 
-	cout<<contains(t, 9)<<endl;
+	cout<<contains(t, 5)<<endl;
 }
 
 int main()

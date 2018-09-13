@@ -13,6 +13,13 @@ using namespace std;
 问题1->链表实现栈，实现[加法][减法][交换][变符号]
 
 ***************************************/
+#define A 	sp
+#define B 	data
+#define C 	sp = e
+#define D 	push(arg2)
+#define E 	push(arg1)
+#define F 	0
+#define G	sub()
 
 #define Len(x)	sizeof(x)/sizeof(x[0])
 
@@ -20,11 +27,6 @@ typedef struct _element
 {
 	int data;
 	_element *next;
-	_element(int val)
-	{
-		this->data = val;
-		this->next = NULL;
-	}
 }element;
 
 element *sp;
@@ -32,9 +34,9 @@ element *sp;
 void push(int data)
 {
 	element *e = new element;
-	e->data = data;			// coding
-	e->next = sp;			// coding
-	sp = e;					// coding
+	e->next = A;
+	e->data = B;			
+	C;					
 }
 
 int pop()
@@ -83,22 +85,22 @@ void swap()
 	int arg1, arg2;
 	arg2 = pop();
 	arg1 = pop();
-	push(arg2);		// coding
-	push(arg1);		// coding
+	D;
+	E;
 }
 
 void Negate()
 {
-	push(0);
+	push(F);
 	swap();
-	sub();
+	G;
 }
 
 void test_question_1()
 {
-//	push(10); push(20); push(30);
-//	mul(); sub(); print();
-//	swap(); print(); print();
+	push(10); push(20); push(30);
+	mul(); sub(); print();
+	swap(); print(); print();
 	push(50); Negate(); 
 }
 

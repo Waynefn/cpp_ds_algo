@@ -27,9 +27,14 @@ using namespace std;
 		F->只依赖于q1和q2的元素个数
 	5.完成[数组实现循环queue]的代码
 ***************************************/
+#define A 	!i
+#define B 	(sizeq(q2) && (peekq(q1) > peekq(q2)))
+#define C 	q->head + q->cnt
+#define D 	q->cnt--
 
-#define MAX (100)
+#define MAX (10)
 #define Len(x)	sizeof(x)/sizeof(x[0])
+#define PRINT_ARRAY(a,n){for(int i = 0; i < n; i++) cout<<a[i]<<"|"; cout<<endl;}
 
 typedef struct _queue
 {
@@ -57,7 +62,7 @@ void enq(queue q, int val)
 {
 	enq_cnt++;
 
-	q->val[q->cnt] = val;		// coding
+	q->val[C] = val;
 	q->cnt++;
 }
 
@@ -72,7 +77,7 @@ int deq(queue q)
 
 	int val = peekq(q);
 	q->head = (q->head + 1) % MAX;
-	q->cnt--;					// coding
+	D;
 	return val;
 }
 
@@ -84,7 +89,7 @@ void split(queue q, queue subq[])
 	while(sizeq(q) > 0)
 	{
 		enq(subq[i], deq(q));
-		i = !i;			// coding
+		i = A;
 	}
 }
 
@@ -111,7 +116,7 @@ queue merge_2(queue q1, queue q2)
 	queue q = newq();
 	while(sizeq(q1) > 0 || sizeq(q2) > 0)
 	{
-		if(sizeq(q1) == 0 || (sizeq(q2) && (peekq(q1) > peekq(q2))))	// coding
+		if(sizeq(q1) == 0 || B)
 			enq(q, deq(q2));
 		else
 			enq(q, deq(q1));
@@ -134,11 +139,20 @@ queue ms(queue q)
 
 void test_question_1()
 {
-	int a[] = {5,4,2,6};
 	queue q = newq();
 
-	for(int i = 0; i < Len(a); i++)
-		enq(q, a[i]);
+	enq(q,0);
+	enq(q,1);
+	enq(q,2);
+	cout<<deq(q)<<endl;
+	cout<<deq(q)<<endl;
+	enq(q,3);
+	enq(q,4);
+	cout<<deq(q)<<endl;
+
+	PRINT_ARRAY(q->val, MAX);
+	cout<<q->head<<" -- "<<q->cnt<<endl;
+	
 	q = ms(q);
 	while(sizeq(q) > 0)
 		cout<<deq(q)<<endl;

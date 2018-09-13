@@ -19,23 +19,43 @@ using namespace std;
 		f(p1,p1)的话会导致程序死循环,因为组成循环链表无法退出while循环
 		完成改进后的safe_f()函数 ???
 ***************************************/
+#define A1 	_list
+#define B1 	p == NULL
+#define C1 	p->next
+#define D1 	p != NULL
+#define E1 	p->next
+
+#define A2 	p != NULL
+#define B2	n++
+#define C2	p->next
+#define D2	p == NULL
+#define E2 	1
+#define F2	p->next
+
+#define A3	NULL
+#define B3	q->elem
+#define C3	NULL
+#define D3	q->next
+#define E3	p->elem
+#define F3	p->next	
+#define G3	q
 
 #define Len(x)	sizeof(x)/sizeof(x[0])
 
 typedef struct _list
 {
 	char *elem;
-	_list *next;		// coding
+	A1 *next;
 }list;
 
 void print(list *p)
 {
-	if(p->next == NULL)
+	if(B1)
 		cout<<"[]"<<endl;	
 	else
 	{
 		cout<<"["<<p->elem;
-		for(p = p->next; p != NULL; p = p->next)	// coding
+		for(p = C1; D1; p = E1)
 			cout<<", "<<p->elem;
 		cout<<"]"<<endl;
 	}
@@ -44,10 +64,10 @@ void print(list *p)
 int length(list *p)
 {
 	int n = 0;
-	while(p != NULL)
+	while(A2)
 	{
-		n++;
-		p = p->next;
+		B2;
+		p = C2;
 	}
 
 	return n;
@@ -55,10 +75,10 @@ int length(list *p)
 
 int length_r(list *p)
 {
-	if(p == NULL)
+	if(D2)
 		return 0;
 	else
-		return 1 + length_r(p->next);
+		return E2 + length_r(F2);
 }
 
 list *f(list *p, list *q)	// pq 连接起来
@@ -89,12 +109,12 @@ list *safe_f(list *p, list *q)
 	if(NULL == p)
 	{
 		if(NULL == q)
-			return NULL;		// coding
+			return A3;
 		else
-			return cons(q->elem, safe_f(NULL, q->next));	// coding
+			return cons(B3, safe_f(C3, D3));
 	}
 	else
-		return cons(p->elem, safe_f(p->next, q));		// coding
+		return cons(E3, safe_f(F3, G3));
 }
 
 void test_question_1()
@@ -103,8 +123,8 @@ void test_question_1()
 	p1 = cons("blue", cons("yellow", cons("red", NULL)));
 	p2 = cons("black", cons("white", NULL));
 	print(f(p1,p2));
-
 	// print(safe_f(p1,p2));
+	print(NULL);
 }
 
 int main()

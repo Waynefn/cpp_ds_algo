@@ -17,6 +17,20 @@ using namespace std;
 	4.数组作为stack有长度限制,说明一个解决的方法
 	ps:stack方向从大到小伸展
 ***************************************/
+#define A 	'(' != pop()
+#define B 	'{' != pop()
+#define C 	'[' != pop()
+#define D 	== 0
+#define E 	== 0
+#define F 	sp--
+#define G 	stack[sp]
+#define H 	/**/
+#define I 	== SIZE
+#define J 	/**/
+#define K 	stack[sp]
+#define L 	sp++
+#define M 	SIZE - sp
+
 
 #define SIZE (100)
 unsigned char stack[SIZE];
@@ -27,46 +41,32 @@ void init_stack(void)
 	sp = SIZE;
 }
 
-/*
-	成功:返回1
-	overflow:返回-1
-*/
 int push(unsigned char data)
 {
-	if(sp == 0)			// coding
+	if(sp E)	/* stack overflow */
 		return -1;
-
-	sp--;				// coding
-	stack[sp] = data;	// coding
-
+	F;			
+	G = data;
+	H;
 	return 1;
 }
 
-/*
-	成功:返回data
-	outflow:返回-1
-*/
 int pop()
 {
 	unsigned char data;
-	if(sp == SIZE)		// coding
+	if(sp I)
 		return -1;
-
-	data = stack[sp];	// coding
-	sp++;				// coding
-
+	J;
+	data = K;
+	L;
 	return data;
 }
 
 int depth()
 {
-	return SIZE - sp;	// coding
+	return M;
 }
 
-/*
-	return 1:字符串的符号合法
-	return 0:不合法
-*/
 int blance(unsigned char *p)
 {
 	unsigned char c;
@@ -82,22 +82,22 @@ int blance(unsigned char *p)
 				push(c);
 				break;
 			case ')':
-				if('(' != pop())	// coding
-					return 0;
-				break;
-			case ']':
-				if('[' != pop())	// coding
+				if(A)
 					return 0;
 				break;
 			case '}':
-				if('{' != pop())	// coding
+				if(B)
+					return 0;
+				break;
+			case ']':
+				if(C)
 					return 0;
 				break;
 			default:
 				break;
 		}
 	}
-	if(depth() == 0)	// coding
+	if(depth() D)
 		return 1;
 	else
 		return 0;

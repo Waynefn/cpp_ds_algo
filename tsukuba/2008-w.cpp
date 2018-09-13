@@ -22,6 +22,14 @@ using namespace std;
 		完成代码
 		数组庞大时插入和堆排哪个速度快,说明理由
 ***************************************/
+#define A1 	sz
+#define B1 	d[j]
+#define C1 	m
+
+#define A2 	val[1]
+#define B2 	val[j+1]
+#define C2 	val[j]
+#define D2 	val[val[0]]
 
 #define Len(x)	sizeof(x)/sizeof(x[0])
 
@@ -36,12 +44,12 @@ void is(int sz, int d[])
 {
 	int i, j, m;
 
-	for(i = 1; i < sz; i++)	// coding
+	for(i = 1; i < A1; i++)
 	{
 		m = d[i];
 		for(j = i-1; j >= 0 && d[j] >= m; j--)
-			d[j+1] = d[j];		// coding
-		d[j+1] = m;			// coding
+			d[j+1] = B1;
+		d[j+1] = C1;
 	}
 
 	print_array(d, sz);
@@ -60,19 +68,19 @@ void in(int dt, int val[])
 
 int dl(int val[])
 {
-	int i = 1, j, ret = val[1];	// coding
+	int i = 1, j, ret = A2;
 
 	while(i <= val[0]/2)
 	{
 		j = 2*i;
-		if(j+1 < val[0] && val[j+1] < val[j])	// coding
+		if(j+1 < val[0] && B2 < C2)
 			j++;
-		if(val[val[0]] < val[j])	// 已经下降完毕
+		if(val[val[0]] < val[j])
 			break;
 		val[i] = val[j];
 		i = j;
 	}
-	val[i] = val[val[0]];			// coding
+	val[i] = D2;			
 	val[0]--;
 
 	return ret;

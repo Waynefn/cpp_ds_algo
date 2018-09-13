@@ -27,6 +27,18 @@ using namespace std;
 			tail = (n+1)*SIZE + y  (tail最大不会超过head一个SIZE)
 			此时head和tail应该同时减去n*SIZE,即可起到模SIZE的作用
 ***************************************/
+#define A1 	n->c[i] == NULL
+#define B1 	n->c[i]
+#define C1 	true
+#define D1 	n->val = val
+#define E1	n->c[i]
+#define F1	n->isEnd
+
+#define A2	buf->tail
+#define B2	buf->store[i++ % BUFSIZE]
+#define C2	*dest++
+#define D2	buf->head
+#define E2	(buf->head / BUFSIZE) * BUFSIZE
 
 #define Len(x)	sizeof(x)/sizeof(x[0])
 
@@ -58,12 +70,12 @@ void insert(node *root, char *key, int val)
 	for(l = 0; l < len; l++)
 	{
 		int i = key[l] - 'a';
-		if(n->c[i] == NULL)		// coding
+		if(A1)
 			n->c[i] = new_node();
-		n = n->c[i];			// coding
+		n = B1;
 	}
-	n->isEnd = true;			// coding
-	n->val = val;				// coding
+	n->isEnd = C1;
+	D1;
 }
 
 int search(node *root, char *key)
@@ -75,13 +87,11 @@ int search(node *root, char *key)
 	for(l = 0; l < len; l++)
 	{
 		int i = key[l] - 'a';
-
 		if(n->c[i] == NULL)
 			return -1;
-
-		n = n->c[i];			// coding
+		n = E1;
 	}
-	if(n->isEnd)				// coding fixed bug:节点一定不为NULL，此时判断isEnd来决定返回值
+	if(F1)		// 节点一定不为NULL，但还要判断isEnd来决定返回值
 		return n->val;	
 	else
 		return -1;
@@ -138,21 +148,19 @@ int put_str(buffer *buf, char *str)
 
 int get_str(buffer *buf, char dest[])
 {
-	int i = buf->head;						// 为了避免操作head,用变量i读取buf的头部字符
-
-	if(i == buf->tail)						// coding	// head == tail,buf为空
+	int i = buf->head;				// 为了避免操作head,用变量i读取buf的头部字符
+	if(i == A2)						// head == tail,buf为空
 	{
 		cout<<"get() empty"<<endl;
 		return 0;
 	}
 
 	do{
-		*dest = buf->store[i++ % BUFSIZE];	// coding
-	}while(*dest++ != '\0');				// coding 先判断相等,再++
+		*dest = B2;
+	}while(C2 != '\0');				// 先判断相等,再++
 
-	buf->head = i;							// coding,读取完成,更新head指针
-
-	i = (buf->head / BUFSIZE) * BUFSIZE;	
+	D2 = i;							// 读取完成,更新head指针
+	i = E2;	
 	buf->head -= i;
 	buf->tail -= i;
 

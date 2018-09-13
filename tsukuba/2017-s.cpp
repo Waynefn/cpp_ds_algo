@@ -28,6 +28,24 @@ C		==  30  40
 
 using namespace std;
 
+/***************************************
+问题1->栈实现后缀表达式计算
+***************************************/
+
+#define F 	a = pop()
+#define G 	b = pop()
+#define H 	b-a
+#define I 	a = pop()
+#define J 	c = pop()
+#define K 	push(b)
+#define L 	push(c)
+#define M 	n->next = sp
+#define N 	n->data
+#define O 	sp = n
+#define P 	NULL == sp
+#define Q 	x = sp->data
+#define R 	sp = sp->next
+
 #define OK (1)
 #define ERROR (0)
 extern int error;
@@ -60,23 +78,23 @@ void init_stack()
 void push(int x)
 {
 	element *n = new element;
-	n->next = sp;	// M
-	n->data = x;	// N
-	sp = n;			// O
+	M;
+	N = x;
+	O;
 }
 
 int pop()
 {
 	int x;
 	element *f;
-	if(NULL == sp)
+	if(P)
 	{
 		error = 1;	// stack NULL
 		return 0;
 	}
-	x = sp->data;	// Q
+	Q;
 	f = sp;
-	sp = sp->next;	// R
+	R;
 	free(f);
 	return x;
 }
@@ -95,8 +113,10 @@ void do_add()
 
 void do_sub()
 {
-	int a = pop(), b = pop();	// F G
-	push(b-a);					// H
+	int a,b;
+	F;
+	G;
+	push(H);
 }
 
 void do_eq()
@@ -113,9 +133,14 @@ void do_not()
 
 void do_cond()
 {
-	int a = pop(), b = pop(), c = pop();	// I J
-	if(a)	push(b);	// K
-	else	push(c);	// L
+	int a,b,c;
+	I;
+	b = pop();
+	J;
+	if(a)	
+		K;
+	else	
+		L;
 }
 
 int calc(char *exp[], int *xp)
@@ -123,7 +148,7 @@ int calc(char *exp[], int *xp)
 	init_stack();
 	for(int i = 0; exp[i] != NULL; i++)
 	{
-		if(isdigit(exp[i][0]))		do_num(exp[i]);
+		if(isdigit(exp[i][0]))				do_num(exp[i]);
 		else if(0 == strcmp(exp[i],"+"))	do_add();
 		else if(0 == strcmp(exp[i],"-"))	do_sub();
 		else if(0 == strcmp(exp[i],"=="))	do_eq();
@@ -144,7 +169,8 @@ int calc(char *exp[], int *xp)
 void test_question_4()
 {
 	int x = 0;
-	char *exp[] = {"10", "20", "==", "30", "40", "?", NULL};
+	// char *exp[] = {"10", "20", "==", "30", "40", "?", NULL};
+	char *exp[] = {"10", "20", "+", "25", "-", NULL};
 	if(OK == calc(exp, &x))
 		cout<<"OK, ret = "<<x<<endl;
 	else

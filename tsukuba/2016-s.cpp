@@ -17,8 +17,23 @@ using namespace std;
 /***************************************
 	情报2(1)->优先队列的堆排序
 ***************************************/
+#define A 	
+#define B 	
+#define C 	
+#define D 	i/2
+#define E 	INT_MAX
+#define F 	q->a[i] = q->a[j]
+#define G 	0
+#define H 	N_VERT
+#define I 	
+#define J 	
+#define K 	dist_vec[j]
+#define L 	next[len_next]
+#define M 	j
+
 #define SIZE (100)
 #define Len(x)	sizeof(x)/sizeof(x[0])	
+#define PRINT_ARRAY(a,n){for(int i = 0; i < n; i++) cout<<a[i]<<"|"; cout<<endl;}
 
 typedef struct
 {
@@ -39,7 +54,7 @@ void putq(pq *q, int v)
 	int i = ++(q->n);
 	while(q->a[i/2] <= v)
 	{
-		q->a[i] = q->a[i/2];	//coding
+		q->a[i] = q->a[D];
 		i = i/2;
 	}
 	q->a[i] = v;
@@ -49,7 +64,7 @@ int getq(pq *q)
 {
 	int i = 1, j, v, w;
 	if(q->n == 0)
-		return INT_MAX;			//coding
+		return E;
 	v = q->a[1];
 	w = q->a[(q->n)--];
 	while(i <= (q->n)/2)
@@ -60,7 +75,7 @@ int getq(pq *q)
 			break;
 		else
 		{
-			q->a[i] = q->a[j];	// coding
+			F;
 			i = j;
 		}
 	}
@@ -157,16 +172,15 @@ void calc_dists(const int origin, int dist_vec[])
 	dist_vec[origin] = 0;		// 初始化起点的距离
 	while(len_curr > 0)			// 类似每一轮BFS前,队列里元素的个数
 	{
-		cout<<"此次BFS的起点: "; print_array(curr, len_curr);
+		cout<<"此次BFS的起点: "; PRINT_ARRAY(curr, len_curr);
 		for(i = 0; i < len_curr; i++)	// 取出已访问的外层顶点i
 		{
-			for(j = 0; j < N_VERT; j++)	// 根据i,去更新与之相邻的更外层顶点j
+			for(j = G; j < H; j++)	// 根据i,去更新与之相邻的更外层顶点j
 			{
 				if(adj_mat[curr[i]][j] == 1 && dist_vec[j] == UNREACH)
 				{
-					cout<<curr[i]<<"-->["<<j<<"] ";
-					dist_vec[j] = dist;		// 更新探索到的节点的距离
-					next[len_next] = j;		// 邻接点放入next中
+					K = dist;		// 更新探索到的节点的距离
+					L = M;			// 邻接点放入next中
 					len_next++;
 				}
 			}
@@ -181,7 +195,7 @@ void calc_dists(const int origin, int dist_vec[])
 		dist++;
 	}
 	cout<<"顶点"<<origin<<"到其他各顶点的距离为：";	
-	print_array(dist_vec, N_VERT);
+	PRINT_ARRAY(dist_vec, N_VERT);
 }
 
 void calc_dists_self(const int origin, int dist_vec[])
@@ -212,7 +226,7 @@ void calc_dists_self(const int origin, int dist_vec[])
 	}
 
 	cout<<"顶点"<<origin<<"到其他各顶点的距离为：";
-	print_array(dist_vec, N_VERT);
+	PRINT_ARRAY(dist_vec, N_VERT);
 }
 
 void test_question_2()
@@ -224,61 +238,8 @@ void test_question_2()
 
 int main()
 {
-//	test_question_1();
+	test_question_1();
 	test_question_2();
 
 	return 0;
 }
-
-/* 没搞明白原题的代码思路，代码如下
-
-void calc_dists(const int origin, int dist_vec[])
-{
-	int adj_list[N_VERT * N_VERT], adj_index[N_VERT + 1];
-	int array1[N_VERT], array2[N_VERT];
-	int *curr = array1, *next = array2, *tmp;
-	int i, j, index = 0, dist = 1, len_curr = 1, len_next = 0;
-
-	// 完成邻接表
-	for(i = 0; i < N_VERT; i++)
-	{
-		adj_index[i] = index;
-		for(j = 0; j < N_VERT; j++)
-			if(adj_mat[i][j] == 1)
-				adj_list[index++] = j;
-	}
-	adj_index[N_VERT] = index;
-
-	print_array(adj_index, N_VERT+1);
-	print_array(adj_list, 20);
-
-	// 初始化所有顶点距离为-1
-	for(i = 0; i < N_VERT; i++)
-		dist_vec[i] = UNREACH;
-
-	curr[0] = origin;
-	dist_vec[origin] = 0;	// 初始化起点的距离
-	while(len_curr > 0)		// 每一轮BFS的探索距离
-	{
-		for(i = 0; i < len_curr; i++)
-		{
-			for(j = ; j < ; j++)	// coding
-			{
-				if( == )			// coding
-				{
-					 = dist;		// coding
-					  = ;			// coding
-					len_next++;
-				}
-			}
-		}
-		tmp = next;
-		next = curr;
-		curr = tmp;
-		len_curr = len_next;	// BFS搜索范围增加
-		len_next = 0;
-		dist++;
-	}	
-}
-
-*/

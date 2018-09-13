@@ -106,8 +106,8 @@ void test()
 	Quick(a2, Len(a2));
 	PRINT_ARRAY(a2, Len(a2));
 
-	int a3[] = {99,38,65,97,26,13,27,19,55,4};
-	Kth(a3, Len(a3), 3);
+	int a3[] = {3,9,0,5,6,2,1,4};
+	Kth(a3, Len(a3), 4);
 	Kth(a3, Len(a3), 6);
 }
 

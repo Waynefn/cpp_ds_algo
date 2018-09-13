@@ -14,6 +14,14 @@ using namespace std;
 	(d):执行C行11次，初始0执行了一次，d=1执行一次 ~ d=1234执行四次
 ***************************************/
 
+#define A 	d->digits[d->length]
+#define B 	i /= 10
+#define C 	d->digits[i] = d->digits[i-1]
+#define D 	d->digits[0] != 0
+#define E 	d->digits[0]
+#define F 	*str-'0'
+#define G 	*str != '\0'
+
 #define Len(x)	sizeof(x)/sizeof(x[0])
 #define N (100)
 
@@ -34,9 +42,9 @@ void intToBigDecimal(int i, BigDecimal *d)
 {
 	d->length = 0;
 	do{
-		d->digits[d->length] = i % 10;		// coding
+		A = i % 10;
 		d->length++;
-		i /= 10;		// coding
+		B;
 	}while(i);
 }
 
@@ -44,10 +52,10 @@ void shiftLeftBigDecimal(BigDecimal *d)
 {
 	int i;
 	for(i = d->length; i > 0; i--)
-		d->digits[i] = d->digits[i-1];		// coding
-	if(d->length > 1 || d->digits[0] != 0)	// coding
+		C;
+	if(d->length > 1 || D)
 		d->length++;
-	d->digits[0] = 0;						// coding
+	E = 0;
 }
 
 void strToBigDecimal(char *str, BigDecimal *d)
@@ -55,12 +63,9 @@ void strToBigDecimal(char *str, BigDecimal *d)
 	intToBigDecimal(0, d);
 	do{
 		shiftLeftBigDecimal(d);
-		
-		d->digits[0] = *str-'0';// coding
-		
+		d->digits[0] = F;
 		str++;
-
-	}while(*str != '\0');				// coding
+	}while(G);
 }
 
 int compareBigDecimal(BigDecimal *d1, BigDecimal *d2)

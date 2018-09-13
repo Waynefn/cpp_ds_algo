@@ -2,6 +2,9 @@
 
 using namespace std;
 
+/**********************************************
+    拓扑排序
+**********************************************/
 #define V (7)
 #define M (INT_MAX)
 
@@ -30,11 +33,9 @@ void Topsort()
     queue<int> q;
 
     Topsort_CalcIndegree(indegree);
-
     for(int i = 0; i < V; i++)
         if(indegree[i] == 0)
             q.push(i);
-
     while(!q.empty())
     {
         int curr = q.front(); q.pop();

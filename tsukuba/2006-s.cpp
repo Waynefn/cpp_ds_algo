@@ -18,58 +18,59 @@ using namespace std;
 	empty时：
 
 **********************************************/
+#define A 	NULL
+#define B 	data
+#define C 	qh->first = qh->last = e;
+#define D 	qh->last->next = e;	\
+			qh->last = e;
+
 #define Len(x)	sizeof(x)/sizeof(x[0])
 
 typedef struct _element
 {
-	int val;
+	int data;
 	_element *next;
 }element;
 
 typedef struct _queuehead
 {
-	element *first;		// pop point
-	element *last;		// push point
+	element *first;
+	element *last;
 	_queuehead()
 	{
-		this->first = NULL;
-		this->last = NULL;
+		first = last = NULL;
 	}
 }queuehead;
 
 void show_radixSort();
 
-bool queue_isEmpty(queuehead *qh)
+bool emptyqueue(queuehead *qh)
 {
 	return qh->first == NULL;
 }
 
-void queue_push(queuehead *qh, int val)
+void enqueue(queuehead *qh, int data)
 {
 	element *e = new element;
-	e->next = NULL;
-	e->val = val;
+	e->next = A;
+	e->data = B;
 	if(qh->first == NULL)
 	{
-		// coding
-		qh->first = e;
-		qh->last = e;
+		C
 	}
 	else
 	{
-		// coding
-		qh->last->next = e;
-		qh->last = e;
+		D
 	}
 }
 
-int queue_pop(queuehead *qh)	// coding
+int dequeue(queuehead *qh)	// coding
 {
-	if(queue_isEmpty(qh))
+	if(emptyqueue(qh))
 		return -1;
 
 	element *tmp = qh->first;
-	int res = tmp->val;
+	int res = tmp->data;
 
 	qh->first = tmp->next;
 	delete tmp;
@@ -93,15 +94,15 @@ void radix_sort(queuehead *input, queuehead *output, int n)
 	for(i = 0, div = 1; i < n; i++)
 		div = div * M;
 
-	while((data = queue_pop(input)) >= 0)
+	while((data = dequeue(input)) >= 0)
 	{
 		i = (data / div) % M;
-		queue_push(&buf[i], data);
+		enqueue(&buf[i], data);
 	}
 
 	for(i = 0; i < M; i++)
-		while((data = queue_pop(&buf[i])) >= 0)
-			queue_push(output, data);
+		while((data = dequeue(&buf[i])) >= 0)
+			enqueue(output, data);
 }
 
 void test_question_1()
@@ -112,12 +113,12 @@ void test_question_1()
 	int data;
 
 	for(int i = 0; i < Len(a); i++)
-		queue_push(&input, a[i]);
+		enqueue(&input, a[i]);
 
 	radix_sort(&input, &output, 0);
 	radix_sort(&output, &input, 1);
 
-	while((data = queue_pop(&input)) >= 0)
+	while((data = dequeue(&input)) >= 0)
 		cout<<data<<" ";
 	cout<<endl;
 }

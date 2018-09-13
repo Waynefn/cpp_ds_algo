@@ -15,6 +15,20 @@ https://www.titech.ac.jp/graduate_school/admissions/pdf/cs_h29.pdf
 
 using namespace std;
 
+#define A 	NULL == p
+#define B 	data < p->data
+#define C 	NULL != p->next
+#define D 	data > p->next->data
+#define E 	NULL != (*p)
+#define F 	data > (*p)->data
+#define G 	&(*p)->next
+#define H 	head1->next
+#define I 	head1->next = head2
+#define J 	head1
+#define K 	p3 = p2->next
+#define L 	p1 = p2
+#define M 	p2 = p3
+
 void test_1()
 {
 	if(0 && printf("A")) {printf ("B");};
@@ -57,14 +71,14 @@ CELL *insert1(CELL *head, int data)
 	CELL *node = CELL_alloc(data);
 	CELL *p = head;
 
-	if(NULL == p || data < p->data) // 头插
+	if(A || B) // 头插
 	{
 		node->next = p;
 		return node;
 	}
 	else
 	{
-		while(NULL != p->next && data > p->next->data) // 找到该插入的地方
+		while(C && D) // 找到该插入的地方
 			p = p->next;
 		node->next = p->next;
 		p->next = node;
@@ -76,10 +90,8 @@ void insert2(CELL **head_p, int data)
 {
 	CELL *node = CELL_alloc(data);
 	CELL **p = head_p;
-	
-	while(NULL != (*p) && data > (*p)->data)
-		p = &(*p)->next; 
-
+	while(E && F)
+		p = G; 
 	node->next = *p;
 	*p = node;
 }
@@ -122,9 +134,9 @@ CELL *reverse2(CELL *head1, CELL *head2)
 	if(head1 == NULL)
 		return head2;
 
-	CELL *h1 = head1->next;
-	head1->next = head2;
-	CELL *h2 = head1;
+	CELL *h1 = H;
+	I;
+	CELL *h2 = J;
 
 	return reverse2(h1, h2);
 }
@@ -134,10 +146,10 @@ CELL *reverse3(CELL *head)
 	CELL *p1 = NULL, *p2 = head, *p3;
 	while(p2 != NULL)
 	{
-		p3 = p2->next;
+		K;
 		p2->next = p1;
-		p1 = p2;
-		p2 = p3;
+		L;
+		M;
 	}
 	return p1;
 }

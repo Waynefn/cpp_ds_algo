@@ -20,7 +20,13 @@ using namespace std;
 	5.有向图满足上述特性时,sort()函数是可以对顶点排序达成某种条件,是什么?
 		全順序関係　https://ja.wikipedia.org/wiki/%E5%85%A8%E9%A0%86%E5%BA%8F
 ***************************************/
+#define A 	for(tail = 0; tail < N; tail++)	\
+				if(a[tail][head] == 1)		\
+					indegree[head]++;
+
 #define Len(x)	sizeof(x)/sizeof(x[0])
+#define PRINT_ARRAY(a,n){for(int i = 0; i < n; i++) cout<<a[i]<<"|"; cout<<endl;}
+
 #define N (5)
 
 int sorted[N], indegree[N], nodestack[N], stackp = 0;
@@ -33,17 +39,13 @@ char a[N][N] =
 	{1,0,1,0,0},
 };
 
-// 求所有顶点的[入度]个数
 void count_indegree()
 {
 	int tail, head;
 	for(head = 0; head < N; head++)
 	{
 		indegree[head] = 0;
-		// 以下内容为coding
-		for(tail = 0; tail < N; tail++)
-			if(a[tail][head] == 1)
-				indegree[head]++;
+		A;
 	}
 }
 
@@ -95,9 +97,7 @@ void test_question_1()
 	int tmp[N];
 	cout<<sort(sorted)<<endl;
 
-	for(int i = 0; i < N; i++)
-		cout<<sorted[i]<<" ";
-	cout<<endl;
+	PRINT_ARRAY(sorted, N);
 }
 
 int main()

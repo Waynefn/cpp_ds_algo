@@ -14,6 +14,30 @@ using namespace std;
 问题1->二叉树的树高/遍历/搜索/插入
 
 ***************************************/
+#define A1 	p->left
+#define B1 	p->right
+#define C1 	1 + a
+#define D1 	1 + b
+
+#define A2 	key == p->key
+#define B2 	key < p->key
+#define C2 	get1(p->left, key)
+#define D2 	get1(p->right, key)
+
+#define A3 	key == p->key
+#define B3 	key < p->key
+#define C3 	p->left
+#define D3 	put1(p->left, key, val)
+#define E3 	p->right
+#define F3 	put1(p->right, key, val)
+
+#define A4 	10, 1
+#define B4 	40, 2
+#define C4 	50, 3
+#define D4 	65, 1
+#define E4 	70, 3
+#define F4 	85, 2
+
 typedef struct _node
 {
 	int key;
@@ -29,12 +53,12 @@ int height1(node *p)
 	if(NULL == p)
 		return 0;
 
-	a = height1(p->left);	// coding
-	b = height1(p->right);	// coding
+	a = height1(A1);
+	b = height1(B1);
 	if(a >= b)
-		return 1 + a;		// coding
+		return C1; 
 	else
-		return 1 + b;		// coding
+		return D1;
 }
 
 int height()
@@ -63,12 +87,12 @@ int get1(node *p, int key)
 {
 	if(NULL == p)
 		return -1;
-	if(key == p->key)		// coding
+	if(A2)		// coding
 		return p->val;
-	else if(key < p->key)	// coding
-		return get1(p->left, key);	// coding
+	else if(B2)	// coding
+		return C2;	// coding
 	else
-		return get1(p->right, key);	// coding
+		return D2;	// coding
 }
 
 int get(int key)
@@ -88,21 +112,21 @@ node *make_node(int key, int val)
 
 void put1(node *p, int key, int val)
 {
-	if(key == p->key)	// coding
+	if(A3)
 		p->val = val;
-	else if(key < p->key)	// coding
+	else if(B3)
 	{
-		if(NULL == p->left)	// coding
-			p->left = make_node(key, val);	// coding
+		if(NULL == C3)
+			C3 = make_node(key, val);
 		else
-			put1(p->left, key, val);		// coding
+			D3;
 	}
 	else
 	{
-		if(NULL == p->right)	// coding
-			p->right = make_node(key, val);	// coding
+		if(NULL == E3)
+			E3 = make_node(key, val);
 		else
-			put1(p->right, key, val);		// coding
+			F3;
 	}
 }
 
@@ -116,12 +140,12 @@ void put(int key, int val)
 
 void test_question_1()
 {
-	put(10, 1);
-	put(40, 2);
-	put(50, 3);
-	put(65, 1);
-	put(70, 3);
-	put(85, 2);
+	put(A4);
+	put(B4);
+	put(C4);
+	put(D4);
+	put(E4);
+	put(F4);
 	print();
 	cout<<"height = "<<height()<<endl;
 }

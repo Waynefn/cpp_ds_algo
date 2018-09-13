@@ -33,6 +33,7 @@ using namespace std;
 	4.对N个元素的归并排序,时间复杂度是多少,请解释
 		N个元素划分为树状的子问题,每一层最多N次比较,树高度为logN
 ***************************************/
+#define A 	r-j+m+1
 
 #define Len(x)	sizeof(x)/sizeof(x[0])
 #define SIZE (7)
@@ -74,7 +75,7 @@ void sortsub(int a[], int l, int r)
 		for(i = l; i <= m; i++)	
 			b[i] = a[i];
 		for(j = m+1; j <= r; j++)
-			b[r-j+m+1] = a[j]; 		// coding
+			b[A] = a[j];
 
 		i = l; j = r;
 		for(k = l; k <= r; k++)

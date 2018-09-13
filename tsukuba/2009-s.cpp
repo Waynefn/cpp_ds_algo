@@ -13,6 +13,17 @@ using namespace std;
 问题1->
 
 ***************************************/
+#define A1 	sum += p->data
+#define B1 	p->next
+
+#define A2	x
+#define B2	t
+#define C2	t
+#define D2	p
+
+#define A3	p->data == x
+#define B3	p->next
+#define C3	p->next
 
 #define Len(x)	sizeof(x)/sizeof(x[0])
 
@@ -32,6 +43,22 @@ void trvl_list()
 	cout<<endl;
 }
 
+int sum_list()
+{
+	List *p;
+	int sum = 0;
+
+	p = head;
+	while(p != NULL)
+	{
+		A1;
+		p = B1;
+	}
+
+	cout<<"sum = "<<sum<<endl;
+	return sum;
+}
+
 void insert_list(int x)
 {
 	List *p, *q, *t;
@@ -45,13 +72,13 @@ void insert_list(int x)
 	}
 
 	t = new List;
-	t->data = x;		// coding
+	t->data = A2;
 
 	if(q == NULL)
-		head = t;
+		head = B2;
 	else
-		q->next = t;	// coding
-	t->next = p;
+		q->next = C2;
+	t->next = D2;
 }
 
 void delete_list(int x)
@@ -61,33 +88,17 @@ void delete_list(int x)
 	q = NULL;
 	for(p = head; p != NULL; p = p->next)
 	{
-		if(p->data == x)	// coding
+		if(A3)
 		{
 			if(q == NULL)
-				head = p->next;		// coding
+				head = B3;
 			else
-				q->next = p->next;	// coding
+				q->next = C3;
 			delete p;
 			return;
 		}
 		q = p;
 	}
-}
-
-int sum_list()
-{
-	List *p;
-	int sum = 0;
-
-	p = head;
-	while(p != NULL)
-	{
-		sum += p->data;		// coding
-		p = p->next;		// coding
-	}
-
-	cout<<"sum = "<<sum<<endl;
-	return sum;
 }
 
 void test_question_1()

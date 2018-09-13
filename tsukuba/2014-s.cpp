@@ -20,10 +20,10 @@ using namespace std;
 		所以结果为节点的个数:2^n-1
 	5.sumup_tree2(root)代码补充
 ***************************************/
+#define B 	if(p == NULL)	return 0
+#define C 	return p->val += sumup_tree2(p->right)
 
 #define Len(x)	sizeof(x)/sizeof(x[0])
-
-int q4_cnt = 0;
 
 typedef struct _node
 {
@@ -75,17 +75,15 @@ int sumup_list2(node *p)
 int sumup_tree1(node *p, int val)
 {
 	if(p == NULL)	return val;
-	q4_cnt++;
-	cout<<"curr is "<<p->val<<endl;
-	p->val += sumup_tree1(p->left, val);	//A
+	p->val += sumup_tree1(p->left, val);	/*A*/
 	return sumup_tree1(p->right, p->val);
 }
 
 int sumup_tree2(node *p)
 {
-	if(p == NULL)	return 0;				// coding
+	B;
 	p->val += sumup_tree2(p->left);
-	return p->val += sumup_tree2(p->right);	// coding
+	C;
 }
 
 void test_question_1()
@@ -100,7 +98,6 @@ void test_question_1()
 	n1 = make_node(1, n2, n3);
 
 //	sumup_tree1(n1, 0);
-//	cout<<q4_cnt<<endl;
 
 	sumup_tree2(n1);
 	cout<<n1->val<<endl;

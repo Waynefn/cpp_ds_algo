@@ -17,6 +17,13 @@ using namespace std;
 		排序好的数组?? [0,1,1,3,4]
 	4.f1换成冒泡排序的代码
 ***************************************/
+#define A 	{0,1,3,1,4}
+#define B 	j < size-i
+#define C 	
+#define D 	
+#define E 	
+#define F 	
+#define G 	
 
 #define Len(x)	sizeof(x)/sizeof(x[0])
 #define SIZE (6)
@@ -66,7 +73,7 @@ void f1_bubble(int data[], int size)
 {
 	int i, j;
 	for(i = 0; i < size-1; i++)
-		for(j = 1; j < size-i; j++)		// coding
+		for(j = 1; B; j++)
 			if(data[j-1] > data[j])
 				swap(&data[j-1], &data[j]);
 }
@@ -75,10 +82,11 @@ void test_question_1()
 {
 	int i;
 
-//	int array[SIZE] = {0,1,3,1,4};
-	int array[SIZE] = {3,4,6,1,2,5};
+	int array[SIZE] = A;
+	// int array[SIZE] = {3,4,6,1,2,5};
 
 	f1(array, SIZE);
+	// f1_bubble(array, SIZE);
 	print_array(array, SIZE);
 }
 

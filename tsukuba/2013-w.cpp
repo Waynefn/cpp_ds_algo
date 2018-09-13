@@ -16,17 +16,25 @@ using namespace std;
 	3.select_min的输出顺序为[1,0,2,5,3,4]
 	4.顶点1为起点,算法最终结果d[] = {5,0,6,11,15,10}
 ***************************************/
+#define A 	M
+#define B 	5
+#define C 	0
+#define D 	M
+#define E 	5
+#define F 	v->Vcount > 0
+#define G 	v->Vertex[x] == true
+
 #define M (9999)
 #define N (6)
 
 int graph[N][N] = 
 {
-	{0,  M,  M,  60, M,  5},	// 0
-	{5,  0,  6,  M,  50, M},	// 1
+	{0,  M,  A,  60, M,  5},	// 0
+	{B,  0,  6,  M,  50, M},	// 1
 	{M,  M,  0,  5,  M,  M},	// 2
-	{M,  M,  M,  0,  5,  M},	// 3
-	{30, M,  20, M,  0,  M},	// 4
-	{M,  40, M,  M,  5,  0},	// 5
+	{M,  M,  M,  C,  5,  M},	// 3
+	{30, M,  20, M,  0,  D},	// 4
+	{M,  40, M,  M,  E,  0},	// 5
 };
 
 typedef struct
@@ -48,17 +56,17 @@ void set_vertices(vertices *v, bool b)
 
 bool remain(vertices *v)
 {
-	if(v->Vcount > 0)	// coding
+	if(F)
 		return true;
 	return false;
 }
 
 bool member(int x, vertices *v)
 {
-	return v->Vertex[x] == true;	// coding
+	return G;
 }
 
-int select_min(int d[N], vertices *v)	// 函数未提供
+int select_min(int d[N], vertices *v)
 {
 	int min = M;
 	int v_index;
@@ -74,13 +82,13 @@ int select_min(int d[N], vertices *v)	// 函数未提供
 	return v_index;
 }
 
-void add_vertex(int u, vertices *v)		// 函数未提供
+void add_vertex(int u, vertices *v)
 {
 	v->Vertex[u] = true;
 	v->Vcount++;
 }
 
-void remove_vertex(int u, vertices *v)	// 函数未提供
+void remove_vertex(int u, vertices *v)
 {
 	v->Vertex[u] = false;
 	v->Vcount--;

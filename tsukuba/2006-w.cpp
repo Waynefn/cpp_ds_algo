@@ -13,6 +13,10 @@ using namespace std;
 问题2->快速阶乘算法
 
 ***************************************/
+#define A 	n % 2
+#define B 	z *= z;
+
+#define pi 3.1415926
 
 double factorial(int n)
 {
@@ -24,26 +28,23 @@ double factorial(int n)
 		tmp--;
 	}
 
-	cout<<n<<"的阶乘 = "<<ret<<endl;
 	return ret;
 }
 
 double power(double x, int n)
 {
-	int tmp = n;
 	double y, z;
 	y = 1.0;
 	z = x;
 
-	while(tmp > 0)
+	while(n > 0)
 	{
-		if(tmp % 2)		// coding
+		if(A)
 			y *= z;
-		z *= z;			// coding
-		tmp /= 2;
+		B
+		n /= 2;
 	}
 
-	cout<<x<<"的"<<n<<"次方 = "<<y<<endl;
 	return y;
 }
 
@@ -59,17 +60,14 @@ double my_sin(double x, int n)
 		else
 			ret -= power(x, 2*i+1)/factorial(2*i+1);
 	}
-
-	cout<<"sin("<<x<<")的第n项展开 = "<<ret<<endl;
 	return ret;
 }
 
 void test_question_2()
 {
-	factorial(10);
-	power(2, 3);
-	const double pi=3.1415926;
-	my_sin(pi/2, 5);
+	cout<<5<<"! = "<<factorial(5)<<endl;
+	cout<<2<<"^"<<3<<" = "<<power(2, 3)<<endl;
+	cout<<"sin("<<pi/2<<")的第5项展开 = "<<my_sin(pi/2, 5)<<endl;
 }
 
 int main()

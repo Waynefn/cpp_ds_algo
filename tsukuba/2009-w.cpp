@@ -13,6 +13,21 @@ using namespace std;
 问题1->插入排序,希尔排序
 
 ***************************************/
+#define A 	a[j] < w
+#define B 	last-1
+#define C 	p >= first
+#define D 	p--
+#define E 	a[p+1]
+#define F 	d
+#define G 	K+1
+#define H 	n-d+1
+#define I 	i+d
+#define J 	i
+#define K 	a[j] < w
+#define L 	j + d
+#define M 	2
+#define N 	l >= 0
+#define O 	l--
 
 #define Len(x)	sizeof(x)/sizeof(x[0])
 
@@ -25,8 +40,8 @@ void print_array(int a[], int n)
 
 void shift(int a[], int first, int last)
 {
-	for(int p = last-1; p >= first; p--) 	// coding
-		a[p+1] = a[p];						// coding
+	for(int p = B; C; D)
+		E = a[p];
 }
 
 void insertion_sort(int a[], int n)
@@ -37,9 +52,8 @@ void insertion_sort(int a[], int n)
 
 	for(i = 1; i < n; i++)
 	{
-//		cout<<"i = "<<i<<"--> "; print_array(a, n);
 		w = a[i];
-		for(j = 0; j < i && a[j] < w; j++)
+		for(j = 0; j < i && A; j++)
 			continue;
 		shift(a, j, i);
 		a[j] = w;
@@ -49,8 +63,8 @@ void insertion_sort(int a[], int n)
 
 void shift_d(int a[], int first, int last, int d)
 {
-	for(int p = last-d; p >= first; p -= d) 	// coding
-		a[p+d] = a[p];							// coding
+	for(int p = last-d; p >= first; p -= d)
+		a[p+d] = a[p];
 }
 
 void insertion_sort_d(int a[], int n, int d)
@@ -60,12 +74,12 @@ void insertion_sort_d(int a[], int n, int d)
 	if(n <= d)
 		return;
 
-	for(k = 0; k < d; k++)
+	for(k = 0; k < F; k = G)
 	{
-		for(i = d+k; i <= n-d; i+=d)	// * i<=n-d必须包含等于，i才能取得当前gap轮次的最后一个数据
+		for(i = d+k; i < H; i = I)	// * i<=n-d必须包含等于，i才能取得当前gap轮次的最后一个数据
 		{
 			w = a[i];
-			for(j = k; j < i && a[j] < w; j += d)
+			for(j = k; j < J && K; j = L)
 				continue;
 			shift_d(a,j,i,d);
 			a[j] = w;
@@ -77,7 +91,7 @@ int dim[] = {1,2,4};
 void shell_sort(int a[], int n)
 {
 	int l;
-	for(l = 2; l >= 0; l--)
+	for(l = M; N; O)
 		insertion_sort_d(a, n, dim[l]);
 	print_array(a, n);
 }

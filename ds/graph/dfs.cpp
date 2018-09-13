@@ -2,6 +2,9 @@
 
 using namespace std;
 
+/**********************************************
+    DFS
+**********************************************/
 #define V (5)
 #define M (INT_MAX)
 
@@ -16,22 +19,22 @@ int g[V][V] =
 
 void Dfs_r(int curr, bool visited[])
 {
-	visited[curr] = true;
-	cout<<curr<<" ";
-	for(int to = 0; to < V; to++)
-		if(!visited[to] && g[curr][to] < M)
-			Dfs_r(to, visited);
+    visited[curr] = true;
+    cout<<curr<<" ";
+    for(int to = 0; to < V; to++)
+        if(!visited[to] && g[curr][to] < M)
+            Dfs_r(to, visited);
 }
 
 void Dfs()
 {
-	static bool visited[V] = {false};
-	for(int i = 0; i < V; i++)
-		if(!visited[i])
-			Dfs_r(i, visited);
+    static bool visited[V] = {false};
+    for(int i = 0; i < V; i++)
+        if(!visited[i])
+            Dfs_r(i, visited);
 }
 
 int main()
 {
-	Dfs();
+    Dfs();
 }
