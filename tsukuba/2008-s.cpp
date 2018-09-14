@@ -87,12 +87,12 @@ int get1(node *p, int key)
 {
 	if(NULL == p)
 		return -1;
-	if(A2)		// coding
+	if(A2)
 		return p->val;
-	else if(B2)	// coding
-		return C2;	// coding
+	else if(B2)
+		return C2;
 	else
-		return D2;	// coding
+		return D2;
 }
 
 int get(int key)

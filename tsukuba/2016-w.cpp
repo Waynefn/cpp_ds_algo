@@ -11,13 +11,6 @@ using namespace std;
 
 /***************************************
 问题1->二叉树基本操作
-	1.find_node(t, 9)的结果：程序不会停止
-	2.完成contains()函数
-	3.n个不同的随机数产生的tree,调用contains()时,时间复杂度?
-		题意应该是只调用一次->logn
-	4.最差情况时调用contains()时,时间复杂度?
-		题意应该是只调用一次->n
-	5.完成insert()函数
 ***************************************/
 #define A 	node != &EMPTY
 #define B	t->left	
@@ -86,7 +79,7 @@ void test_question_1()
 	for(int i = 0; i < Len(a); i++)
 		t = insert(t, a[i]);
 
-	cout<<contains(t, 5)<<endl;
+	cout<<contains(t, 3)<<endl;
 }
 
 int main()

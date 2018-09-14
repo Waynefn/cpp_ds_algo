@@ -35,8 +35,8 @@ using namespace std;
 #define F 	a = pop()
 #define G 	b = pop()
 #define H 	b-a
-#define I 	a = pop()
-#define J 	c = pop()
+#define I 	c = pop()
+#define J 	a = pop()
 #define K 	push(b)
 #define L 	push(c)
 #define M 	n->next = sp
@@ -170,7 +170,7 @@ void test_question_4()
 {
 	int x = 0;
 	// char *exp[] = {"10", "20", "==", "30", "40", "?", NULL};
-	char *exp[] = {"10", "20", "+", "25", "-", NULL};
+	char *exp[] = {"2", "3", "4", "+", NULL};
 	if(OK == calc(exp, &x))
 		cout<<"OK, ret = "<<x<<endl;
 	else

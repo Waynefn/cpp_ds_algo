@@ -10,18 +10,10 @@ http://www.cs.tsukuba.ac.jp/admission/27-8inf.pdf
 using namespace std;
 
 /***************************************
-问题1->多个二叉树
-	1.函数make_sample_tree()做出的树,画出来
-	2.图1被修改后？
-	3.图2被修改后？
-	4.sumup_tree1(root, 0)在访问一颗高度为n的完全二叉树时，A行被调用次数？
-		高度n的完全二叉树的节点为2^n-1
-		函数以中序遍历访问了整棵树，NULL节点时在执行A行之前就返回了
-		所以结果为节点的个数:2^n-1
-	5.sumup_tree2(root)代码补充
+问题1->多叉树
 ***************************************/
 #define B 	if(p == NULL)	return 0
-#define C 	return p->val += sumup_tree2(p->right)
+#define C 	return p->val + sumup_tree2(p->right)
 
 #define Len(x)	sizeof(x)/sizeof(x[0])
 
@@ -88,17 +80,38 @@ int sumup_tree2(node *p)
 
 void test_question_1()
 {
-	node *n1, *n2, *n3, *n4, *n5, *n6, *n7;
-	n4 = make_node(4, NULL, NULL);
-	n5 = make_node(5, NULL, NULL);
+	node *n1, *n2, *n3;
+	n3 = make_node(3, NULL, NULL);
+	n2 = make_node(2, NULL, n3);
+	n1 = make_node(1, NULL, n2);
+	sumup_tree1(n1, 0);
+	cout<<n1->val<<endl;
+	cout<<n2->val<<endl;
+	cout<<n3->val<<endl;
+}
+
+void test_question_2()
+{
+	node *n2, *n4, *n6;
 	n6 = make_node(6, NULL, NULL);
+	n4 = make_node(4, NULL, n6);
+	n2 = make_node(2, NULL, n4);
+	sumup_tree2(n2);
+	cout<<n2->val<<endl;
+	cout<<n4->val<<endl;
+	cout<<n6->val<<endl;
+}
+
+void test_question_3()
+{
+	node *n1, *n2, *n3, *n4, *n5, *n6, *n7;
 	n7 = make_node(7, NULL, NULL);
-	n2 = make_node(2, n4, n5);
-	n3 = make_node(3, n6, n7);
-	n1 = make_node(1, n2, n3);
-
-//	sumup_tree1(n1, 0);
-
+	n6 = make_node(6, NULL, n7);
+	n5 = make_node(5, NULL, n6);
+	n4 = make_node(4, NULL, NULL);
+	n3 = make_node(3, n5, NULL);
+	n2 = make_node(2, n4, n3);
+	n1 = make_node(1, n2, NULL);
 	sumup_tree2(n1);
 	cout<<n1->val<<endl;
 	cout<<n2->val<<endl;
@@ -111,7 +124,8 @@ void test_question_1()
 
 int main()
 {
-	test_question_1();
-
+	// test_question_1();
+	// test_question_2();
+	test_question_3();
 	return 0;
 }

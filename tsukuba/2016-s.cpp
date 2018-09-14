@@ -3,14 +3,9 @@ http://www.cs.tsukuba.ac.jp/admission/29-8.pdf
 	情报1(1)与情报1(2)是离散数学的题
 	情报2(1)->优先队列的堆排序
 	情报2(2)->有向无权重图
-		原题变量和填空太多，只能明白思路但代码没法填，用自己的代码实现了算法
 */
 
-#include <iostream>
-#include <stdlib.h>
-#include <limits.h>
-
-#include <queue>
+#include <bits/stdc++.h>
 
 using namespace std;
 
@@ -98,21 +93,6 @@ void test_question_1()
 
 /***************************************
 情报2(2)->有向无权重图
-	1.找出图中ABCDEF对应的矩阵下标
-	2.写出B为起点到其他各点的最短距离
-	3.矩阵转换为邻接表后,写出adj_list和adj_index的值
-		adj_list  = {0,    3,4,5,6,  8,9,  11} 存放指向adj_index的下标
-		adj_index = {1,3,5,2,3,4,5,7,6,2,7,0}  存放邻接表
-	
-		顶点 --> 邻接点
-		0	 --> 1,3,5
-		1	 --> 2
-		2	 --> 3
-		3	 --> 4
-		4	 --> 5,7
-		5	 --> 6
-		6	 --> 2,7
-		7 	 --> 0
 	4.BFS方式计算起点0至其他所有点的距离,结果保存到dist_vec数组
 
 	本题的思路为BFS,然而题目的意图和代码实现难度很高:
@@ -155,7 +135,6 @@ void calc_dists(const int origin, int dist_vec[])
 	int *curr = array1, *next = array2, *tmp;
 	int i, j, index = 0, dist = 1, len_curr = 1, len_next = 0;
 
-	// 完成邻接表
 	for(i = 0; i < N_VERT; i++)
 	{
 		adj_index[i] = index;
@@ -166,31 +145,29 @@ void calc_dists(const int origin, int dist_vec[])
 	adj_index[N_VERT] = index;
 
 	for(i = 0; i < N_VERT; i++)
-		dist_vec[i] = UNREACH;	// 初始化所有顶点距离为-1
+		dist_vec[i] = UNREACH;	// 初始化距离-1,表示尚未访问
 
 	curr[0] = origin;
-	dist_vec[origin] = 0;		// 初始化起点的距离
-	while(len_curr > 0)			// 类似每一轮BFS前,队列里元素的个数
+	dist_vec[origin] = 0;
+	while(len_curr > 0)			// while(!q.empty())
 	{
 		cout<<"此次BFS的起点: "; PRINT_ARRAY(curr, len_curr);
-		for(i = 0; i < len_curr; i++)	// 取出已访问的外层顶点i
+		for(i = 0; i < len_curr; i++)	// curr[i]:从队列curr取出的顶点x
 		{
-			for(j = G; j < H; j++)	// 根据i,去更新与之相邻的更外层顶点j
+			for(j = adj_index[curr[i]]; j < adj_index[curr[i]+1]; j++)	// 通过下标adj_index[x] ~ adj_index[x+1],可以在adj_list[]中取得连通到的顶点
 			{
-				if(adj_mat[curr[i]][j] == 1 && dist_vec[j] == UNREACH)
+				if(dist_vec[adj_list[j]] == UNREACH)	// adj_list[j]即连通到的顶点，dist_vec[adj_list[j]] = -1 即尚未访问
 				{
-					K = dist;		// 更新探索到的节点的距离
-					L = M;			// 邻接点放入next中
-					len_next++;
+					dist_vec[adj_list[j]] = dist;		// adj_list[j]未访问过,更新其距离
+					next[len_next] = adj_list[j];		// adj_list[j]执行"入队"操作
+					len_next++;							// "队列"元素+1
 				}
 			}
 		}
-		cout<<endl;
-
 		tmp = next;
 		next = curr;
 		curr = tmp;
-		len_curr = len_next;	// BFS搜索范围增加
+		len_curr = len_next;	// BFS搜索下一层
 		len_next = 0;
 		dist++;
 	}
@@ -198,42 +175,10 @@ void calc_dists(const int origin, int dist_vec[])
 	PRINT_ARRAY(dist_vec, N_VERT);
 }
 
-void calc_dists_self(const int origin, int dist_vec[])
-{
-	bool visited[N_VERT] = {false};
-	for(int i = 0; i < N_VERT; i++)
-		dist_vec[i] = INT_MAX;
-	dist_vec[origin] = 0;
-	visited[origin] = true;
-
-	queue<int> q;
-	q.push(origin);
-	while(!q.empty())
-	{
-		int curr = q.front(); q.pop();
-		cout<<"此次BFS的起点: "<<curr<<endl;
-		for(int to = 0; to < N_VERT; to++)
-		{
-			if(!visited[to] && adj_mat[curr][to])
-			{
-				cout<<curr<<"-->["<<to<<"] ";
-				dist_vec[to] = dist_vec[curr]+1;
-				visited[to] = true;
-				q.push(to);
-			}
-		}
-		cout<<endl;
-	}
-
-	cout<<"顶点"<<origin<<"到其他各顶点的距离为：";
-	PRINT_ARRAY(dist_vec, N_VERT);
-}
-
 void test_question_2()
 {
 	int res[N_VERT];
 	calc_dists(0, res);
-
 }
 
 int main()

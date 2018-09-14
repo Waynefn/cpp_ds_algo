@@ -1,6 +1,6 @@
 /*
-问题2：决策树，选硬币
-问题3：a数组最大k个数保存到b数组
+问题2：最大子序列和（禁止选相邻元素）
+问题3：阶乘，gcd，任意进制转换
 */
 
 #include <iostream>
@@ -11,30 +11,41 @@ using namespace std;
 #define Len(x)		sizeof(x)/sizeof(x[0])	
 #define PRINT_ARRAY(a,n){for(int i = 0; i < n; i++) cout<<a[i]<<"|"; cout<<endl;}
 
-void f1(int a[], int na, int b[], int nb)
+int factorial(int n)
 {
-	int i,j,k;
-	for(i = 0; i < na; i++)
-	{
-		for(j = nb-1; j >= 0; j--)
-			if(b[j] > a[i])
-				break;
+	int ret = 1;
+	for(int i = 1; i <= n; i++)
+		ret *= i;
+	return ret;
+}
 
-		if(j < nb-1)
-		{
-			for(k = nb-2; k > j; k--)
-				b[k+1] = b[k];
-			b[k+1] = a[i];
-		}
+int GCD(int m, int n)
+{
+	int r = 1;
+	while(r)
+	{
+		r = m % n;
+		m = n;
+		n = r;
 	}
-	PRINT_ARRAY(b, nb);
+	return m;
+}
+
+char *F(int n, int b)
+{
+	static char outb[66] = {0};
+	int i = 64;
+	for(; n > 0 && i > 0; --i, n /= b)
+		outb[i] = "0123456789abcdefghijkl"[n%b];
+	return &outb[i+1];
 }
 
 void Q3()
 {
-	int a[] = {2,17,12,4,6,19,10,13,12,7};
-	int b[] = {0,0,0,0,0};
-	f1(a, Len(a), b, Len(b));
+	cout<<"5! = "<<factorial(5)<<endl;
+	cout<<"gcd(12,8) = "<<GCD(12,8)<<endl;
+	cout<<F(428,16)<<endl;		// 1ac
+	cout<<F(226,4)<<endl;		// 3202
 }
 
 int main()
