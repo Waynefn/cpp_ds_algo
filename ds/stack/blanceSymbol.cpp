@@ -5,8 +5,9 @@ using namespace std;
 /**********************************************
     栈判断符号平衡
 **********************************************/
-void IsBlanced(const char *str)
+bool IsBlanced(const char *str)
 {
+    cout<<str<<" ";
     stack<char> s;
     for(int i = 0; i < strlen(str); i++)
     {
@@ -20,26 +21,27 @@ void IsBlanced(const char *str)
                 break;
             case ')':
                 if(!s.empty() && s.top() == '(')    s.pop();    
-                else                                return;
+                else                                return false;
                 break;
             case ']':
                 if(!s.empty() && s.top() == '[')    s.pop();
-                else                                return;
+                else                                return false;
                 break;
             case '}':
                 if(!s.empty() && s.top() == '{')    s.pop();
-                else                                return;
+                else                                return false;
                 break;
             default:
                 break;
         }
     }
-    cout<<str<<" passed"<<endl;
+    return s.empty();   // 注意确认栈是否为空
 }
 
 int main()
 {
-    IsBlanced("{[()]}");
-    IsBlanced("{[()]}}");
+    cout<<IsBlanced("{[()]}")<<endl;
+    cout<<IsBlanced("{[()]}}")<<endl;
+    cout<<IsBlanced("{{[()]}")<<endl;
     return 0;
 }
