@@ -21,11 +21,10 @@ using namespace std;
 ***************************************/
 #define INF (255)
 #define MAXN (16)
+#define PRINT_ARRAY(a,n){for(int i = 0; i < n; i++) cout<<a[i]<<"|"; cout<<endl;}
 
 int len[MAXN];
 int prev[MAXN];
-
-void combine(int s[], int n, int )
 
 void printpath(int v)
 {
@@ -80,6 +79,8 @@ void compute(int w[], int n, int s, int d)
 		i = next;
 		visited[i] = 1;
 	}
+	PRINT_ARRAY(len, n);
+	PRINT_ARRAY(prev, n);
 }
 
 void test_question_1()
@@ -96,7 +97,7 @@ void test_question_1()
 	compute(w,n,0,3);
 	cout<<"shortest path length from 0 to 3 :"<<len[3]<<endl;
 
-	printpath(len[3]); cout<<endl;
+	printpath(3); cout<<endl;
 }
 
 int main()

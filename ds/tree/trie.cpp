@@ -38,8 +38,10 @@ Trie *Insert(Trie *t, char *word)
 
 bool Search(Trie *t, char *word)
 {
+    if(NULL == t)
+        return false;
+    
     Trie *curr = t;
-
     for(int i = 0; i < strlen(word); i++)
     {
         int c = word[i] - 'a';
