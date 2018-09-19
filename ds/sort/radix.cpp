@@ -19,14 +19,11 @@ int GetMax(int a[], int n)
 void Radix_d(int a[], int n, int d)
 {
     queue<int> q[M];
-
     for(int i = 0; i < n; i++)
         q[a[i]/d%M].push(a[i]);
-
     for(int i = 0, k = 0; i < M; i++)
         while(!q[i].empty())
             a[k++] = q[i].front(), q[i].pop();
-
     PRINT_ARRAY(a, n);
 }
 

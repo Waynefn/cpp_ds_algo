@@ -11,7 +11,7 @@ using namespace std;
 #define SWAP(x, y)  {int c = x; x = y; y = c;   }   
 #define PRINT_ARRAY(a,n){for(int i = 0; i < n; i++) cout<<a[i]<<"|"; cout<<endl;}
 
-void Bubble1(int a[], int n)
+void Bubble(int a[], int n)
 {
     for(int i = n; i > 1; i--)
         for(int j = 1; j < i; j++)
@@ -19,7 +19,7 @@ void Bubble1(int a[], int n)
                 SWAP(a[j-1], a[j]);
 }
 
-void Bubble2(int a[], int n)
+void Bubble_Optimize(int a[], int n)
 {
     int last = n;
     while(last)
@@ -39,13 +39,13 @@ void Bubble2(int a[], int n)
 
 int main()
 {
-    int a1[] = {1,1,0,0,3,4,5,2,2,0};
-    Bubble1(a1, Len(a1));
-    PRINT_ARRAY(a1, Len(a1));
+    int a[] = {1,1,0,0,3,4,5,2,2,0};
+    Bubble(a, Len(a));
+    PRINT_ARRAY(a, Len(a));
     
-    int a2[] = {1,1,0,0,3,4,5,2,2,0};
-    Bubble2(a2, Len(a2));
-    PRINT_ARRAY(a2, Len(a2));
+    int b[] = {1,1,0,0,3,4,5,2,2,0};
+    Bubble_Optimize(b, Len(b));
+    PRINT_ARRAY(b, Len(b));
 
     return 0;
 }

@@ -145,7 +145,7 @@ void calc_dists(const int origin, int dist_vec[])
 	adj_index[N_VERT] = index;
 
 	for(i = 0; i < N_VERT; i++)
-		dist_vec[i] = UNREACH;	// 初始化距离-1,表示尚未访问
+		dist_vec[i] = UNREACH;	// 初始化距离-1,表示尚未访问  
 
 	curr[0] = origin;
 	dist_vec[origin] = 0;

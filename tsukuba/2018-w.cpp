@@ -8,7 +8,8 @@ http://www.cs.tsukuba.ac.jp/admission/30-2.pdf
 
 using namespace std;
 
-#define CAPACITY (10)
+#define CAPACITY (2)
+#define PRINT_ARRAY(a,n){for(int i = 0; i < n; i++) cout<<a[i]<<"|"; cout<<endl;}
 
 typedef struct
 {
@@ -16,13 +17,6 @@ typedef struct
 	int size;
 	int capacity;
 }List;
-
-void print_list(List *l)
-{
-	for(int i = 0; i < l->size; i++)
-		cout<<l->array[i]<<" ";
-	cout<<endl;
-}
 
 List *new_list()
 {
@@ -39,57 +33,55 @@ void free_List(List *l)
 	delete l;
 }
 
-void expand(List *l)	// 数组空间不足，增加容量
+void expand(List *l)	// 数组空间不足，申请2倍容量的新空间，拷贝原有数据
 {
-	
+	int *newarray = new int[2 * l->capacity];
+	for(int i = 0; i < l->capacity; i++)
+		newarray[i] = l->array[i];
+	l->array = newarray;
+	l->capacity *= 2;
 }
 
 int find_pos(List *l, int x)	// 二分搜索找x插入的位置
 {
 	int lower, upper, i;
 	lower = 0, upper = l->size;
-	while(lower <= upper)				// R
+	while(lower < upper)
 	{
-		i = lower+(upper-lower)/2;		// S *(lower+upper) maybe overflow
+		i = lower+(upper-lower)/2;		
 		if(x == l->array[i])
-			return i; 					// T
-		else if(x < l->array[i])		// U
-			upper = i-1;
+			return i;
+		else if(x < l->array[i])
+			upper = i;
 		else
-			lower = i+1;				// V
+			lower = i+1;				// *******
 	}
 	return lower;
 }
 
-void insert(List *l, int x)		// 按升序插入x
+List *insert(List *l, int x)		// 按升序插入x
 {
-	cout<<"insert "<<x<<" ";
 	int i,j;
 	if(l->size == l->capacity)
 		expand(l);
-	cout<<"size = "<<l->size<<" ";
 	i = find_pos(l, x);
-	cout<<"find pos = "<<i<<endl;
-	for(j = l->size; j >= i; j--)		// Q
+	for(j = l->size; j >= i; j--)		
 		l->array[j+1] = l->array[j];
 	l->array[i] = x;
 	l->size++;
+	return l;
 }
 
 void append(List *l, int x)	// 末尾追加x，若容量不足则调用expand
 {
-	cout<<"append"<<endl;
 	if(l->size == l->capacity)
 		expand(l);
 	l->array[l->size++] = x;
 }
 
-List *make_list()	// 申请空的list，追加3个整数
+List *make_list()
 {
 	List *l = new_list();
-	insert(l, 20);	// A,B
-	insert(l, 10);	// C
-	append(l, 30);	// D
 	return l;
 }
 
@@ -98,31 +90,67 @@ List *uniq(List *l)		// 链表l中的重复元素去掉，然后返回l
 	List *u;
 	int x, i;
 	u = new_list();
-	if(l == NULL)		// E 参数l为空，则返回u
+	if(l == NULL)
 		return u;
-	x = l->array[0];	// F
+	x = l->array[0];
 	append(u, x);
-	for(i = 1; i < l->size; i++)	// G
+	for(i = 1; i < l->size; i++)
 	{
-		if(x != l->array[i])		// H
+		if(x != l->array[i])
 		{
-			x = l->array[i];		// I
+			x = l->array[i];
 			append(u, x);
 		}
 	}
 	return u;
 }
 
+List *merge(List *a, List *b)
+{
+	List *c = new_list();
+	int i = 0, j = 0;
+	while(i < a->size && j < b->size)
+	{
+		if(a->array[i] < b->array[j])
+		{
+			append(c, a->array[i]);
+			i++;
+		}
+		else
+		{
+			append(c, b->array[j]);
+			j++;
+		}
+	}
+	if(i < a->size)
+		for(; i < a->size; i++)
+			append(c, a->array[i]);
+	else
+		for(; j < b->size; j++)
+			append(c, b->array[j]);
+	return c;
+}
+
 void test_question_4()
 {
-	List *l = make_list();
-	l->array[0] = 20; l->size++;
-	// l->array[1] = 20; l->size++;
-	// l->array[2] = 30; l->size++;
-	// cout<<"find pos : "<<find_pos(l, 10)<<endl;
+	List *a = make_list();
+	insert(a, 3);
+	insert(a, 5);
+	insert(a, 1);
+	insert(a, 1);
+	a = uniq(a);
 
+	List *b = make_list();
+	insert(b, 4);
+	insert(b, 2);
+	insert(b, 6);
+	insert(b, 6);
+	insert(b, 6);
+	insert(b, 6);
+	b = uniq(b);
 
-	print_list(l);
+	List *c = merge(a, b);
+	PRINT_ARRAY(c->array, c->size);
 }
 
 int main()

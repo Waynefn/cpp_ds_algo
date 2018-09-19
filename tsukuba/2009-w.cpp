@@ -19,12 +19,12 @@ using namespace std;
 #define D 	p--
 #define E 	a[p+1]
 #define F 	d
-#define G 	K+1
+#define G 	k+1
 #define H 	n-d+1
 #define I 	i+d
 #define J 	i
 #define K 	a[j] < w
-#define L 	j + d
+#define L 	j+d
 #define M 	2
 #define N 	l >= 0
 #define O 	l--
@@ -70,10 +70,8 @@ void shift_d(int a[], int first, int last, int d)
 void insertion_sort_d(int a[], int n, int d)
 {
 	int w,i,j,k;
-
 	if(n <= d)
 		return;
-
 	for(k = 0; k < F; k = G)
 	{
 		for(i = d+k; i < H; i = I)	// * i<=n-d必须包含等于，i才能取得当前gap轮次的最后一个数据
@@ -98,9 +96,9 @@ void shell_sort(int a[], int n)
 
 void test_question_1()
 {
-	int a[] = {7,6,5,4,3,2,1,8};
+	int a[] = {80,35,15,40,65};
 	insertion_sort(a, Len(a));
-	int b[] = {7,6,5,4,3,2,1,8};
+	int b[] = {8,3,6,4,2,5,1,7};
 	shell_sort(b, Len(b));
 }
 

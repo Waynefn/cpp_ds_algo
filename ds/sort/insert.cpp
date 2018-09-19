@@ -15,6 +15,13 @@ using namespace std;
         3.2 直至发现a[j-1]不再大于tmp || j已经移动到a[0],结束移动
         3.3 已经找到了[合适的位置],令a[j] = tmp,完成本轮的移动
 **********************************************/
+void Insert_Swap(int a[], int n)
+{
+    for(int i = 1; i < n; i++)
+        for(int j = i; j > 0 && a[j-1] > a[j]; j--)
+            SWAP(a[j-1], a[j]);
+}
+
 void Insert(int a[], int n)
 {
     for(int i = 1; i < n; i++)
@@ -34,4 +41,8 @@ int main()
     int a[] = {49,38,65,97,26,13,27,49,55,4};
     Insert(a, Len(a));
     PRINT_ARRAY(a, Len(a));
+
+    int b[] = {49,38,65,97,26,13,27,49,55,4};
+    Insert_Swap(b, Len(b));
+    PRINT_ARRAY(b, Len(b));
 }
