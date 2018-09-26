@@ -22,7 +22,6 @@ bool subset_sum(int a[], int n, int k)
 	if (a[n-1] > k)
 		return subset_sum(a, n-1, k);
 
-	// 递归地查询【包含last元素】和【不包含last元素】的结果
 	return subset_sum(a, n-1, k) || subset_sum(a, n-1, k-a[n-1]);
 }
 

@@ -23,7 +23,7 @@ int arrange(int a, int b, int arr[])
 			if(left > b)
 				break;
 		}
-		while(arr[right >= bd]){
+		while(arr[right] >= bd){
 			right--;
 			if(right < a)
 				break;

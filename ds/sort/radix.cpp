@@ -29,7 +29,7 @@ void Radix_d(int a[], int n, int d)
 
 void Radix(int a[], int n)
 {
-    int max = GetMax(a, n);         // 根据max元素确定要处理的最大位数
+    int max = GetMax(a, n);             // 根据max元素确定要处理的最大位数
     for (int d = 1; d < max; d *= 10)   // 从低位往高位排
         Radix_d(a, n, d);
 }

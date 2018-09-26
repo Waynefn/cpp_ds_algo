@@ -25,7 +25,6 @@ void Shell(int a[], int n)
                 a[j] = tmp;
             }
         }
-        PRINT_ARRAY(a, n);
     }
 }
 
