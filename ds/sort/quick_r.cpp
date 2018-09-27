@@ -9,11 +9,12 @@ using namespace std;
 /********************************************** 
     快排-递归实现
 **********************************************/
-void Quick_r_sub(int a[], int s, int e)
+void Quick_r(int a[], int s, int e)
 {
     if(s >= e)
         return;
     int i = s, j = e, x = a[s];
+    cout<<"x = "<<x<<endl;
     while(i < j)
     {
         while(i < j && a[j] > x)    j--;
@@ -22,46 +23,48 @@ void Quick_r_sub(int a[], int s, int e)
         if(i < j)   a[j--] = a[i];  
     }
     a[i] = x;
-    Quick_r_sub(a, s, i-1);
-    Quick_r_sub(a, i+1, e);
-}
-
-void Quick_r(int a[], int n)
-{
-    Quick_r_sub(a, 0, n-1);
-}
-
-/********************************************** 
-    快排-非递归实现
-**********************************************/
-int Quick_sub(int a[], int s, int e)
-{
-    int i = s, j = e, x = a[s];
-    while(i < j)
-    {
-        while(i < j && a[j] > x)    j--;
-        if(i < j)                   a[i++] = a[j];
-        while(i < j && a[i] < x)    i++;
-        if(i < j)                   a[j--] = a[i];
-    }
-    a[i] = x;
-    return i;
+    Quick_r(a, s, i-1);
+    Quick_r(a, i+1, e);
 }
 
 void Quick(int a[], int n)
 {
-    stack<int> st;
-    st.push(0), st.push(n-1);
-    while(!st.empty())
+    Quick_r(a, 0, n-1);
+}
+
+/********************************************** 
+    快排-三数取中实现
+**********************************************/
+void Median3(int a[], int low, int high)
+{
+    int mid = (low+high)/2;
+    if(a[mid] > a[high])    SWAP(a[mid], a[high]);
+    if(a[low] > a[high])    SWAP(a[low], a[high]);
+    if(a[mid] > a[low])     SWAP(a[mid], a[low]);
+}
+
+void Quick_3_r(int a[], int s, int e)
+{
+    if(s >= e)
+        return;
+    Median3(a, s, e);
+    int i = s, j = e, x = a[s];
+    cout<<"x = "<<x<<endl;
+    while(i < j)
     {
-        int e = st.top(); st.pop();
-        int s = st.top(); st.pop();
-        int p = Quick_sub(a, s, e);
-        if(p-1 > s)
-            st.push(s), st.push(p-1);
-        if(p+1 < e)
-            st.push(p+1), st.push(e);
+        while(i < j && a[j] > x)    j--;
+        if(i < j)   a[i++] = a[j];
+        while(i < j && a[i] < x)    i++;
+        if(i < j)   a[j--] = a[i];  
     }
+    a[i] = x;
+    Quick_3_r(a, s, i-1);
+    Quick_3_r(a, i+1, e);
+}
+
+void Quick_3(int a[], int n)
+{
+    Quick_3_r(a, 0, n-1);
 }
 
 /********************************************** 
@@ -98,15 +101,15 @@ void Kth(int a[], int n, int k)
 **********************************************/
 void test()
 {
-    int a1[] = {99,38,65,97,26,13,27,19,55,4};
-    Quick_r(a1, Len(a1));
+    int a1[] = {8,9,0,5,6,2,1,4};
+    Quick(a1, Len(a1));
     PRINT_ARRAY(a1, Len(a1));
     
-    int a2[] = {99,38,65,97,26,13,27,19,55,4};
-    Quick(a2, Len(a2));
+    int a2[] = {8,9,0,5,6,2,1,4};
+    Quick_3(a2, Len(a2));
     PRINT_ARRAY(a2, Len(a2));
 
-    int a3[] = {3,9,0,5,6,2,1,4};
+    int a3[] = {8,9,0,5,6,2,1,4};
     Kth(a3, Len(a3), 4);
     Kth(a3, Len(a3), 6);
 }

@@ -25,27 +25,27 @@ void MergeArray(int a[], int s, int m, int e, int p[])
         a[s+i] = p[i];
 }
 
-void Merge_r_sub(int a[], int s, int e, int p[])
+void Merge_r(int a[], int s, int e, int p[])
 {
     if(s < e)
     {
         int m = (s + e) / 2;
-        Merge_r_sub(a, s, m, p);
-        Merge_r_sub(a, m+1, e, p);
+        Merge_r(a, s, m, p);
+        Merge_r(a, m+1, e, p);
         MergeArray(a, s, m, e, p);
     }
 }
 
-void Merge_r(int a[], int n)
+void Merge(int a[], int n)
 {
     int *p = new int[n];
-    Merge_r_sub(a, 0, n-1, p);
+    Merge_r(a, 0, n-1, p);
 }
 
 int main()
 {
     int a[] = {49,38,65,97,26,13,27,49,55,4};
-    Merge_r(a, Len(a));
+    Merge(a, Len(a));
     PRINT_ARRAY(a, Len(a));
 
     return 0;

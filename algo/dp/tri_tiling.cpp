@@ -22,7 +22,9 @@ void tri_tiling(int n)
 
 void test_tri_tiling()
 {
-	tri_tiling(8);
+	tri_tiling(2);	// 3
+	tri_tiling(8);	// 153
+	tri_tiling(12);	// 2131
 }
 
 int main()
