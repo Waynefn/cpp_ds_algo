@@ -79,8 +79,8 @@ void Union(int s[], int x, int y)
     }
     else    // 深度相对小集合指向深度相对大的集合,保证最大深度缓慢增长
     {
-        if(s[r1] < s[r2])   s[r2] = x;
-        else                s[r1] = y;
+        if(s[r1] < s[r2])   s[r2] = r1;
+        else                s[r1] = r2;
     }
 }
 

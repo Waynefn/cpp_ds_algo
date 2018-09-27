@@ -80,10 +80,10 @@ void Heap2_Down(int a[], int last)
 
 void Heap2(int a[], int n)
 {
-    for(int i = 0; i < n; i++)
-        Heap2_Up(a, i);
-    for(int i = n; i > 0; i--)
-        Heap2_Down(a, i-1);
+	for(int i = 1; i < n; i++)
+		Heap2_Up(a, i);
+	for(int i = n; i > 0; i--)
+		Heap2_Down(a, i-1);
 }
 
 int main()
