@@ -1,10 +1,19 @@
-#include<iostream>  
-#include<cmath> 
-
-#include "utils.h"
+#include <bits/stdc++.h>
 
 using namespace std;
 
+#define Len(x)      sizeof(x)/sizeof(x[0])
+#define PRINT_ARRAY(a,n){for(int i = 0; i < n; i++) cout<<a[i]<<"|"; cout<<endl;}
+
+/**********************************************
+    n皇后问题
+     _ _ _ _  x
+    |_|_|_|_|
+    |_|_|_|_|
+    |_|_|_|_|
+    |_|_|_|_|
+    y
+**********************************************/
 bool check(int a[], int curr_x, int y)
 {
     for(int prev_x = 0; prev_x < curr_x; prev_x++)
@@ -21,28 +30,23 @@ void n_queen(int a[], int n, int curr_x)
     if(curr_x >= n)
     {
         PRINT_ARRAY(a, n);
-    }   // 继续执行else也不会报错,因为n皇后的解一定包含所有元素。继续执行下去也不可能再找到能放入皇后的位置，最后仍然会退出程序
+    }
     else
     {
-        for(int y = 0; y < n; y++)  // 对当前x坐标,寻找所有可能放入皇后的y坐标
+        for(int y = 0; y < n; y++)
         {
             if(check(a, curr_x, y))
             {
                 a[curr_x] = y;
-                n_queen(a, n, curr_x+1);    // 找到一个合法的y坐标,x往后继续探索
+                n_queen(a, n, curr_x+1);
             }
         }
     }
 }
 
-void test_n_queen()
-{
-    int a[5] = {0}; 
-    n_queen(a, Len(a), 0);  
-}
-
 int main()
 {
-	test_n_queen();
+	int a[4] = {0}; 
+    n_queen(a, Len(a), 0);  
 	return 0;
 }

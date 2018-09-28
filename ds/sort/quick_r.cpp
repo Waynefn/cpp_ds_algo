@@ -14,7 +14,6 @@ void Quick_r(int a[], int s, int e)
     if(s >= e)
         return;
     int i = s, j = e, x = a[s];
-    cout<<"x = "<<x<<endl;
     while(i < j)
     {
         while(i < j && a[j] > x)    j--;
@@ -49,7 +48,6 @@ void Quick_3_r(int a[], int s, int e)
         return;
     Median3(a, s, e);
     int i = s, j = e, x = a[s];
-    cout<<"x = "<<x<<endl;
     while(i < j)
     {
         while(i < j && a[j] > x)    j--;
@@ -96,10 +94,7 @@ void Kth(int a[], int n, int k)
     Kth_sub(a, 0, n-1, k);
 }
 
-/********************************************** 
-    test
-**********************************************/
-void test()
+int main()
 {
     int a1[] = {8,9,0,5,6,2,1,4};
     Quick(a1, Len(a1));
@@ -112,10 +107,5 @@ void test()
     int a3[] = {8,9,0,5,6,2,1,4};
     Kth(a3, Len(a3), 4);
     Kth(a3, Len(a3), 6);
-}
-
-int main()
-{
-    test();
     return 0;
 }

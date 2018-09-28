@@ -4,10 +4,11 @@
 
 using namespace std;
 
+/**********************************************
+    3*n的方块，通过1*2的方块组成的方式有多少
+**********************************************/
 void tri_tiling(int n)
 {
-	PRINT_SUB_FUNCTION_NAME;
-
 	int f[MAX] = {0}, g[MAX] = {0};
 	f[0] = 1, f[1] = 0;
 	g[0] = 0, g[1] = 1;
@@ -20,16 +21,11 @@ void tri_tiling(int n)
 	cout<<"f["<<n<<"] = "<<f[n]<<endl;
 }
 
-void test_tri_tiling()
+int main()
 {
 	tri_tiling(2);	// 3
 	tri_tiling(8);	// 153
 	tri_tiling(12);	// 2131
-}
-
-int main()
-{
-	test_tri_tiling();
 
 	return 0;
 }

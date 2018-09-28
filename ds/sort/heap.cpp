@@ -65,15 +65,15 @@ void Heap2_Down(int a[], int last)
     SWAP(a[0], a[last]);
 
     int i = 0, child, smallest = 0;
-    for(; i < last; i = child)
+    for(; 2*i+1 < last; i = child)
     {
         child = 2*i+1;
         if(child+1 < last && a[child] < a[child+1])
             child++;
-        if(child < last && curr < a[child])
-            a[i] = a[child];
-        else
+        if(curr > a[child])
             break;
+        else
+            a[i] = a[child];
     }
     a[i] = curr;
 }
