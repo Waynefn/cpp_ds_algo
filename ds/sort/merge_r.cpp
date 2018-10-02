@@ -12,7 +12,6 @@ using namespace std;
 void MergeArray(int a[], int s, int m, int e, int p[])
 {
     int i = s, j = m+1, k = 0;
-
     while(i <= m && j <= e)
     {
         if(a[i] < a[j]) p[k++] = a[i++];
@@ -27,13 +26,12 @@ void MergeArray(int a[], int s, int m, int e, int p[])
 
 void Merge_r(int a[], int s, int e, int p[])
 {
-    if(s < e)
-    {
-        int m = (s + e) / 2;
-        Merge_r(a, s, m, p);
-        Merge_r(a, m+1, e, p);
-        MergeArray(a, s, m, e, p);
-    }
+    if(s >= e)
+        return;
+    int m = (s + e) / 2;
+    Merge_r(a, s, m, p);
+    Merge_r(a, m+1, e, p);
+    MergeArray(a, s, m, e, p);
 }
 
 void Merge(int a[], int n)
