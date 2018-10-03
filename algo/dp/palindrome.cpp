@@ -8,7 +8,7 @@ using namespace std;
 /**********************************************
 	组成回文串的最小添加字符数
 **********************************************/
-void create_palindrome(char str[])
+void palindrome(const char *str)
 {
 	PRINT_SUB_FUNCTION_NAME;
 
@@ -36,14 +36,14 @@ void create_palindrome(char str[])
 	cout<<d[0][len-1]<<endl;
 }
 
-void test_create_palindrome()
+void test_palindrome()
 {
-	create_palindrome((char *)"Ab3bd");
+	palindrome("Ab3bd");
 }
 
 int main()
 {
-	test_create_palindrome();
+	test_palindrome();
 
 	return 0;
 }
