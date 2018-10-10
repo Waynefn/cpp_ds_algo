@@ -1,131 +1,81 @@
-/*
-http://www.cs.titech.ac.jp/H23-gozen.pdf
-问题7：回溯算法，排列问题perm，n皇后问题
-*/
-
-#include<iostream>  
+#include <bits/stdc++.h>
 
 using namespace std;
 
-#define PRINT_ARRAY(a,n){for(int i = 0; i < n; i++) cout<<a[i]<<"|"; cout<<endl;}
-
-int a[1024];
+#define MAX (20)
 
 /**********************************************
-	1. perm
+	comb_1
 **********************************************/
-int check_1(int x, int y)
+int comb_1(int n, int k)
 {
-	for(int k = 0; k < x; k++)
-		if(a[k] == y)
-			return 0;
-	return 1;
-}
-
-void f_1(int n, int x)
-{
-	if(x >= n)
-	{
-		PRINT_ARRAY(a, n);
-	}
-	else
-	{
-		int y = 0;
-		while(y < n)
-		{
-			if(check_1(x, y))
-			{
-				a[x] = y;
-				f_1(n, x+1);
-			}
-			y = y + 1;
-		}
-	}
-}
-
-void test_1_perm()
-{
-	f_1(3, 0);
+	if(k == 0 || k == n)
+		return 1;
+	return comb_1(n-1, k) + comb_1(n-1, k-1);	// coding
 }
 
 /**********************************************
-	2. n queen
+	comb_2
 **********************************************/
-int cnt = 0;
-
-int check_2(int x, int y)
+int pf(int m, int n)
 {
-	for(int k = 0; k < x; k++)
-	{
-		if(a[k] == y
-		|| a[k] == y+x-k	// coding
-		|| a[k] == y-x+k)	// coding
-			return 0;
-	}
-	return 1;
+	int i, f;
+	f = 1;
+	for(i = m; i <= n; i++)
+		f = f*i;
+	return f;
 }
 
-void f_2(int n, int x)
+int comb_2(int n, int k)
 {
-	if(x >= n)
+	int i, j;
+	if(n >= 2*k)
 	{
-		PRINT_ARRAY(a, n);
+		i = n-k+1;
+		j = k;
 	}
 	else
 	{
-		int y = 0;
-		while(y < n)
-		{
-			if(check_2(x, y))
-			{
-				a[x] = y;
-				f_2(n, x+1);
-			}
-			y = y + 1;
-		}
+		i = k+1;
+		j = n-k;
 	}
+	return pf(i, n) / pf(1, j);	// coding
 }
 
-void f_3(int n, int x)
+/**********************************************
+	comb_3
+**********************************************/
+int comb_3(int n, int k)
 {
-	int y = 0;
-	while(1)
+	int i, j;
+	int a[MAX];
+
+	if(n - k < k)	k = n-k;
+	if(k == 0)		return 1;
+	if(k == 1)		return n;
+
+	for(i = 0; i < k; i++)
+		a[i] = i + 2;
+	for(i = 3; i <= n-k+1; i++)		// coding
 	{
-		while(y < n)
-		{
-			if(check_2(x, y))
-			{
-				a[x] = y;
-				x++;
-				if(x >= n)
-				{
-					PRINT_ARRAY(a, n);
-					goto backtrack;
-				}
-				y = 0;		// coding
-			}
-			else
-				y++;
-		}
-		backtrack:
-		{
-			x--;
-			if(x < 0)
-				return;
-			y = a[x] + 1;	// coding
-		}
+		a[0] = i;
+		for(j = 1; j < k; j++)
+			a[j] += a[j-1];
 	}
+
+	return a[k-1];	// coding
 }
 
-void test_2_n_queen()
+void test_comb()
 {
-	f_2(5, 0);
-	f_3(5, 0);
+	cout<<"comb_1 :"<<comb_1(5, 3)<<endl;
+	cout<<"comb_2 :"<<comb_2(7, 3)<<endl;
+	cout<<"comb_3 :"<<comb_3(7, 4)<<endl;
 }
 
 int main()
 {
-//	test_1_perm();
-	test_2_n_queen();
+	test_comb();
+
 	return 0;
 }

@@ -1,10 +1,4 @@
-/*
-http://www.ist.osaka-u.ac.jp/japanese/admission/docs/28nenndo%20jyouhoukougaku.pdf
-	问题1->基数排序
-*/
-
-#include <iostream>
-#include <stdlib.h>
+#include <bits/stdc++.h>
 
 using namespace std;
 
@@ -53,9 +47,7 @@ void sort(int values[], int numvalues, int r, int maxdigit)
 		for(b = 0; b < r; b++)
 			for(j = 0; j < numbucket[b]; j++)		// 本轮在b桶内放了多少个数字,values才会取多少数字
 				values[i++] = buckets[b][j];
-
 		rd *= r;	// 从低位到高位进行基数排序
-
 		for(int i = 0; i < 3; i++)
 		{
 			for(int j = 0; j < 5; j++)

@@ -1,10 +1,3 @@
-/*
-http://www.cs.tsukuba.ac.jp/admission/29-8.pdf
-	情报1(1)与情报1(2)是离散数学的题
-	情报2(1)->优先队列的堆排序
-	情报2(2)->有向无权重图
-*/
-
 #include <bits/stdc++.h>
 
 using namespace std;
@@ -12,9 +5,9 @@ using namespace std;
 /***************************************
 	情报2(1)->优先队列的堆排序
 ***************************************/
-#define A 	
-#define B 	
-#define C 	
+#define A 	2*i
+#define B 	2*i+1
+#define C 	a[1]
 #define D 	i/2
 #define E 	INT_MAX
 #define F 	q->a[i] = q->a[j]
@@ -40,7 +33,7 @@ pq *newq()
 {
 	pq *q = (pq *)malloc(sizeof(pq));
 	q->n = 0;
-	q->a[0] = INT_MAX;		// (d) 如果 = 0会导致怎么样?
+	q->a[0] = INT_MAX;
 	return q;
 }
 
@@ -92,19 +85,7 @@ void test_question_1()
 }
 
 /***************************************
-情报2(2)->有向无权重图
-	4.BFS方式计算起点0至其他所有点的距离,结果保存到dist_vec数组
-
-	本题的思路为BFS,然而题目的意图和代码实现难度很高:
-		adj_list  = {0,3,4,5,6,8,9,11},例如0和3
-			for(i = 0; i < 3; i++) 
-				adj_index[i]的值正好对应[顶点0的邻接顶点]
-		题目设置了curr和next数组,用来模拟入队和出队
-			curr数组:保存当前有待BFS的顶点i,是[已访问&&得到距离的顶点]
-			next数组:保存i顶点邻接到的其他顶点j,是下一次[待访问和计算距离的顶点]
-			每一轮BFS结束后,将curr与next交换,模拟[i出队并BFS搜索到j,然后j入队]
-		虽然最后完成了题目,但没有使用题目给出的模拟邻接表,因为[探索表中某顶点对应的邻接顶点时,无法根据已知代码判断list是否结束]
-	所以相比填充题目的代码,自行实现算法非常容易,参考calc_dists_self()
+	情报2(2)->BFS最短路径 by邻接表
 ***************************************/
 #define UNREACH (-1)
 #define N_VERT	(8)
@@ -120,13 +101,6 @@ const int adj_mat[N_VERT][N_VERT] =
 	{0, 0, 1, 0, 0, 0, 0, 1},	// 6
 	{1, 0, 0, 0, 0, 0, 0, 0},	// D = 7
 };
-
-void print_array(int a[], int n)
-{
-	for(int i = 0; i < n; i++)
-		cout<<a[i]<<" ";
-	cout<<endl;
-}
 
 void calc_dists(const int origin, int dist_vec[])
 {

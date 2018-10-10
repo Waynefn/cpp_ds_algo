@@ -1,11 +1,4 @@
-/*
-http://www.cs.tsukuba.ac.jp/admission/26-8inf.pdf
-	问题1->快排
-	问题2->离散数学逻辑
-*/
-
-#include <iostream>
-#include <stdlib.h>
+#include <bits/stdc++.h>
 
 using namespace std;
 
@@ -25,15 +18,9 @@ using namespace std;
 #define F 	
 #define G 	
 
+#define SIZE (5)
 #define Len(x)	sizeof(x)/sizeof(x[0])
-#define SIZE (6)
-
-void print_array(int a[], int n)
-{
-	for(int i = 0; i < n; i++)
-		cout<<a[i]<<" ";
-	cout<<endl;
-}
+#define PRINT_ARRAY(a,n){for(int i = 0; i < n; i++) cout<<a[i]<<"|"; cout<<endl;}
 
 void swap(int *a, int *b)
 {
@@ -44,10 +31,8 @@ void swap(int *a, int *b)
 void f2(int data[], int s, int e)
 {
 	int i = s, j = e, p;
-
 	if(i >= j)
 		return;
-
 	p = data[s];
 	while(1)
 	{
@@ -56,10 +41,11 @@ void f2(int data[], int s, int e)
 		if(i >= j)
 			break;
 		swap(&data[i], &data[j]);
+		PRINT_ARRAY(data, SIZE);
 		i++;
 		j--;
 	}
-	print_array(data, SIZE);
+	
 	f2(data, s, i-1);
 	f2(data, j+1, e);
 }
@@ -82,12 +68,12 @@ void test_question_1()
 {
 	int i;
 
-	int array[SIZE] = A;
-	// int array[SIZE] = {3,4,6,1,2,5};
+	// int array[SIZE] = A;
+	int array[SIZE] = {3,4,6,1,5};
 
-	f1(array, SIZE);
-	// f1_bubble(array, SIZE);
-	print_array(array, SIZE);
+	// f1(array, SIZE);
+	f1_bubble(array, SIZE);
+	PRINT_ARRAY(array, SIZE);
 }
 
 int main()

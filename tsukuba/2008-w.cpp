@@ -1,13 +1,6 @@
-/*
-http://www.cs.tsukuba.ac.jp/admission/20-2inf.pdf
-	问题1->插入排序，堆排序
-	问题2->离散数学逻辑，Kruskal最小生成树算法
-*/
+#include <bits/stdc++.h>
 
-#include <iostream>
-#include <stdlib.h>
-
-using namespace std;
+using namespace std
 
 /***************************************
 问题1->插入排序，堆排序

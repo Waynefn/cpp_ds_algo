@@ -1,11 +1,4 @@
-/*
-https://www.titech.ac.jp/graduate_school/admissions/pdf/cs_h28.pdf
-问题3->d sum problem
-*/
-
-#include <iostream>
-#include <stdlib.h>
-#include <stdio.h>
+#include <bits/stdc++.h>
 
 using namespace std;
 
@@ -47,7 +40,7 @@ void g(int a[], int n, int k)
 			b[i][j] = 0;
 		for(j = 0; j <= k; j++)
 		{
-			if(j == a[i])	// 难点1 由于b[i][j]的定义导致需要小心处理子问题的结果
+			if(j == a[i])
 				b[i][j] = 1;
 			if(i > 0)
 			{
@@ -63,18 +56,13 @@ void g(int a[], int n, int k)
 	cout<<"g() result: "<<b[n-1][k]<<endl;	// 此题的b[i][j]指的是:从a[0]到a[i]为止,是否存在某几个元素组成j,所以考虑取舍的last元素是a[i]
 }
 
-void test_1()
+int main()
 {
 	int a[] = {3,2,4};
 	int k = 6;
 	cout<<"subset_sum() result: "<<subset_sum(a, Len(a), k)<<endl;
 	cout<<"f() result: "<<f(a, Len(a), k, 0, 0)<<endl;
 	g(a, Len(a), k);
-}
-
-int main()
-{
-	test_1();
 
 	return 0;
 }
