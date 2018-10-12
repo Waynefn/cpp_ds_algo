@@ -44,9 +44,17 @@ void sort(int values[], int numvalues, int r, int maxdigit)
 		}
 
 		i = 0;
-		for(b = 0; b < r; b++)
-			for(j = 0; j < numbucket[b]; j++)		// 本轮在b桶内放了多少个数字,values才会取多少数字
+		// for(b = 0; b < r; b++)
+			// for(j = 0; j < numbucket[b]; j++)		// 本轮在b桶内放了多少个数字,values才会取多少数字
+		for(b = r-1; b >= 0; b--)
+		{
+			cout<<"b = "<<b<<" : ";
+			for(j = 0; j < numbucket[b]; j++)
+			{
+				cout<<"j = "<<j<<" ";
 				values[i++] = buckets[b][j];
+			}cout<<endl;
+		}
 		rd *= r;	// 从低位到高位进行基数排序
 		for(int i = 0; i < 3; i++)
 		{

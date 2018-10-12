@@ -8,8 +8,29 @@
 
 using namespace std;
 
+#define M (100)
 #define Len(x)		sizeof(x)/sizeof(x[0])	
 #define PRINT_ARRAY(a,n){for(int i = 0; i < n; i++) cout<<a[i]<<"|"; cout<<endl;}
+
+/***************************************
+	问题2：最大子序列和（禁止选相邻元素）
+***************************************/
+void subsum(int a[], int n)
+{
+	int d[M][M];
+	
+}
+
+void Q2()
+{
+	int a[] = {1,5,2,-4,6};
+	int b[] = {3,5,7,6,2,4};
+
+}
+
+/***************************************
+	问题3：阶乘，gcd，任意进制转换
+***************************************/
 
 int factorial(int n)
 {
