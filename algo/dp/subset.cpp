@@ -10,6 +10,19 @@ using namespace std;
     子集和(subset sum)
     d[i][j] : 数组a[0]~a[i-1]的前i个元素,可以组合得到k的可能性
 **********************************************/
+void subset_result(int a[], int n, int k, bool d[M][M])
+{
+    if(n <= 0)
+        return;
+    if(d[n][k] == d[n-1][k])
+        subset_result(a, n-1, k, d);
+    else
+    {
+        cout<<"add a["<<n-1<<"] = "<<a[n-1]<<endl;
+        subset_result(a, n-1, k-a[n-1], d);
+    }
+}
+
 void subset(int a[], int n, int k)
 {
     bool d[M][M];
@@ -29,6 +42,7 @@ void subset(int a[], int n, int k)
                 d[i][j] = d[i-1][j] || d[i-1][j-a[i-1]];
         }
     }
+    subset_result(a, n, k, d);
     cout<<"subset "<<k<<" : "<<d[n][k]<<endl;
 }
 

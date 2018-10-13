@@ -15,23 +15,40 @@ using namespace std;
 /***************************************
 	问题2：最大子序列和（禁止选相邻元素）
 ***************************************/
+void subsum_result(int a[], int n, int d[])
+{
+	if(n <= 0)
+		return;
+	if(d[n] == d[n-1])
+		subsum_result(a, n-1, d);
+	else
+	{
+		cout<<"add a["<<n-1<<"] = "<<a[n-1]<<endl;
+		subsum_result(a, n-2, d);
+	}
+}
+
 void subsum(int a[], int n)
 {
-	int d[M][M];
-	
+	int d[M] = {0};
+	d[1] = a[0];
+	for(int i = 2; i <= n; i++)
+		d[i] = max(d[i-1], d[i-2] + a[i-1]);
+	subsum_result(a, n, d);
+	cout<<"d[] = "<<d[n]<<endl;
 }
 
 void Q2()
 {
 	int a[] = {1,5,2,-4,6};
 	int b[] = {3,5,7,6,2,4};
-
+	subsum(a, Len(a));
+	subsum(b, Len(b));
 }
 
 /***************************************
 	问题3：阶乘，gcd，任意进制转换
 ***************************************/
-
 int factorial(int n)
 {
 	int ret = 1;
@@ -71,6 +88,7 @@ void Q3()
 
 int main()
 {
+	Q2();
 	Q3();
 	return 0;
 }
