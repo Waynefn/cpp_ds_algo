@@ -35,7 +35,6 @@ bool Search(Node *h, int v)
 {
     if(NULL == h)
         return false;
-
     for(Node *i = h; i != NULL; i = i->next)
         if(i->val == v)
             return true;
@@ -45,7 +44,6 @@ bool Search(Node *h, int v)
 Node *InsertHead(Node *h, int v)
 {
     Node *n = MakeNode(v);
-    
     n->next = h;
     return n;
 }

@@ -69,7 +69,6 @@ float optPolicy(int curPos, int goal)
 	for(i = 0; i < numArcs(curPos); i++)
 		if(visited[curPos] == 0)
 			maxScore[i] = optPolicy(nextNode(curPos, i), goal);	// coding
-}
 
 //	找到最大价值的行动方式
 	opt = 0; max = 0.0;

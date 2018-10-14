@@ -9,90 +9,66 @@ http://www.ist.osaka-u.ac.jp/japanese/admission/docs/H27nyuusimonndai%E3%80%80jy
 
 using namespace std;
 
+#define PRINT_MATRIX(a,m,n){for(int i = 0; i < m; i++){for(int j = 0; j < n; j++) cout<<a[i][j]<<"|"; cout<<endl;}}
+
 /***************************************
-问题1->
+问题1->二分搜索
 ***************************************/
-int front = 0;
-int rear = 0;
-
-void insert(int a[], int size, int d)
+void bs()
 {
-	int p, left, right, m, i;
-	if(rear > suze-1)
-	{
-		cout<<"Overflow"<<endl;
-		exit(1);
-	}
+	// int A[]
+}
 
-	p = -1;
-	if(front == rear)
-		p = front;
-	else
+/***************************************
+问题2->01背包
+***************************************/
+void knapsack(int sz[], int val[], int n, int c)
+{
+	int d[n+1][c+1];
+	int i, j, max, index;
+	for(i = 0; i <= n; i++)
+		for(j = 0; j <= c; j++)
+			d[i][j] = -1;
+	d[0][0] = 0;
+	for(i = 1; i <= n; i++)
 	{
-		left = front;
-		right = rear-1;
-		while(left < right)
+		for(j = 0; j <= c; j++)
 		{
-			m = (left + right) / 2;
-			if(a[m] == d)
+			if(d[i-1][j] != -1)
 			{
-				p = m+1;
-				break;
+				if(d[i-1][j] > d[i][j]) 
+					d[i][j] = d[i-1][j];
+				if(j + sz[i] <= c)
+					d[i][j+sz[i]] = d[i-1][j] + val[i];
 			}
-			if(d < a[m])	right = m-1;
-			else			left = m+1;		
 		}
-		if(p == -1)
+	}
+	PRINT_MATRIX(d, n+1, c+1);
+	max = 0, index = 0;
+	for(j = 0; j <= c; j++)
+		if(d[n][j] > max)
+			{max = d[n][j]; index = j;}
+	for(i = n; i >= 1; i--)
+	{
+		if(index >= sz[i] && d[i][index]-val[i] == d[n-1][index-sz[i]])
 		{
-			if(a[left] > d)	p = left;
-			else			p = left+1;
+			cout<<"add ["<<i<<"] = "<<val[i]<<" in knapsack"<<endl;
+			index -= sz[i];
 		}
 	}
-	i = rear;
-	while(i > p)
-	{
-		a[i] = a[i-1];
-		i--;
-		a[p] = d;
-		rear++;
-	}
+	cout<<"result = "<<max<<endl;
 }
 
-int delete(int a[])
+void Q2()
 {
-	int x;
-	if(front == rear)
-	{
-		cout<<"Underflow"<<endl;
-		exit(1);
-	}
-	x = a[front++];
-	return x;
-}
-
-void test_question_1()
-{
-	int i;
-	int a[20];
-	int a1[] = {10,5,20,6,13};
-	int a2[] = {2,5,18,7,5};
-
-	for(i = 0; i < 5; i++)
-		insert(a, Len(a), a1[i]);
-	for(i = 0; i < 3; i++)
-		cout<<delete(a)<<"|";
-	cout<<endl;
-
-	for(i = 0; i < 5; i++)
-		insert(a, Len(a), a2[i]);
-	for(i = 0; i < 7; i++)
-		cout<<delete(a)<<"|";
-	cout<<endl;
+	int sz[] = {0, 2, 6, 6, 2};
+	int val[] = {0, 20, 30, 15,25};
+	knapsack(sz, val, 4, 15);
 }
 
 int main()
 {
-	test_question_1();
+	Q2();
 
 	return 0;
 }
