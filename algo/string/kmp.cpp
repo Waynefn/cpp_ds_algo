@@ -3,7 +3,7 @@
 using namespace std;
 
 #define MAX (100)
-#define PRINT_ARRAY(a,n){for(int i = 0; i < n; i++) cout<<a[i]<<"|"; cout<<endl;}
+#define PRINT_ARRAY(a,n) do {for(int i = 0; i < n; i++) cout<<a[i]<<"|"; cout<<endl;} while(0)
 
 /**********************************************
 	1.kmp lps
